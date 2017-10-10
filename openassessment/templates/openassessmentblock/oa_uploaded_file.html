@@ -24,8 +24,6 @@
                 <a href="{{ file_url }}" class="submission__answer__file submission--file" target="_blank">
                     {% if file_description %}
                       {{ file_description }}
-                    {% else %}
-                      {% trans "View the files associated with this submission:" %} #{{ forloop.counter }}
                     {% endif %}
                 </a>
             {% endif %}
