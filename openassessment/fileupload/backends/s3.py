@@ -21,7 +21,6 @@ class Backend(BaseBackend):
                 method='PUT',
                 bucket=bucket_name,
                 key=key_name,
-                headers={'Content-Length': '5242880', 'Content-Type': content_type}
             )
             return upload_url
         except Exception as ex:
@@ -69,5 +68,6 @@ def _connect_to_s3():
 
     return boto.connect_s3(
         aws_access_key_id=aws_access_key_id,
-        aws_secret_access_key=aws_secret_access_key
+        aws_secret_access_key=aws_secret_access_key,
+        host=settings.S3_HOST
     )
