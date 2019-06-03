@@ -123,79 +123,79 @@ msgstr "Не удалось загрузить"
 #: openassessment/xblock/static/js/openassessment-lms.min.js:1
 #: openassessment/xblock/static/js/src/lms/oa_course_items_listing.js:48
 msgid "Unit Name"
-msgstr ""
+msgstr "Название юнита"
 
 #: openassessment/xblock/static/js/openassessment-lms.min.js:1
 #: openassessment/xblock/static/js/src/lms/oa_course_items_listing.js:48
 msgid "Units"
-msgstr ""
+msgstr "Юниты"
 
 #: openassessment/xblock/static/js/openassessment-lms.min.js:1
 #: openassessment/xblock/static/js/src/lms/oa_course_items_listing.js:52
 msgid "Assessment"
-msgstr ""
+msgstr "Оценка"
 
 #: openassessment/xblock/static/js/openassessment-lms.min.js:1
 #: openassessment/xblock/static/js/src/lms/oa_course_items_listing.js:52
 msgid "Assessments"
-msgstr ""
+msgstr "Оценки"
 
 #: openassessment/xblock/static/js/openassessment-lms.min.js:1
 #: openassessment/xblock/static/js/src/lms/oa_course_items_listing.js:56
 msgid "Total Responses"
-msgstr ""
+msgstr "Всего ответов"
 
 #: openassessment/xblock/static/js/openassessment-lms.min.js:1
 #: openassessment/xblock/static/js/src/lms/oa_course_items_listing.js:60
 msgid "Training"
-msgstr ""
+msgstr "Подготовка"
 
 #: openassessment/xblock/static/js/openassessment-lms.min.js:1
 #: openassessment/xblock/static/js/src/lms/oa_course_items_listing.js:64
 msgid "Peer"
-msgstr ""
+msgstr "Коллега"
 
 #: openassessment/xblock/static/js/openassessment-lms.min.js:1
 #: openassessment/xblock/static/js/src/lms/oa_course_items_listing.js:68
 msgid "Self"
-msgstr ""
+msgstr "Свой"
 
 #: openassessment/xblock/static/js/openassessment-lms.min.js:1
 #: openassessment/xblock/static/js/src/lms/oa_course_items_listing.js:72
 msgid "Waiting"
-msgstr ""
+msgstr "Ожидайте"
 
 #: openassessment/xblock/static/js/openassessment-lms.min.js:1
 #: openassessment/xblock/static/js/src/lms/oa_course_items_listing.js:76
 msgid "Staff"
-msgstr ""
+msgstr "Сотрудник"
 
 #: openassessment/xblock/static/js/openassessment-lms.min.js:1
 #: openassessment/xblock/static/js/src/lms/oa_course_items_listing.js:81
 #: openassessment/xblock/static/js/src/lms/oa_course_items_listing.js:82
 msgid "Final Grade Received"
-msgstr ""
+msgstr "Итоговая оценка получена"
 
 #: openassessment/xblock/static/js/openassessment-lms.min.js:1
 #: openassessment/xblock/static/js/src/lms/oa_course_items_listing.js:111
 msgid "List of Open Assessments is unavailable"
-msgstr ""
+msgstr "Список открытых оценок недоступен"
 
 #: openassessment/xblock/static/js/openassessment-lms.min.js:1
 #: openassessment/xblock/static/js/src/lms/oa_course_items_listing.js:212
 #: openassessment/xblock/static/js/src/lms/oa_course_items_listing.js:262
 msgid "Please wait"
-msgstr ""
+msgstr "Пожалуйста, подождите"
 
 #: openassessment/xblock/static/js/openassessment-lms.min.js:1
 #: openassessment/xblock/static/js/src/lms/oa_course_items_listing.js:235
 msgid "Block view is unavailable"
-msgstr ""
+msgstr "Блочный вид недоступен"
 
 #: openassessment/xblock/static/js/openassessment-lms.min.js:1
 #: openassessment/xblock/static/js/src/lms/oa_course_items_listing.js:247
 msgid "Back to Full List"
-msgstr ""
+msgstr "Вернуться к полному списку"
 
 #: openassessment/xblock/static/js/openassessment-lms.min.js:1
 #: openassessment/xblock/static/js/src/lms/oa_peer.js:193
@@ -210,11 +210,13 @@ msgid ""
 "After you upload new files all your previously uploaded files will be "
 "overwritten. Continue?"
 msgstr ""
+"После загрузки новых файлов все ранее загруженные файлы будут "
+"перезаписаны. Продолжить?"
 
 #: openassessment/xblock/static/js/openassessment-lms.min.js:1
 #: openassessment/xblock/static/js/src/lms/oa_response.js:283
 msgid "Your file "
-msgstr ""
+msgstr "Ваш файл "
 
 #: openassessment/xblock/static/js/openassessment-lms.min.js:1
 #: openassessment/xblock/static/js/src/lms/oa_response.js:307
@@ -263,7 +265,7 @@ msgstr "Вы собираетесь отправить свой ответ на 
 #: openassessment/xblock/static/js/openassessment-lms.min.js:1
 #: openassessment/xblock/static/js/src/lms/oa_response.js:574
 msgid "File size must be 10MB or less."
-msgstr ""
+msgstr "Размер файла должен быть 10 МБ или меньше."
 
 #: openassessment/xblock/static/js/openassessment-lms.min.js:1
 #: openassessment/xblock/static/js/src/lms/oa_response.js:581
@@ -281,17 +283,17 @@ msgstr "Недопустимый тип файла"
 #: openassessment/xblock/static/js/src/lms/oa_response.js:647
 #: openassessment/xblock/static/js/src/lms/oa_response.js:653
 msgid "Describe "
-msgstr ""
+msgstr "Описание "
 
 #: openassessment/xblock/static/js/openassessment-lms.min.js:1
 #: openassessment/xblock/static/js/src/lms/oa_response.js:647
 msgid "(required):"
-msgstr ""
+msgstr "(обязательно):"
 
 #: openassessment/xblock/static/js/openassessment-lms.min.js:1
 #: openassessment/xblock/static/js/src/lms/oa_response.js:667
 msgid "Thumbnail view of "
-msgstr ""
+msgstr "Просмотр миниатюр "
 
 #: openassessment/xblock/static/js/openassessment-lms.min.js:1
 #: openassessment/xblock/static/js/src/lms/oa_self.js:124
@@ -326,37 +328,37 @@ msgstr "Если вы покинете страницу, не сохранив �
 #: openassessment/xblock/static/js/openassessment-lms.min.js:1
 #: openassessment/xblock/static/js/src/lms/oa_training.js:116
 msgid "Feedback available for selection."
-msgstr ""
+msgstr "Обратная связь доступна для выбора."
 
 #: openassessment/xblock/static/js/openassessment-studio.min.js:1
 #: openassessment/xblock/static/js/src/studio/oa_edit.js:391
 msgid "Paragraph"
-msgstr ""
+msgstr "Параграф"
 
 #: openassessment/xblock/static/js/openassessment-studio.min.js:1
 #: openassessment/xblock/static/js/src/studio/oa_edit.js:392
 msgid "Preformatted"
-msgstr ""
+msgstr "Предварительно отформатированный"
 
 #: openassessment/xblock/static/js/openassessment-studio.min.js:1
 #: openassessment/xblock/static/js/src/studio/oa_edit.js:393
 msgid "Heading 3"
-msgstr ""
+msgstr "Заголовок 3"
 
 #: openassessment/xblock/static/js/openassessment-studio.min.js:1
 #: openassessment/xblock/static/js/src/studio/oa_edit.js:394
 msgid "Heading 4"
-msgstr ""
+msgstr "Заголовок 4"
 
 #: openassessment/xblock/static/js/openassessment-studio.min.js:1
 #: openassessment/xblock/static/js/src/studio/oa_edit.js:395
 msgid "Heading 5"
-msgstr ""
+msgstr "Заголовок 5"
 
 #: openassessment/xblock/static/js/openassessment-studio.min.js:1
 #: openassessment/xblock/static/js/src/studio/oa_edit.js:396
 msgid "Heading 6"
-msgstr ""
+msgstr "Заголовок 6"
 
 #: openassessment/xblock/static/js/openassessment-studio.min.js:1
 #: openassessment/xblock/static/js/src/studio/oa_container_item.js:39
