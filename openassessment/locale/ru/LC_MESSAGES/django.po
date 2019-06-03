@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: edx-platform\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-03 08:18+0000\n"
+"POT-Creation-Date: 2019-06-03 12:59+0000\n"
 "PO-Revision-Date: 2018-03-29 22:44+0000\n"
 "Last-Translator: Ned Batchelder <ned@edx.org>\n"
 "Language-Team: Russian (http://www.transifex.com/open-edx/edx-platform/"
@@ -153,8 +153,7 @@ msgid ""
 "Specify whether learners must include a text based response to this "
 "problem's prompt."
 msgstr ""
-"Укажите, должен ли учащийся включать текстовый ответ на запрос "
-"этой проблемы."
+"Укажите, должен ли учащийся включать текстовый ответ на запрос этой проблемы."
 
 #: openassessment/templates/openassessmentblock/edit/oa_edit.html:119
 msgid "File Uploads Response"
@@ -193,9 +192,9 @@ msgstr ""
 "Укажите, могут ли учащиеся отправлять файлы вместе со своими текстовыми "
 "ответами. Выберите Изображения, чтобы разрешить файлы JPG, GIF или PNG. "
 "Выберите PDF или Изображения, чтобы разрешить файлы PDF и изображения. "
-"Выберите «Пользовательские типы файлов», чтобы разрешить файлы с расширениями, "
-"указанными ниже. (Используйте опцию Выбрать пользовательские типы файлов "
-"с осторожностью.)"
+"Выберите «Пользовательские типы файлов», чтобы разрешить файлы с "
+"расширениями, указанными ниже. (Используйте опцию Выбрать пользовательские "
+"типы файлов с осторожностью.)"
 
 #: openassessment/templates/openassessmentblock/edit/oa_edit.html:143
 msgid "File Types"
@@ -715,8 +714,9 @@ msgstr ""
 msgid ""
 "Select the statements below that best reflect your experience with peer "
 "assessments."
-msgstr "Выберите нижеприведенные утверждения, которые лучше всего отражают "
-"ваш опыт оценки коллегами."
+msgstr ""
+"Выберите нижеприведенные утверждения, которые лучше всего отражают ваш опыт "
+"оценки коллегами."
 
 #: openassessment/templates/openassessmentblock/grade/oa_grade_complete.html:149
 msgid "These assessments were useful."
@@ -794,7 +794,8 @@ msgid ""
 "Grade Available Responses is unavailable. This item is not configured for "
 "Staff Assessment."
 msgstr ""
-"Оценки доступных ответов недоступны. Этот пункт не настроен для оценки персонала."
+"Оценки доступных ответов недоступны. Этот пункт не настроен для оценки "
+"персонала."
 
 #: openassessment/templates/openassessmentblock/instructor_dashboard/oa_listing.html:6
 msgid "Please wait"
@@ -832,38 +833,38 @@ msgid ""
 "This assignment has closed. One or more deadlines for this assignment have "
 "passed. You will receive an incomplete grade for this assignment."
 msgstr ""
-"Это задание закрыто. Один или несколько крайних сроков для этого "
-"задания прошли. Вы получите неполную оценку за это задание."
+"Это задание закрыто. Один или несколько крайних сроков для этого задания "
+"прошли. Вы получите неполную оценку за это задание."
 
 #: openassessment/templates/openassessmentblock/message/oa_message_complete.html:8
 msgid ""
 "You have completed this assignment. Your final grade will be available when "
 "the assessments of your response are complete."
 msgstr ""
-"Вы выполнили это задание. Ваша итоговая оценка будет доступна "
-"после завершения оценки вашего ответа."
+"Вы выполнили это задание. Ваша итоговая оценка будет доступна после "
+"завершения оценки вашего ответа."
 
 #: openassessment/templates/openassessmentblock/message/oa_message_complete.html:10
 msgid ""
 "You have completed this assignment. Review your grade and your assessment "
 "details."
-msgstr ""
-"Вы выполнили это задание. Проверьте свою оценку и детали оценки."
+msgstr "Вы выполнили это задание. Проверьте свою оценку и детали оценки."
 
 #: openassessment/templates/openassessmentblock/message/oa_message_incomplete.html:9
 msgid ""
 "This assignment is in progress. Learner training will close soon. Complete "
 "the learner training step to move on."
 msgstr ""
-"Это задание выполняется. Обучение учащихся скоро закроется. "
-"Завершите шаг обучения ученика, чтобы двигаться дальше."
+"Это задание выполняется. Обучение учащихся скоро закроется. Завершите шаг "
+"обучения ученика, чтобы двигаться дальше."
 
 #: openassessment/templates/openassessmentblock/message/oa_message_incomplete.html:11
 msgid ""
 "This assignment is in progress. Complete the learner training step to move "
 "on."
 msgstr ""
-"Это задание выполняется. Завершите шаг обучения ученика, чтобы двигаться дальше."
+"Это задание выполняется. Завершите шаг обучения ученика, чтобы двигаться "
+"дальше."
 
 #: openassessment/templates/openassessmentblock/message/oa_message_incomplete.html:15
 #: openassessment/templates/openassessmentblock/message/oa_message_incomplete.html:33
@@ -883,22 +884,28 @@ msgid ""
 "                                "
 msgstr ""
 "\n"
-"                                    %(start_strong)s Это задание выполняется."
-" Шаг самооценки скоро закроется. %(end_strong)s Вам все еще нужно завершить шаг"
-" %(start_link)s самооценки %(end_link)s \n"
+"                                    %(start_strong)s Это задание "
+"выполняется. Шаг самооценки скоро закроется. %(end_strong)s Вам все еще "
+"нужно завершить шаг %(start_link)s самооценки %(end_link)s \n"
 "                                "
 
 #: openassessment/templates/openassessmentblock/message/oa_message_incomplete.html:24
-#, python-format
+#, fuzzy, python-format
+#| msgid ""
+#| "\n"
+#| "                                    This assignment is in progress. You "
+#| "still need to complete the %(start_link)speer assessment%(end_link)s "
+#| "step.\n"
+#| "                                "
 msgid ""
 "\n"
-"                                    Это задание выполняется. You "
+"                                    This assignment is in progress. You "
 "still need to complete the %(start_link)sself assessment%(end_link)s step.\n"
 "                                "
 msgstr ""
 "\n"
-"                                    This assignment is in progress. Вам "
-"все еще нужно завершить шаг %(start_link)s самооценки %(end_link)s \n"
+"                                    Это задание выполняется. Вывсе еще нужно "
+"завершить шаг  %(start_link)s оценки %(end_link)s \n"
 "                                "
 
 #: openassessment/templates/openassessmentblock/message/oa_message_incomplete.html:38
@@ -915,9 +922,9 @@ msgstr ""
 "\n"
 "                                    Это задание выполняется."
 "%(start_strong)sШаг экспертной оценки скоро закроется.%(end_strong)s Все "
-"представленные коллегиальные ответы были оценены. Проверьте позже, чтобы увидеть, если больше "
-"учеников отправили ответы. Вам все еще нужно завершить шаг "
-"%(start_link)s экспертной оценки %(end_link)s step.\n"
+"представленные коллегиальные ответы были оценены. Проверьте позже, чтобы "
+"увидеть, если больше учеников отправили ответы. Вам все еще нужно завершить "
+"шаг %(start_link)s экспертной оценки %(end_link)s step.\n"
 "                                "
 
 #: openassessment/templates/openassessmentblock/message/oa_message_incomplete.html:42
@@ -932,8 +939,8 @@ msgid ""
 msgstr ""
 "\n"
 "                                    Это задание выполняется. Все "
-"представленные ответы коллег были оценены. Проверьте позже, чтобы увидеть, если больше"
-"учащиеся представили ответы. Вам все еще нужно завершить шаг "
+"представленные ответы коллег были оценены. Проверьте позже, чтобы увидеть, "
+"если большеучащиеся представили ответы. Вам все еще нужно завершить шаг "
 "%(start_link)s экспертной оценки %(end_link)s .\n"
 "                                "
 
@@ -961,8 +968,8 @@ msgid ""
 "                                "
 msgstr ""
 "\n"
-"                                    Это задание выполняется. Вы"
-"все еще нужно завершить шаг  %(start_link)s оценки %(end_link)s \n"
+"                                    Это задание выполняется. Вывсе еще нужно "
+"завершить шаг  %(start_link)s оценки %(end_link)s \n"
 "                                "
 
 #: openassessment/templates/openassessmentblock/message/oa_message_open.html:7
@@ -975,9 +982,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"                    Ответы по заданиям будут закрыты в ближайшее время. Чтобы получить"
-"оценку, сначала предоставьте ответ на приглашение, затем заполните поле "
-" %(start_tag)s Вашего ответа %(end_tag)s \n"
+"                    Ответы по заданиям будут закрыты в ближайшее время. "
+"Чтобы получитьоценку, сначала предоставьте ответ на приглашение, затем "
+"заполните поле  %(start_tag)s Вашего ответа %(end_tag)s \n"
 "                "
 
 #: openassessment/templates/openassessmentblock/message/oa_message_open.html:11
@@ -990,9 +997,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"                    Это назначение имеет несколько шагов. На первом этапе "
-"вы предоставите ответ на вопрос. Другие шаги появляются под "
-"%(start_tag)s Вашим ответом %(end_tag)s \n"
+"                    Это назначение имеет несколько шагов. На первом этапе вы "
+"предоставите ответ на вопрос. Другие шаги появляются под %(start_tag)s Вашим "
+"ответом %(end_tag)s \n"
 "                "
 
 #: openassessment/templates/openassessmentblock/message/oa_message_unavailable.html:4
@@ -1145,9 +1152,9 @@ msgid ""
 "longer complete peer assessments or continue with this assignment, and you "
 "will receive a grade of Incomplete."
 msgstr ""
-"Срок выполнения этого шага истек. Этот шаг сейчас закрыт. Вы больше не можете "
-"проходить оценку коллег или продолжать выполнять это задание, и вы получите "
-"оценку Незавершенное."
+"Срок выполнения этого шага истек. Этот шаг сейчас закрыт. Вы больше не "
+"можете проходить оценку коллег или продолжать выполнять это задание, и вы "
+"получите оценку Незавершенное."
 
 #: openassessment/templates/openassessmentblock/peer/oa_peer_complete.html:13
 msgid "Completed"
@@ -1191,8 +1198,8 @@ msgid ""
 "All submitted peer responses have been assessed. Check back later to see if "
 "more learners have submitted responses."
 msgstr ""
-"Все представленные коллегиальные ответы были оценены. Проверьте позже, "
-"чтобы увидеть, если больше учеников отправили ответы."
+"Все представленные коллегиальные ответы были оценены. Проверьте позже, чтобы "
+"увидеть, если больше учеников отправили ответы."
 
 #: openassessment/templates/openassessmentblock/peer/oa_peer_unavailable.html:16
 #: openassessment/templates/openassessmentblock/response/oa_response_unavailable.html:17
@@ -1398,10 +1405,10 @@ msgid ""
 "a grade of Incomplete. If you saved but did not submit a response, the "
 "response appears in the course records."
 msgstr ""
-"Срок выполнения этого шага истек. Этот шаг сейчас закрыт. "
-"Вы больше не можете отправлять ответ или продолжать работу с этой проблемой, "
-"и вы получите оценку Incomplete. Если вы сохранили, но не отправили ответ, "
-"ответ появится в записях курса."
+"Срок выполнения этого шага истек. Этот шаг сейчас закрыт. Вы больше не "
+"можете отправлять ответ или продолжать работу с этой проблемой, и вы "
+"получите оценку Incomplete. Если вы сохранили, но не отправили ответ, ответ "
+"появится в записях курса."
 
 #: openassessment/templates/openassessmentblock/response/oa_response_graded.html:20
 #: openassessment/templates/openassessmentblock/response/oa_response_submitted.html:20
@@ -1506,9 +1513,9 @@ msgid ""
 "longer complete a self assessment or continue with this assignment, and you "
 "will receive a grade of Incomplete."
 msgstr ""
-"Срок выполнения этого шага истек. Этот шаг сейчас закрыт. Вы больше не можете "
-"выполнять самооценку или продолжать выполнять это задание, и вы получите оценку "
-"Незавершенное."
+"Срок выполнения этого шага истек. Этот шаг сейчас закрыт. Вы больше не "
+"можете выполнять самооценку или продолжать выполнять это задание, и вы "
+"получите оценку Незавершенное."
 
 #: openassessment/templates/openassessmentblock/staff/oa_staff_grade.html:13
 #: openassessment/xblock/grade_mixin.py:349
@@ -1945,8 +1952,8 @@ msgid ""
 "longer continue with this assignment, and you will receive a grade of "
 "Incomplete."
 msgstr ""
-"Срок выполнения этого шага истек. Этот шаг сейчас закрыт. Вы больше не можете "
-"продолжать выполнять это задание, и вы получите оценку Incomplete."
+"Срок выполнения этого шага истек. Этот шаг сейчас закрыт. Вы больше не "
+"можете продолжать выполнять это задание, и вы получите оценку Incomplete."
 
 #: openassessment/templates/openassessmentblock/student_training/student_training_error.html:18
 msgid "Error Loading Learner Training Examples"
@@ -1967,6 +1974,168 @@ msgstr "Для оценивания, вы должны представить о
 #: openassessment/xblock/data_conversion.py:250
 msgid "You must provide feedback for criteria in the assessment."
 msgstr "Вам необходимо оставить отзыв в соответствии с критерием"
+
+#: openassessment/xblock/defaults.py:8
+msgid ""
+"Censorship in the Libraries 'All of us can think of a book that we hope none "
+"of our children or any other children have taken off the shelf. But if I "
+"have the right to remove that book from the shelf -- that work I abhor -- "
+"then you also have exactly the same right and so does everyone else. And "
+"then we have no books left on the shelf for any of us.' --Katherine "
+"Paterson, Author Write a persuasive essay to a newspaper reflecting your "
+"views on censorship in libraries. Do you believe that certain materials, "
+"such as books, music, movies, magazines, etc., should be removed from the "
+"shelves if they are found offensive? Support your position with convincing "
+"arguments from your own experience, observations, and/or reading.Read for "
+"conciseness, clarity of thought, and form."
+msgstr ""
+"Цензура в библиотеках «Все мы можем вспомнить книгу, которую, как мы "
+"надеемся, никто из наших детей или других детей не взял с полки. Но если у "
+"меня есть право убрать эту книгу с полки - эту работу я ненавижу - то и у "
+"вас точно такое же право, как и у всех остальных. А потом у нас на полке не "
+"осталось книг для кого-либо из нас. - Кэтрин Патерсон, автор. Напишите "
+"убедительное эссе в газету, отражающее ваши взгляды на цензуру в "
+"библиотеках. Считаете ли вы, что определенные материалы, такие как книги, "
+"музыка, фильмы, журналы и т. Д., Следует убрать с полок, если они будут "
+"сочтены оскорбительными? Подкрепите свою позицию убедительными аргументами "
+"из собственного опыта, наблюдений и / или чтения. Прочитайте для краткости, "
+"ясности мысли и формы."
+
+#: openassessment/xblock/defaults.py:21 openassessment/xblock/defaults.py:118
+#: openassessment/xblock/defaults.py:131
+msgid "Ideas"
+msgstr "Идеи"
+
+#: openassessment/xblock/defaults.py:22
+msgid "Determine if there is a unifying theme or main idea."
+msgstr "Определите, есть ли объединяющая тема или основная идея."
+
+#: openassessment/xblock/defaults.py:27 openassessment/xblock/defaults.py:56
+#: openassessment/xblock/defaults.py:132
+msgid "Poor"
+msgstr "Плохо"
+
+#: openassessment/xblock/defaults.py:29
+msgid ""
+"Difficult for the reader to discern the main idea.  Too brief or too "
+"repetitive to establish or maintain a focus."
+msgstr ""
+"Читателю сложно понять основную идею. Слишком краткий или слишком "
+"повторяющийся, чтобы установить или сохранить фокус."
+
+#: openassessment/xblock/defaults.py:34 openassessment/xblock/defaults.py:63
+#: openassessment/xblock/defaults.py:119
+msgid "Fair"
+msgstr "Справедливо"
+
+#: openassessment/xblock/defaults.py:36
+msgid ""
+"Presents a unifying theme or main idea, but may include minor tangents.  "
+"Stays somewhat focused on topic and task."
+msgstr ""
+"Представляет объединяющую тему или основную идею, но может включать "
+"незначительные касательные. Остается несколько сфокусированным на теме и "
+"задаче."
+
+#: openassessment/xblock/defaults.py:41 openassessment/xblock/defaults.py:70
+#: openassessment/xblock/defaults.py:123 openassessment/xblock/defaults.py:136
+msgid "Good"
+msgstr "Хорошо"
+
+#: openassessment/xblock/defaults.py:43
+#, fuzzy
+#| msgid ""
+#| "Presents a unifying theme or main idea without going off on tangents.  "
+#| "Stays completely focused on topic and task."
+msgid ""
+"Presents a unifying theme or main idea without going off on tangents. Stays "
+"completely focused on topic and task."
+msgstr ""
+"Представляет объединяющую тему или основную идею, не касаясь касательных. "
+"Остается полностью сосредоточенным на теме и задаче."
+
+#: openassessment/xblock/defaults.py:51 openassessment/xblock/defaults.py:122
+#: openassessment/xblock/defaults.py:135
+msgid "Content"
+msgstr "Содержание"
+
+#: openassessment/xblock/defaults.py:52
+msgid "Assess the content of the submission"
+msgstr "Оценить содержание представления"
+
+#: openassessment/xblock/defaults.py:58
+msgid ""
+"Includes little information with few or no details or unrelated details. "
+"Unsuccessful in attempts to explore any facets of the topic."
+msgstr ""
+"Включает в себя мало информации с небольшим количеством или без подробностей "
+"или не связанных деталей. Безуспешно в попытках исследовать любые грани темы."
+
+#: openassessment/xblock/defaults.py:65
+#, fuzzy
+#| msgid ""
+#| "Includes little information and few or no details.  Explores only one or "
+#| "two facets of the topic."
+msgid ""
+"Includes little information and few or no details. Explores only one or two "
+"facets of the topic."
+msgstr ""
+"Включает мало информации и мало или вообще никаких деталей. Исследует только "
+"один или два аспекта темы."
+
+#: openassessment/xblock/defaults.py:72
+msgid ""
+"Includes sufficient information and supporting details. (Details may not be "
+"fully developed; ideas may be listed.)  Explores some facets of the topic."
+msgstr ""
+"Включает в себя достаточную информацию и вспомогательные детали. (Детали "
+"могут быть не полностью разработаны; идеи могут быть перечислены.) Изучает "
+"некоторые аспекты темы."
+
+#: openassessment/xblock/defaults.py:77
+msgid "Excellent"
+msgstr "Отлично"
+
+#: openassessment/xblock/defaults.py:79
+msgid ""
+"Includes in-depth information and exceptional supporting details that are "
+"fully developed.  Explores all facets of the topic."
+msgstr ""
+"Включает в себя подробную информацию и исключительные вспомогательные "
+"детали, которые полностью разработаны. Исследует все аспекты темы."
+
+#: openassessment/xblock/defaults.py:90
+msgid ""
+"(Optional) What aspects of this response stood out to you? What did it do "
+"well? How could it be improved?"
+msgstr ""
+"(Необязательно). Какие аспекты этого ответа вам понравились? Что это хорошо? "
+"Как это можно улучшить?"
+
+#: openassessment/xblock/defaults.py:95
+msgid "I think that this response..."
+msgstr "Я думаю, что это ответ ..."
+
+#: openassessment/xblock/defaults.py:98
+msgid ""
+"Replace this text with your own sample response for this assignment. Then, "
+"under Response Score to the right, select an option for each criterion. "
+"Learners practice performing peer assessments by assessing this response and "
+"comparing the options that they select in the rubric with the options that "
+"you specified."
+msgstr ""
+"Замените этот текст собственным примером ответа для этого задания. Затем в "
+"разделе «Оценка ответов» выберите параметр для каждого критерия. Учащиеся "
+"практикуются в проведении взаимных оценок, оценивая этот ответ и сравнивая "
+"варианты, которые они выбирают в рубрике, с опциями, которые вы указали."
+
+#: openassessment/xblock/defaults.py:105
+msgid ""
+"Replace this text with another sample response, and then specify the options "
+"that you would select for this response."
+msgstr ""
+"Замените этот текст другим примером ответа, а затем укажите параметры, "
+"которые вы выбрали бы для этого ответа."
 
 #: openassessment/xblock/grade_mixin.py:72
 #: openassessment/xblock/leaderboard_mixin.py:53
@@ -2234,14 +2403,17 @@ msgstr "Ошибка: и текстовые и файловые ответы н�
 msgid ""
 "Error: in case if text response is disabled file upload response must be "
 "required"
-msgstr "Ошибка: в случае, если текстовый ответ отключен, необходимо загрузить файл с ответом"
+msgstr ""
+"Ошибка: в случае, если текстовый ответ отключен, необходимо загрузить файл с "
+"ответом"
 
 #: openassessment/xblock/studio_mixin.py:203
 msgid ""
 "Error: in case if file upload response is disabled text response must be "
 "required"
-msgstr "Ошибка: в случае, если ответ на загрузку файла отключен, текстовый "
-"ответ должен быть обязательным"
+msgstr ""
+"Ошибка: в случае, если ответ на загрузку файла отключен, текстовый ответ "
+"должен быть обязательным"
 
 #: openassessment/xblock/studio_mixin.py:227
 #, python-brace-format
@@ -2421,129 +2593,3 @@ msgstr "Количество лучших ответов задано невер
 #: openassessment/xblock/validation.py:376
 msgid "The submission format is invalid."
 msgstr "Неправильный формат ответа."
-
-#: openassessment/xblock/defaults.py:7
-msgid ""
-"Censorship in the Libraries 'All of us can think of a book that we hope none of our children "
-"or any other children have taken off the shelf. But if I have the right to remove that book "
-"from the shelf -- that work I abhor -- then you also have exactly the same right and so does "
-"everyone else. And then we have no books left on the shelf for any of us.' --Katherine Paterson, "
-"Author Write a persuasive essay to a newspaper reflecting your views on censorship in libraries. "
-"Do you believe that certain materials, such as books, music, movies, magazines, etc., should be "
-"removed from the shelves if they are found offensive? Support your position with convincing arguments "
-"from your own experience, observations, and/or reading.Read for conciseness, clarity of thought, and form."
-msgstr ""
-"Цензура в библиотеках «Все мы можем вспомнить книгу, которую, как мы надеемся, никто из наших детей "
-"или других детей не взял с полки. Но если у меня есть право убрать эту книгу с полки - эту работу я "
-"ненавижу - то и у вас точно такое же право, как и у всех остальных. А потом у нас на полке не осталось "
-"книг для кого-либо из нас. - Кэтрин Патерсон, автор. Напишите убедительное эссе в газету, отражающее "
-"ваши взгляды на цензуру в библиотеках. Считаете ли вы, что определенные материалы, такие как книги, "
-"музыка, фильмы, журналы и т. Д., Следует убрать с полок, если они будут сочтены оскорбительными? "
-"Подкрепите свою позицию убедительными аргументами из собственного опыта, наблюдений и / или чтения. "
-"Прочитайте для краткости, ясности мысли и формы."
-
-#: openassessment/xblock/defaults.py:20
-msgid "Ideas"
-msgstr "Идеи"
-
-#: openassessment/xblock/defaults.py:20
-msgid "Determine if there is a unifying theme or main idea."
-msgstr "Определите, есть ли объединяющая тема или основная идея."
-
-#: openassessment/xblock/defaults.py
-msgid "Poor"
-msgstr "Плохо"
-
-#: openassessment/xblock/defaults.py:27
-msgid ""
-"Difficult for the reader to discern the main idea.  Too brief "
-"or too repetitive to establish or maintain a focus."
-msgstr ""
-"Читателю сложно понять основную идею. Слишком краткий или слишком "
-"повторяющийся, чтобы установить или сохранить фокус."
-
-#: openassessment/xblock/defaults.py
-msgid "Fair"
-msgstr "Справедливо"
-
-#: openassessment/xblock/defaults.py:31
-msgid "Presents a unifying theme or main idea, but may include "
-"minor tangents.  Stays somewhat focused on topic and task."
-msgstr "Представляет объединяющую тему или основную идею, но может включать "
-"незначительные касательные. Остается несколько сфокусированным на теме и задаче."
-
-#: openassessment/xblock/defaults.py
-msgid "Good"
-msgstr "Хорошо"
-
-#: openassessment/xblock/defaults.py
-msgid "Excellent"
-msgstr "Отлично"
-
-#: openassessment/xblock/defaults.py:35
-msgid "Presents a unifying theme or main idea without going off "
-"on tangents.  Stays completely focused on topic and task."
-msgstr ""
-"Представляет объединяющую тему или основную идею, не касаясь касательных. "
-"Остается полностью сосредоточенным на теме и задаче."
-
-#: openassessment/xblock/defaults.py:41
-msgid "Content"
-msgstr "Содержание"
-
-#: openassessment/xblock/defaults.py:42
-msgid "Assess the content of the submission"
-msgstr "Оценить содержание представления"
-
-
-#: openassessment/xblock/defaults.py:47
-msgid "Includes little information with few or no details or unrelated details. "
-"Unsuccessful in attempts to explore any facets of the topic."
-msgstr "Включает в себя мало информации с небольшим количеством или без "
-"подробностей или не связанных деталей. Безуспешно в попытках исследовать любые грани темы."
-
-#: openassessment/xblock/defaults.py:47
-msgid "Includes little information and few or no details.  Explores only one or two facets of the topic."
-msgstr "Включает мало информации и мало или вообще никаких деталей. Исследует только один или два аспекта темы."
-
-#: openassessment/xblock/defaults.py:55
-msgid "Includes sufficient information and supporting details. (Details may "
-"not be fully developed; ideas may be listed.)  Explores some facets of the topic."
-msgstr "Включает в себя достаточную информацию и вспомогательные детали. (Детали могут "
-"быть не полностью разработаны; идеи могут быть перечислены.) Изучает некоторые аспекты темы."
-
-#: openassessment/xblock/defaults.py:59
-msgid "Includes in-depth information and exceptional supporting details "
-"that are fully developed.  Explores all facets of the topic."
-msgstr "Включает в себя подробную информацию и исключительные "
-"вспомогательные детали, которые полностью разработаны. Исследует все аспекты темы."
-
-#: openassessment/xblock/defaults.py:59
-msgid "(Optional) What aspects of this response stood out to you? "
-"What did it do well? How could it be improved?"
-msgstr "(Необязательно). Какие аспекты этого ответа вам понравились? "
-"Что это хорошо? Как это можно улучшить?"
-
-#: openassessment/xblock/defaults.py:74
-msgid "I think that this response..."
-msgstr "Я думаю, что это ответ ..."
-
-#: openassessment/xblock/defaults.py
-msgid ""
-"Replace this text with your own sample response for this assignment. "
-"Then, under Response Score to the right, select an option for each criterion. "
-"Learners practice performing peer assessments by assessing this response and comparing "
-"the options that they select in the rubric with the options that you specified."
-msgstr ""
-"Замените этот текст собственным примером ответа для этого задания. Затем в разделе "
-"«Оценка ответов» выберите параметр для каждого критерия. Учащиеся практикуются в "
-"проведении взаимных оценок, оценивая этот ответ и сравнивая варианты, которые они "
-"выбирают в рубрике, с опциями, которые вы указали."
-
-#: openassessment/xblock/defaults.py
-msgid ""
-"Replace this text with another sample response, "
-"and then specify the options that you would select for this response."
-msgstr ""
-"Замените этот текст другим примером ответа, а затем укажите параметры, "
-"которые вы выбрали бы для этого ответа."

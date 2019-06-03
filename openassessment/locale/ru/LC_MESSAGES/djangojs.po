@@ -453,3 +453,5 @@ msgstr "Необходимо заполнить список типов файл
 #: openassessment/xblock/static/js/src/studio/oa_edit_settings.js:76
 msgid "The following file types are not allowed: "
 msgstr "Следующие типы файлов недопустимы:"
+
+
