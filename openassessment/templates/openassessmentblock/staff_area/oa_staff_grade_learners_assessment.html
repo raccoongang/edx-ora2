@@ -12,9 +12,9 @@
                     <div class="staff-assessment__display">
                         <header class="staff-assessment__display__header">
                             <h4 class="staff-assessment__display__title">
-                                {% if student_username %}
+                                {% if student_email %}
                                     {% blocktrans %}
-                                        Response for: {{ student_username }}
+                                        Response for: {{ student_email }}
                                     {% endblocktrans %}
                                 {% else %}
                                     {% trans "Learner Response" %}
