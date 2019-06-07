@@ -210,7 +210,7 @@ class StaffAreaMixin(object):
                 if submission:
                     anonymous_student_id = submission['student_item']['student_id']
                     submission_context = self.get_student_submission_context(
-                        self.get_username(anonymous_student_id), submission
+                        self.xmodule_runtime.get_real_user(anonymous_student_id), submission
                     )
                     path = 'openassessmentblock/staff_area/oa_staff_grade_learners_assessment.html'
                     return self.render_assessment(path, submission_context)
@@ -243,14 +243,14 @@ class StaffAreaMixin(object):
         except PeerAssessmentInternalError:
             return self.render_error(self._(u"Error getting staff grade ungraded and checked out counts."))
 
-    def get_student_submission_context(self, student_username, submission):
+    def get_student_submission_context(self, student, submission):
         """
         Get a context dict for rendering a student submission and associated rubric (for staff grading).
         Includes submission (populating submitted file information if relevant), rubric_criteria,
         and student_username.
 
         Args:
-            student_username (unicode): The username of the student to report.
+            student (object): The student object.
             submission (object): A submission, as returned by the submission_api.
 
         Returns:
@@ -261,7 +261,7 @@ class StaffAreaMixin(object):
         context = {
             'submission': create_submission_dict(submission, self.prompts) if submission else None,
             'rubric_criteria': copy.deepcopy(self.rubric_criteria_with_labels),
-            'student_username': student_username,
+            'student_email': student.email,
             'user_timezone': user_preferences['user_timezone'],
             'user_language': user_preferences['user_language'],
             "prompts_type": self.prompts_type,

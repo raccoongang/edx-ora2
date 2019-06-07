@@ -1592,11 +1592,9 @@ msgstr "Поставьте оценку согласно критериям."
 #, python-format
 msgid ""
 "\n"
-"                                        Response for: %(student_username)s\n"
+"                                        Response for: %(student_email)s\n"
 "                                    "
-msgstr ""
-"\n"
-"Ответ: %(student_username)s"
+msgstr "\nОтвет: %(student_email)s"
 
 #: openassessment/templates/openassessmentblock/staff_area/oa_staff_grade_learners_assessment.html:20
 #: openassessment/templates/openassessmentblock/staff_area/oa_staff_override_assessment.html:19
