@@ -940,7 +940,7 @@ msgstr ""
 "\n"
 "                                    Это задание выполняется. Все "
 "представленные ответы коллег были оценены. Проверьте позже, чтобы увидеть, "
-"если большеучащиеся представили ответы. Вам все еще нужно завершить шаг "
+"если больше учащихся предоставили ответы. Вам все еще нужно завершить шаг "
 "%(start_link)s экспертной оценки %(end_link)s .\n"
 "                                "
 
@@ -1229,7 +1229,7 @@ msgid ""
 "your response."
 msgstr ""
 "Все работы однокурсников, сданные на проверку, уже оценены.  Вернитесь "
-"позже; возможно, другие слушатели к этому времени сдадут свои работы.  Вы "
+"позже, возможно, другие слушатели к этому времени сдадут свои работы.  Вы "
 "получите оценку по завершении выполнения всех шагов этого задания, когда "
 "ваши однокурсники проверят вашу работу."
 
@@ -1863,6 +1863,10 @@ msgid ""
 "%(training_available_num)s)\n"
 "                  "
 msgstr ""
+"\n"
+"                      В процессе (%(current_progress_num)s из "
+"%(training_available_num)s)\n"
+"                  "
 
 #. Translators: This string displays a date to the user, then tells them the time until that date.  Example: "available August 13th, 2014 (in 5 days and 45 minutes)"
 #: openassessment/templates/openassessmentblock/student_training/student_training.html:36
@@ -1919,7 +1923,7 @@ msgstr ""
 
 #: openassessment/templates/openassessmentblock/student_training/student_training.html:74
 msgid "The response to the prompt above:"
-msgstr ""
+msgstr "Ответ на вопрос выше:"
 
 #: openassessment/templates/openassessmentblock/student_training/student_training.html:96
 msgid "Selected Options Agree"
