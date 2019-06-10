@@ -2,59 +2,83 @@
 # -*- coding: utf-8 -*-
 # pylint: disable=line-too-long
 
-DEFAULT_PROMPT = """
-    Censorship in the Libraries
+from django.utils.translation import ugettext as _
 
-    'All of us can think of a book that we hope none of our children or any other children have taken off the shelf. But if I have the right to remove that book from the shelf -- that work I abhor -- then you also have exactly the same right and so does everyone else. And then we have no books left on the shelf for any of us.' --Katherine Paterson, Author
-
-    Write a persuasive essay to a newspaper reflecting your views on censorship in libraries. Do you believe that certain materials, such as books, music, movies, magazines, etc., should be removed from the shelves if they are found offensive? Support your position with convincing arguments from your own experience, observations, and/or reading.
-
-    Read for conciseness, clarity of thought, and form.
-"""
+DEFAULT_PROMPT = _(
+    "Censorship in the Libraries 'All of us can think of a book that we hope none of our children "
+    "or any other children have taken off the shelf. But if I have the right to remove that book "
+    "from the shelf -- that work I abhor -- then you also have exactly the same right and so does "
+    "everyone else. And then we have no books left on the shelf for any of us.' --Katherine Paterson, "
+    "Author Write a persuasive essay to a newspaper reflecting your views on censorship in libraries. "
+    "Do you believe that certain materials, such as books, music, movies, magazines, etc., should be "
+    "removed from the shelves if they are found offensive? Support your position with convincing arguments "
+    "from your own experience, observations, and/or reading.Read for conciseness, clarity of thought, and form."
+)
 
 DEFAULT_RUBRIC_CRITERIA = [
     {
         'name': "Ideas",
-        'label': "Ideas",
-        'prompt': "Determine if there is a unifying theme or main idea.",
+        'label': _("Ideas"),
+        'prompt': _("Determine if there is a unifying theme or main idea."),
         'order_num': 0,
         'feedback': 'optional',
         'options': [
             {
-                'order_num': 0, 'points': 0, 'name': 'Poor', 'label': 'Poor',
-                'explanation': """Difficult for the reader to discern the main idea.  Too brief or too repetitive to establish or maintain a focus."""
+                'order_num': 0, 'points': 0, 'name': 'Poor', 'label': _('Poor'),
+                'explanation': _(
+                    "Difficult for the reader to discern the main idea.  Too "
+                    "brief or too repetitive to establish or maintain a focus."
+                )
             },
             {
-                'order_num': 1, 'points': 3, 'name': 'Fair', 'label': 'Fair',
-                'explanation': """Presents a unifying theme or main idea, but may include minor tangents.  Stays somewhat focused on topic and task."""
+                'order_num': 1, 'points': 3, 'name': 'Fair', 'label': _('Fair'),
+                'explanation': _(
+                    "Presents a unifying theme or main idea, but may include minor tangents.  "
+                    "Stays somewhat focused on topic and task."
+                )
             },
             {
-                'order_num': 2, 'points': 5, 'name': 'Good', 'label': 'Good',
-                'explanation': """Presents a unifying theme or main idea without going off on tangents.  Stays completely focused on topic and task."""
+                'order_num': 2, 'points': 5, 'name': 'Good', 'label': _('Good'),
+                'explanation': _(
+                    "Presents a unifying theme or main idea without going off on tangents. "
+                    "Stays completely focused on topic and task."
+                )
             },
         ],
     },
     {
         'name': "Content",
-        'label': "Content",
-        'prompt': "Assess the content of the submission",
+        'label': _("Content"),
+        'prompt': _("Assess the content of the submission"),
         'order_num': 1,
         'options': [
             {
-                'order_num': 0, 'points': 0, 'name': 'Poor', 'label': 'Poor',
-                'explanation': """Includes little information with few or no details or unrelated details.  Unsuccessful in attempts to explore any facets of the topic."""
+                'order_num': 0, 'points': 0, 'name': 'Poor', 'label': _('Poor'),
+                'explanation': _(
+                    "Includes little information with few or no details or unrelated details. "
+                    "Unsuccessful in attempts to explore any facets of the topic."
+                )
             },
             {
-                'order_num': 1, 'points': 1, 'name': 'Fair', 'label': 'Fair',
-                'explanation': """Includes little information and few or no details.  Explores only one or two facets of the topic."""
+                'order_num': 1, 'points': 1, 'name': 'Fair', 'label': _('Fair'),
+                'explanation': _(
+                    "Includes little information and few or no details. "
+                    "Explores only one or two facets of the topic."
+                )
             },
             {
-                'order_num': 2, 'points': 3, 'name': 'Good', 'label': 'Good',
-                'explanation': """Includes sufficient information and supporting details. (Details may not be fully developed; ideas may be listed.)  Explores some facets of the topic."""
+                'order_num': 2, 'points': 3, 'name': 'Good', 'label': _('Good'),
+                'explanation': _(
+                    "Includes sufficient information and supporting details. (Details may not be fully "
+                    "developed; ideas may be listed.)  Explores some facets of the topic."
+                )
             },
             {
-                'order_num': 3, 'points': 3, 'name': 'Excellent', 'label': 'Excellent',
-                'explanation': """Includes in-depth information and exceptional supporting details that are fully developed.  Explores all facets of the topic."""
+                'order_num': 3, 'points': 3, 'name': 'Excellent', 'label': _('Excellent'),
+                'explanation': _(
+                    "Includes in-depth information and exceptional supporting "
+                    "details that are fully developed.  Explores all facets of the topic."
+                )
             },
         ],
     },
@@ -62,24 +86,22 @@ DEFAULT_RUBRIC_CRITERIA = [
 
 # The rubric's feedback prompt is a set of instructions letting the student
 # know they can provide additional free form feedback in their assessment.
-DEFAULT_RUBRIC_FEEDBACK_PROMPT = """
-(Optional) What aspects of this response stood out to you? What did it do well? How could it be improved?
-"""
+DEFAULT_RUBRIC_FEEDBACK_PROMPT = _(
+    "(Optional) What aspects of this response stood out to you? What did it do well? How could it be improved?"
+)
 
 # The rubric's feedback text is the default text displayed and used as
 # the student's response to the feedback prompt
-DEFAULT_RUBRIC_FEEDBACK_TEXT = """
-I think that this response...
-"""
+DEFAULT_RUBRIC_FEEDBACK_TEXT = _("I think that this response...")
 
-DEFAULT_EXAMPLE_ANSWER = (
+DEFAULT_EXAMPLE_ANSWER = _(
     "Replace this text with your own sample response for this assignment. "
     "Then, under Response Score to the right, select an option for each criterion. "
     "Learners practice performing peer assessments by assessing this response and comparing "
     "the options that they select in the rubric with the options that you specified."
 )
 
-DEFAULT_EXAMPLE_ANSWER_2 = (
+DEFAULT_EXAMPLE_ANSWER_2 = _(
     "Replace this text with another sample response, "
     "and then specify the options that you would select for this response."
 )
@@ -93,12 +115,12 @@ DEFAULT_STUDENT_TRAINING = {
             "answer": DEFAULT_EXAMPLE_ANSWER,
             "options_selected": [
                 {
-                    "criterion": "Ideas",
-                    "option": "Fair"
+                    "criterion": _("Ideas"),
+                    "option": _("Fair")
                 },
                 {
-                    "criterion": "Content",
-                    "option": "Good"
+                    "criterion": _("Content"),
+                    "option": _("Good")
                 }
             ]
         },
@@ -106,12 +128,12 @@ DEFAULT_STUDENT_TRAINING = {
             "answer": DEFAULT_EXAMPLE_ANSWER_2,
             "options_selected": [
                 {
-                    "criterion": "Ideas",
-                    "option": "Poor"
+                    "criterion": _("Ideas"),
+                    "option": _("Poor")
                 },
                 {
-                    "criterion": "Content",
-                    "option": "Good"
+                    "criterion": _("Content"),
+                    "option": _("Good")
                 }
             ]
         }
