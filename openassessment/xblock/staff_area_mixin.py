@@ -209,8 +209,15 @@ class StaffAreaMixin(object):
                 submission = submission_api.get_submission_and_student(submission_to_assess['uuid'])
                 if submission:
                     anonymous_student_id = submission['student_item']['student_id']
+
+                    try:
+                        user = self.xmodule_runtime.get_real_user(anonymous_student_id)
+                        user_email = user.email
+                    except (TypeError, AttributeError):
+                        user_email = None
+
                     submission_context = self.get_student_submission_context(
-                        self.xmodule_runtime.get_real_user(anonymous_student_id), submission
+                        user_email, submission
                     )
                     path = 'openassessmentblock/staff_area/oa_staff_grade_learners_assessment.html'
                     return self.render_assessment(path, submission_context)
@@ -243,14 +250,14 @@ class StaffAreaMixin(object):
         except PeerAssessmentInternalError:
             return self.render_error(self._(u"Error getting staff grade ungraded and checked out counts."))
 
-    def get_student_submission_context(self, student, submission):
+    def get_student_submission_context(self, student_email, submission):
         """
         Get a context dict for rendering a student submission and associated rubric (for staff grading).
         Includes submission (populating submitted file information if relevant), rubric_criteria,
         and student_username.
 
         Args:
-            student (object): The student object.
+            student_email (string): The student email.
             submission (object): A submission, as returned by the submission_api.
 
         Returns:
@@ -261,7 +268,7 @@ class StaffAreaMixin(object):
         context = {
             'submission': create_submission_dict(submission, self.prompts) if submission else None,
             'rubric_criteria': copy.deepcopy(self.rubric_criteria_with_labels),
-            'student_email': student.email,
+            'student_email': student_email,
             'user_timezone': user_preferences['user_timezone'],
             'user_language': user_preferences['user_language'],
             "prompts_type": self.prompts_type,
