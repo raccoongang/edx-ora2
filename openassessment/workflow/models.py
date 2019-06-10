@@ -65,7 +65,8 @@ class AssessmentWorkflow(TimeStampedModel, StatusModel):
                     # graded yet -- we're waiting for assessments of their
                     # submission by others.
         "done",  # Complete
-        "cancelled"  # User submission has been cancelled.
+        "cancelled",  # User submission has been cancelled.
+        "returned"  # User submission has been returned.
     ]
 
     STATUS_VALUES = STEPS + STATUSES
@@ -535,6 +536,33 @@ class AssessmentWorkflow(TimeStampedModel, StatusModel):
                 )
             )
 
+    def workflow_return(self, assessment_requirements):
+        """
+        Return workflow for all steps.
+
+        Set the points earned to 0 and workflow status to returned.
+
+        Args:
+            assessment_requirements (dict): Dictionary that currently looks like:
+                `{"peer": {"must_grade": <int>, "must_be_graded_by": <int>}}`
+                `must_grade` is the number of assessments a student must complete.
+                `must_be_graded_by` is the number of assessments a submission must
+                receive to be scored. `must_grade` should be greater than
+                `must_be_graded_by` to ensure that everyone will get scored.
+                The intention is to eventually pass in more assessment sequence
+                specific requirements in this dict.
+        """
+
+        # Save status if it is not returned.
+        if self.status != self.STATUS.returned:
+            self.status = self.STATUS.returned
+            self.save()
+            logger.info(
+                u"Workflow for submission UUID {uuid} has updated status to {status}".format(
+                    uuid=self.submission_uuid, status=self.STATUS.returned
+                )
+            )
+
     @classmethod
     def cancel_workflow(cls, submission_uuid, comments, cancelled_by_id, assessment_requirements):
         """
@@ -560,6 +588,42 @@ class AssessmentWorkflow(TimeStampedModel, StatusModel):
             workflow = cls.objects.get(submission_uuid=submission_uuid)
             AssessmentWorkflowCancellation.create(workflow=workflow, comments=comments, cancelled_by_id=cancelled_by_id)
             # Cancel the related step's workflow.
+            workflow.cancel(assessment_requirements)
+        except (cls.DoesNotExist, cls.MultipleObjectsReturned):
+            error_message = u"Error finding workflow for submission UUID {}.".format(submission_uuid)
+            logger.exception(error_message)
+            raise AssessmentWorkflowError(error_message)
+        except DatabaseError:
+            error_message = u"Error creating assessment workflow cancellation for submission UUID {}.".format(
+                submission_uuid)
+            logger.exception(error_message)
+            raise AssessmentWorkflowInternalError(error_message)
+
+    @classmethod
+    def return_workflow(cls, submission_uuid, comments, returned_by_id, assessment_requirements):
+        """
+        Add an entry in AssessmentWorkflowReturning table for a AssessmentWorkflow.
+
+        AssessmentWorkflow which has been returned is no longer included in the
+        peer grading pool.
+
+        Args:
+            submission_uuid (str): The UUID of the workflow's submission.
+            comments (str): The reason for cancellation.
+            returned_by_id (str): The ID of the user who return the peer workflow.
+            assessment_requirements (dict): Dictionary that currently looks like:
+            `{"peer": {"must_grade": <int>, "must_be_graded_by": <int>}}`
+            `must_grade` is the number of assessments a student must complete.
+            `must_be_graded_by` is the number of assessments a submission must
+            receive to be scored. `must_grade` should be greater than
+            `must_be_graded_by` to ensure that everyone will get scored.
+            The intention is to eventually pass in more assessment sequence
+            specific requirements in this dict.
+        """
+        try:
+            workflow = cls.objects.get(submission_uuid=submission_uuid)
+            AssessmentWorkflowReturning.create(workflow=workflow, comments=comments, returned_by_id=returned_by_id)
+            # Return the related step's workflow.
             workflow.cancel(assessment_requirements)
         except (cls.DoesNotExist, cls.MultipleObjectsReturned):
             error_message = u"Error finding workflow for submission UUID {}.".format(submission_uuid)
@@ -812,3 +876,65 @@ class AssessmentWorkflowCancellation(models.Model):
         """
         workflow_cancellations = cls.objects.filter(workflow__submission_uuid=submission_uuid).order_by("-created_at")
         return workflow_cancellations[0] if workflow_cancellations.exists() else None
+
+
+class AssessmentWorkflowReturning(models.Model):
+    """Model for tracking returning of assessment workflow.
+
+    It is created when a staff member requests returning of a submission
+    from the peer grading pool.
+    """
+    workflow = models.ForeignKey(AssessmentWorkflow, related_name='returning')
+    comments = models.TextField(max_length=10000)
+    returned_by_id = models.CharField(max_length=40, db_index=True)
+
+    created_at = models.DateTimeField(default=now, db_index=True)
+
+    class Meta:
+        ordering = ["created_at", "id"]
+        app_label = "workflow"
+
+    def __repr__(self):
+        return (
+            "AssessmentWorkflowReturning(workflow={0.workflow}, "
+            "comments={0.comments}, cancelled_by_id={0.cancelled_by_id}, "
+            "created_at={0.created_at})"
+        ).format(self)
+
+    def __unicode__(self):
+        return repr(self)
+
+    @classmethod
+    def create(cls, workflow, comments, returned_by_id):
+        """
+        Create a new AssessmentWorkflowReturning object.
+
+        Args:
+            workflow (AssessmentWorkflow): The returned workflow.
+            comments (unicode): The reason for returning.
+            returned_by_id (unicode): The ID of the user who return the workflow.
+
+        Returns:
+            AssessmentWorkflowReturning
+
+        """
+        cancellation_params = {
+            'workflow': workflow,
+            'comments': comments,
+            'returned_by_id': returned_by_id,
+        }
+        return cls.objects.create(**cancellation_params)
+
+    @classmethod
+    def get_latest_workflow_returning(cls, submission_uuid):
+        """
+        Get the latest AssessmentWorkflowReturning for a submission's workflow.
+
+        Args:
+            submission_uuid (str): The UUID of the workflow's submission.
+
+        Returns:
+            AssessmentWorkflowReturning or None
+        """
+        workflow_returning = cls.objects.filter(workflow__submission_uuid=submission_uuid).order_by("-created_at")
+        return workflow_returning[0] if workflow_returning.exists() else None

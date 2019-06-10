@@ -460,6 +460,33 @@ class StaffAreaMixin(object):
 
         return self._cancel_workflow(submission_uuid, comments)
 
+    @XBlock.json_handler
+    @require_course_staff("STUDENT_INFO", with_json_handler=True)
+    def return_submission(self, data, suffix=''):  # pylint: disable=W0613
+        """
+        This will return the assessment + peer workflow for the particular submission.
+
+        Args:
+            data (dict): Data contain two attributes: submission_uuid and
+                comments. submission_uuid is id of submission which is to be
+                removed from the grading pool. Comments is the reason given
+                by the user.
+
+            suffix (not used)
+
+        Return:
+            Json serializable dict with the following elements:
+                'success': (bool) Indicates whether or not the workflow cancelled successfully.
+                'msg': The response (could be error message or success message).
+        """
+        submission_uuid = data.get('submission_uuid')
+        comments = data.get('comments')
+
+        if not comments:
+            return {"success": False, "msg": self._(u'Please enter valid reason to return the submission.')}
+
+        return self._return_workflow(submission_uuid, comments)
+
     def _cancel_workflow(self, submission_uuid, comments, requesting_user_id=None):
         """
         Internal helper method to cancel a workflow using the workflow API.
@@ -477,6 +504,42 @@ class StaffAreaMixin(object):
             workflow_api.cancel_workflow(
                 submission_uuid=submission_uuid, comments=comments,
                 cancelled_by_id=requesting_user_id,
+                assessment_requirements=assessment_requirements
+            )
+            return {
+                "success": True,
+                'msg': self._(
+                    u"The learner submission has been removed from peer assessment. "
+                    u"The learner receives a grade of zero unless you delete "
+                    u"the learner's state for the problem to allow them to "
+                    u"resubmit a response."
+                )
+            }
+        except (
+                AssessmentWorkflowError,
+                AssessmentWorkflowInternalError
+        ) as ex:
+            msg = ex.message
+            logger.exception(msg)
+            return {"success": False, 'msg': msg}
+
+    def _return_workflow(self, submission_uuid, comments, requesting_user_id=None):
+        """
+        Internal helper method to return a workflow using the workflow API.
+
+        If requesting_user is not provided, we will use the user to which this xblock is currently bound.
+        """
+        # Import is placed here to avoid model import at project startup.
+        from openassessment.workflow import api as workflow_api
+        try:
+            assessment_requirements = self.workflow_requirements()
+            if requesting_user_id is None:
+                "The student_id is actually the bound user, which is the staff user in this context."
+                requesting_user_id = self.get_student_item_dict()["student_id"]
+            # Return the related workflow.
+            workflow_api.return_workflow(
+                submission_uuid=submission_uuid, comments=comments,
+                returned_by_id=requesting_user_id,
                 assessment_requirements=assessment_requirements
             )
             return {

@@ -193,6 +193,16 @@
                                 );
                             }
                         );
+
+                        $staffGradeTab.find('.wrapper--staff-assessment .action--return_back').click(
+                            function(eventObject) {
+                                var submissionID = $staffGradeTab.find('.staff__grade__form').data('submission-uuid');
+                                eventObject.preventDefault();
+                                view.submitStaffGrade(submissionID, rubric, $staffGradeTab,
+                                    $(eventObject.currentTarget).hasClass('continue_grading--action'), 'return'
+                                );
+                            }
+                        );
                     }
 
                     $staffGradeContent.slideDown(
@@ -531,7 +541,7 @@
          * @param {boolean} continueGrading If true, another learner will be marked as "In Progress",
          *     and a new grading form will be rendered with the learner's answer.
          */
-        submitStaffGrade: function(submissionID, rubric, scope, continueGrading) {
+        submitStaffGrade: function(submissionID, rubric, scope, continueGrading, assessmentType='full-grade') {
             var view = this;
             var successCallback = function() {
                 view.baseView.unsavedWarningEnabled(false, view.FULL_GRADE_UNSAVED_WARNING_KEY);
@@ -544,7 +554,7 @@
                     view.closeStaffGradeForm(true);
                 }
             };
-            this.callStaffAssess(submissionID, rubric, scope, successCallback, '.staff-grade-error', 'full-grade');
+            this.callStaffAssess(submissionID, rubric, scope, successCallback, '.staff-grade-error', assessmentType);
         },
 
         /**
@@ -561,9 +571,17 @@
         callStaffAssess: function(submissionID, rubric, scope, successCallback, errorSelector, assessType) {
             var view = this;
             view.staffSubmitEnabled(scope, false);
+            
+            var handler = "staff_assess";
+            
+            if (assessType == "return") {
+                handler = "return_submission"
+            }
+
+            console.log(assessType);
 
             this.server.staffAssess(
-                rubric.optionsSelected(), rubric.criterionFeedback(), rubric.overallFeedback(), submissionID, assessType
+                rubric.optionsSelected(), rubric.criterionFeedback(), rubric.overallFeedback(), submissionID, assessType, handler
             ).done(successCallback).fail(function(errorMessage) {
                 scope.find(errorSelector).html(_.escape(errorMessage));
                 view.staffSubmitEnabled(scope, true);
