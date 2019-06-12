@@ -1,6 +1,8 @@
 import json
 import logging
 
+from openassessment.assessment.models import StaffWorkflow
+from openassessment.workflow.models import AssessmentWorkflow
 from xblock.core import XBlock
 
 from data_conversion import create_submission_dict, prepare_submission_for_serialization
@@ -102,7 +104,7 @@ class SubmissionMixin(object):
 
         status_tag = 'ENOMULTI'  # It is an error to submit multiple times for the same item
         status_text = self._(u'Multiple submissions are not allowed.')
-        if not workflow:
+        if not workflow or workflow.get('status') == 'returned':
             try:
                 try:
                     saved_files_descriptions = json.loads(self.saved_files_descriptions)
@@ -257,8 +259,22 @@ class SubmissionMixin(object):
                 else:
                     break
 
+        workflow = self.get_workflow_info()
+
         submission = api.create_submission(student_item_dict, student_sub_dict)
-        self.create_workflow(submission["uuid"])
+
+        if workflow.get("status") == 'returned':
+            update_workflow = AssessmentWorkflow.objects.get(submission_uuid=workflow.get('submission_uuid'))
+            update_workflow.submission_uuid = submission["uuid"]
+            update_workflow.status = AssessmentWorkflow.STATUS.waiting
+            update_workflow.save()
+
+            staff_workflow = StaffWorkflow.objects.get(submission_uuid=workflow.get('submission_uuid'))
+            staff_workflow.submission_uuid = submission["uuid"]
+            staff_workflow.save()
+        else:
+            self.create_workflow(submission["uuid"])
+
         self.submission_uuid = submission["uuid"]
 
         # Emit analytics event...
@@ -575,6 +591,18 @@ class SubmissionMixin(object):
                 workflow["submission_uuid"]
             )
             path = 'openassessmentblock/response/oa_response_cancelled.html'
+
+        elif workflow["status"] == "returned":
+
+            student_submission = self.get_user_submission(
+                workflow["submission_uuid"]
+            )
+            context['saved_response'] = create_submission_dict(student_submission, self.prompts)
+            context['save_status'] = self.save_status
+
+            context['submit_enabled'] = True
+            path = 'openassessmentblock/response/oa_response.html'
+
         elif workflow["status"] == "done":
             student_submission = self.get_user_submission(
                 workflow["submission_uuid"]

@@ -260,12 +260,15 @@ def update_from_assessments(submission_uuid, assessment_requirements, override_s
     """
     workflow = _get_workflow_model(submission_uuid)
 
+    print(workflow, '-------get workflow model ------------')
+
     try:
         workflow.update_from_assessments(assessment_requirements, override_submitter_requirements)
         logger.info((
             u"Updated workflow for submission UUID {uuid} "
             u"with requirements {reqs}"
         ).format(uuid=submission_uuid, reqs=assessment_requirements))
+        print(_serialized_with_details(workflow), 'serialized with details ----------------------')
         return _serialized_with_details(workflow)
     except PeerAssessmentError as err:
         err_msg = u"Could not update assessment workflow: {}".format(err)
@@ -394,6 +397,29 @@ def cancel_workflow(submission_uuid, comments, cancelled_by_id, assessment_requi
             specific requirements in this dict.
     """
     AssessmentWorkflow.cancel_workflow(submission_uuid, comments, cancelled_by_id, assessment_requirements)
+
+
+def return_workflow(submission_uuid, comments, returned_by_id, assessment_requirements):
+    """
+    Add an entry in AssessmentWorkflowCancellation table for a AssessmentWorkflow.
+
+    AssessmentWorkflow which has been returned is no longer included in the
+    peer grading pool.
+
+    Args:
+        submission_uuid (str): The UUID of the workflow's submission.
+        comments (str): The reason for cancellation.
+        cancelled_by_id (str): The ID of the user who cancelled the peer workflow.
+        assessment_requirements (dict): Dictionary that currently looks like:
+            `{"peer": {"must_grade": <int>, "must_be_graded_by": <int>}}`
+            `must_grade` is the number of assessments a student must complete.
+            `must_be_graded_by` is the number of assessments a submission must
+            receive to be scored. `must_grade` should be greater than
+            `must_be_graded_by` to ensure that everyone will get scored.
+            The intention is to eventually pass in more assessment sequence
+            specific requirements in this dict.
+    """
+    AssessmentWorkflow.return_workflow(submission_uuid, comments, returned_by_id, assessment_requirements)
 
 
 def get_assessment_workflow_cancellation(submission_uuid):

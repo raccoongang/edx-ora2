@@ -198,6 +198,9 @@ class StaffAreaMixin(object):
             # If no submissions are available for grading, will return None.
             submission_to_assess = staff_api.get_submission_to_assess(course_id, item_id, staff_id)
 
+            # import pydevd
+            # pydevd.settrace('host.docker.internal', port=3758, stdoutToServer=True, stderrToServer=True)
+
             if submission_to_assess is not None:
                 # This is posting a tracking event to the runtime.
                 self.runtime.publish(self, 'openassessmentblock.get_submission_for_staff_grading', {
@@ -480,7 +483,7 @@ class StaffAreaMixin(object):
                 'msg': The response (could be error message or success message).
         """
         submission_uuid = data.get('submission_uuid')
-        comments = data.get('comments')
+        comments = data.get('overall_feedback')
 
         if not comments:
             return {"success": False, "msg": self._(u'Please enter valid reason to return the submission.')}

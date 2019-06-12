@@ -312,6 +312,9 @@ class AssessmentWorkflow(TimeStampedModel, StatusModel):
         if self.status == self.STATUS.cancelled:
             return
 
+        if self.status == self.STATUS.returned:
+            return
+
         # Update our AssessmentWorkflowStep models with the latest from our APIs
         steps = self._get_steps()
 
@@ -624,7 +627,7 @@ class AssessmentWorkflow(TimeStampedModel, StatusModel):
             workflow = cls.objects.get(submission_uuid=submission_uuid)
             AssessmentWorkflowReturning.create(workflow=workflow, comments=comments, returned_by_id=returned_by_id)
             # Return the related step's workflow.
-            workflow.cancel(assessment_requirements)
+            workflow.workflow_return(assessment_requirements)
         except (cls.DoesNotExist, cls.MultipleObjectsReturned):
             error_message = u"Error finding workflow for submission UUID {}.".format(submission_uuid)
             logger.exception(error_message)
@@ -897,7 +900,7 @@ class AssessmentWorkflowReturning(models.Model):
     def __repr__(self):
         return (
             "AssessmentWorkflowReturning(workflow={0.workflow}, "
-            "comments={0.comments}, cancelled_by_id={0.cancelled_by_id}, "
+            "comments={0.comments}, returned_by_id={0.returned_by_id}, "
             "created_at={0.created_at})"
         ).format(self)
 
