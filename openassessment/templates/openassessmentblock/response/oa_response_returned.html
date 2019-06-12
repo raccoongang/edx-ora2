@@ -58,7 +58,7 @@
                     {% trans "You can save your progress and return to complete your response at any time before the due date" %}
                     (<span class="step__deadline">
                         <span id="oa_step_deadline_response" class="date ora-datetime" data-datetime="{{ submission_due|timezone:'UTC'|date:'c' }}" data-timezone="{{ user_timezone }}" data-format="longDateTime" data-language="{{ user_language }}"></span>
-                    </span>).
+                    </span>)
                     {% else %}
                     {% trans "You can save your progress and return to complete your response at any time." %}
                     {% endif %}
