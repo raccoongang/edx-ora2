@@ -198,9 +198,6 @@ class StaffAreaMixin(object):
             # If no submissions are available for grading, will return None.
             submission_to_assess = staff_api.get_submission_to_assess(course_id, item_id, staff_id)
 
-            # import pydevd
-            # pydevd.settrace('host.docker.internal', port=3758, stdoutToServer=True, stderrToServer=True)
-
             if submission_to_assess is not None:
                 # This is posting a tracking event to the runtime.
                 self.runtime.publish(self, 'openassessmentblock.get_submission_for_staff_grading', {
@@ -472,14 +469,14 @@ class StaffAreaMixin(object):
         Args:
             data (dict): Data contain two attributes: submission_uuid and
                 comments. submission_uuid is id of submission which is to be
-                removed from the grading pool. Comments is the reason given
+                returned from the grading pool. Comments is the reason given
                 by the user.
 
             suffix (not used)
 
         Return:
             Json serializable dict with the following elements:
-                'success': (bool) Indicates whether or not the workflow cancelled successfully.
+                'success': (bool) Indicates whether or not the workflow returned successfully.
                 'msg': The response (could be error message or success message).
         """
         submission_uuid = data.get('submission_uuid')
@@ -548,7 +545,7 @@ class StaffAreaMixin(object):
             return {
                 "success": True,
                 'msg': self._(
-                    u"The learner submission has been removed from peer assessment. "
+                    u"The learner submission has been returned from peer assessment. "
                     u"The learner receives a grade of zero unless you delete "
                     u"the learner's state for the problem to allow them to "
                     u"resubmit a response."

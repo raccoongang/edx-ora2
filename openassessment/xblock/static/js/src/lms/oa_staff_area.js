@@ -95,6 +95,9 @@
                         // Install a change handler for rubric options to enable/disable the submit button
                         rubric.canSubmitCallback($.proxy(view.staffSubmitEnabled, view, $manageLearnersTab));
 
+                        // Install a change handler for rubric options to enable/disable the return button
+                        rubric.canSubmitCallback($.proxy(view.staffReturnEnabled, view, $manageLearnersTab));
+
                         rubric.changesExistCallback(
                             $.proxy(view.assessmentRubricChanges, view, view.OVERRIDE_UNSAVED_WARNING_KEY)
                         );
@@ -178,6 +181,9 @@
 
                         // Install a change handler for rubric options to enable/disable the submit button
                         rubric.canSubmitCallback($.proxy(view.staffSubmitEnabled, view, $staffGradeTab));
+
+                        // Install a change handler for rubric options to enable/disable the return button
+                        rubric.canSubmitCallback($.proxy(view.staffReturnEnabled, view, $staffGradeTab));
 
                         rubric.changesExistCallback(
                             $.proxy(view.assessmentRubricChanges, view, view.FULL_GRADE_UNSAVED_WARNING_KEY)
@@ -492,6 +498,10 @@
             return this.baseView.buttonEnabled('.wrapper--staff-assessment .action--submit', enabled);
         },
 
+        staffReturnEnabled: function(scope, enabled) {
+            return this.baseView.buttonEnabled('.wrapper--staff-assessment .action--return_back', enabled);
+        },
+
         /**
          * Called when something is selected or typed in the assessment rubric.
          * Used to set the unsaved changes warning dialog.
@@ -571,6 +581,7 @@
         callStaffAssess: function(submissionID, rubric, scope, successCallback, errorSelector, assessType) {
             var view = this;
             view.staffSubmitEnabled(scope, false);
+            view.staffReturnEnabled(scope, false);
             
             var handler = "staff_assess";
             

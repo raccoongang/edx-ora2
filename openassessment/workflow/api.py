@@ -11,8 +11,12 @@ from submissions import api as sub_api
 
 from .errors import (AssessmentWorkflowError, AssessmentWorkflowInternalError, AssessmentWorkflowNotFoundError,
                      AssessmentWorkflowRequestError)
-from .models import AssessmentWorkflow, AssessmentWorkflowCancellation
-from .serializers import AssessmentWorkflowCancellationSerializer, AssessmentWorkflowSerializer
+from .models import AssessmentWorkflow, AssessmentWorkflowCancellation, AssessmentWorkflowReturning
+from .serializers import (
+    AssessmentWorkflowCancellationSerializer,
+    AssessmentWorkflowSerializer,
+    AssessmentWorkflowReturningSerializer,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -260,15 +264,12 @@ def update_from_assessments(submission_uuid, assessment_requirements, override_s
     """
     workflow = _get_workflow_model(submission_uuid)
 
-    print(workflow, '-------get workflow model ------------')
-
     try:
         workflow.update_from_assessments(assessment_requirements, override_submitter_requirements)
         logger.info((
             u"Updated workflow for submission UUID {uuid} "
             u"with requirements {reqs}"
         ).format(uuid=submission_uuid, reqs=assessment_requirements))
-        print(_serialized_with_details(workflow), 'serialized with details ----------------------')
         return _serialized_with_details(workflow)
     except PeerAssessmentError as err:
         err_msg = u"Could not update assessment workflow: {}".format(err)
@@ -401,15 +402,15 @@ def cancel_workflow(submission_uuid, comments, cancelled_by_id, assessment_requi
 
 def return_workflow(submission_uuid, comments, returned_by_id, assessment_requirements):
     """
-    Add an entry in AssessmentWorkflowCancellation table for a AssessmentWorkflow.
+    Add an entry in AssessmentWorkflowReturning table for a AssessmentWorkflow.
 
     AssessmentWorkflow which has been returned is no longer included in the
     peer grading pool.
 
     Args:
         submission_uuid (str): The UUID of the workflow's submission.
-        comments (str): The reason for cancellation.
-        cancelled_by_id (str): The ID of the user who cancelled the peer workflow.
+        comments (str): The reason for returning.
+        returned_by_id (str): The ID of the user who returned the peer workflow.
         assessment_requirements (dict): Dictionary that currently looks like:
             `{"peer": {"must_grade": <int>, "must_be_graded_by": <int>}}`
             `must_grade` is the number of assessments a student must complete.
@@ -434,6 +435,23 @@ def get_assessment_workflow_cancellation(submission_uuid):
         return AssessmentWorkflowCancellationSerializer(workflow_cancellation).data if workflow_cancellation else None
     except DatabaseError:
         error_message = u"Error finding assessment workflow cancellation for submission UUID {}."\
+            .format(submission_uuid)
+        logger.exception(error_message)
+        raise PeerAssessmentInternalError(error_message)
+
+
+def get_assessment_workflow_returning(submission_uuid):
+    """
+    Get returning information for an assessment workflow.
+
+    Args:
+        submission_uuid (str): The UUID of the submission.
+    """
+    try:
+        workflow_returning = AssessmentWorkflowReturning.get_latest_workflow_returning(submission_uuid)
+        return AssessmentWorkflowReturningSerializer(workflow_returning).data if workflow_returning else None
+    except DatabaseError:
+        error_message = u"Error finding assessment workflow returning for submission UUID {}."\
             .format(submission_uuid)
         logger.exception(error_message)
         raise PeerAssessmentInternalError(error_message)

@@ -144,7 +144,10 @@
   }
 
   // actions
-  .action--submit, .action--save, .action--upload {
+  .action--submit,
+  .action--return_back,
+  .action--save,
+  .action--upload {
     text-shadow: none !important;
     box-shadow: none !important;
   }

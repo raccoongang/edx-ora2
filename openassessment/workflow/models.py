@@ -612,7 +612,7 @@ class AssessmentWorkflow(TimeStampedModel, StatusModel):
 
         Args:
             submission_uuid (str): The UUID of the workflow's submission.
-            comments (str): The reason for cancellation.
+            comments (str): The reason for returning.
             returned_by_id (str): The ID of the user who return the peer workflow.
             assessment_requirements (dict): Dictionary that currently looks like:
             `{"peer": {"must_grade": <int>, "must_be_graded_by": <int>}}`
@@ -633,7 +633,7 @@ class AssessmentWorkflow(TimeStampedModel, StatusModel):
             logger.exception(error_message)
             raise AssessmentWorkflowError(error_message)
         except DatabaseError:
-            error_message = u"Error creating assessment workflow cancellation for submission UUID {}.".format(
+            error_message = u"Error creating assessment workflow returning for submission UUID {}.".format(
                 submission_uuid)
             logger.exception(error_message)
             raise AssessmentWorkflowInternalError(error_message)
@@ -921,12 +921,12 @@ class AssessmentWorkflowReturning(models.Model):
             AssessmentWorkflowReturning
 
         """
-        cancellation_params = {
+        returning_params = {
             'workflow': workflow,
             'comments': comments,
             'returned_by_id': returned_by_id,
         }
-        return cls.objects.create(**cancellation_params)
+        return cls.objects.create(**returning_params)
 
     @classmethod
     def get_latest_workflow_returning(cls, submission_uuid):

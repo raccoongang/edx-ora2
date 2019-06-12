@@ -39,7 +39,7 @@ class AssessmentWorkflowCancellationSerializer(serializers.ModelSerializer):
 
 class AssessmentWorkflowReturningSerializer(serializers.ModelSerializer):
     """
-    Serialize a `AssessmentWorkflowCancellation` model.
+    Serialize a `AssessmentWorkflowReturning` model.
     """
 
     class Meta:

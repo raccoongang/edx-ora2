@@ -591,7 +591,6 @@ class SubmissionMixin(object):
                 workflow["submission_uuid"]
             )
             path = 'openassessmentblock/response/oa_response_cancelled.html'
-
         elif workflow["status"] == "returned":
 
             student_submission = self.get_user_submission(
@@ -599,9 +598,10 @@ class SubmissionMixin(object):
             )
             context['saved_response'] = create_submission_dict(student_submission, self.prompts)
             context['save_status'] = self.save_status
+            context["workflow_returning"] = self.get_workflow_returning_info(self.submission_uuid)
 
             context['submit_enabled'] = True
-            path = 'openassessmentblock/response/oa_response.html'
+            path = 'openassessmentblock/response/oa_response_returned.html'
 
         elif workflow["status"] == "done":
             student_submission = self.get_user_submission(
