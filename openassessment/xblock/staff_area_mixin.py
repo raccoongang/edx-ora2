@@ -462,7 +462,7 @@ class StaffAreaMixin(object):
 
     @XBlock.json_handler
     @require_course_staff("STUDENT_INFO", with_json_handler=True)
-    def return_submission(self, data, suffix=''):  # pylint: disable=W0613
+    def return_submission(self, data, suffix=''):  # pylint: disable=unused-argument
         """
         This will return the assessment + peer workflow for the particular submission.
 
@@ -532,15 +532,13 @@ class StaffAreaMixin(object):
         # Import is placed here to avoid model import at project startup.
         from openassessment.workflow import api as workflow_api
         try:
-            assessment_requirements = self.workflow_requirements()
             if requesting_user_id is None:
-                "The student_id is actually the bound user, which is the staff user in this context."
+                # The student_id is actually the bound user, which is the staff user in this context
                 requesting_user_id = self.get_student_item_dict()["student_id"]
             # Return the related workflow.
             workflow_api.return_workflow(
                 submission_uuid=submission_uuid, comments=comments,
                 returned_by_id=requesting_user_id,
-                assessment_requirements=assessment_requirements
             )
             return {
                 "success": True,

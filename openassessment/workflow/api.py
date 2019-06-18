@@ -400,7 +400,7 @@ def cancel_workflow(submission_uuid, comments, cancelled_by_id, assessment_requi
     AssessmentWorkflow.cancel_workflow(submission_uuid, comments, cancelled_by_id, assessment_requirements)
 
 
-def return_workflow(submission_uuid, comments, returned_by_id, assessment_requirements):
+def return_workflow(submission_uuid, comments, returned_by_id):
     """
     Add an entry in AssessmentWorkflowReturning table for a AssessmentWorkflow.
 
@@ -411,16 +411,8 @@ def return_workflow(submission_uuid, comments, returned_by_id, assessment_requir
         submission_uuid (str): The UUID of the workflow's submission.
         comments (str): The reason for returning.
         returned_by_id (str): The ID of the user who returned the peer workflow.
-        assessment_requirements (dict): Dictionary that currently looks like:
-            `{"peer": {"must_grade": <int>, "must_be_graded_by": <int>}}`
-            `must_grade` is the number of assessments a student must complete.
-            `must_be_graded_by` is the number of assessments a submission must
-            receive to be scored. `must_grade` should be greater than
-            `must_be_graded_by` to ensure that everyone will get scored.
-            The intention is to eventually pass in more assessment sequence
-            specific requirements in this dict.
     """
-    AssessmentWorkflow.return_workflow(submission_uuid, comments, returned_by_id, assessment_requirements)
+    AssessmentWorkflow.return_workflow(submission_uuid, comments, returned_by_id)
 
 
 def get_assessment_workflow_cancellation(submission_uuid):

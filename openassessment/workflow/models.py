@@ -61,12 +61,12 @@ class AssessmentWorkflow(TimeStampedModel, StatusModel):
     STEPS = ASSESSMENT_API_DICT.keys()
 
     STATUSES = [
-        "waiting",  # User has done all necessary assessment but hasn't been
-                    # graded yet -- we're waiting for assessments of their
-                    # submission by others.
-        "done",  # Complete
+        "waiting",    # User has done all necessary assessment but hasn't been
+                      # graded yet -- we're waiting for assessments of their
+                      # submission by others.
+        "done",       # Complete
         "cancelled",  # User submission has been cancelled.
-        "returned"  # User submission has been returned.
+        "returned",   # User submission has been returned.
     ]
 
     STATUS_VALUES = STEPS + STATUSES
@@ -309,10 +309,7 @@ class AssessmentWorkflow(TimeStampedModel, StatusModel):
                 fulfilled, moving the workflow to DONE and exposing their grade.
 
         """
-        if self.status == self.STATUS.cancelled:
-            return
-
-        if self.status == self.STATUS.returned:
+        if self.status in [self.STATUS.cancelled, self.STATUS.returned]:
             return
 
         # Update our AssessmentWorkflowStep models with the latest from our APIs
@@ -539,21 +536,11 @@ class AssessmentWorkflow(TimeStampedModel, StatusModel):
                 )
             )
 
-    def workflow_return(self, assessment_requirements):
+    def workflow_return(self):
         """
         Return workflow for all steps.
 
-        Set the points earned to 0 and workflow status to returned.
-
-        Args:
-            assessment_requirements (dict): Dictionary that currently looks like:
-                `{"peer": {"must_grade": <int>, "must_be_graded_by": <int>}}`
-                `must_grade` is the number of assessments a student must complete.
-                `must_be_graded_by` is the number of assessments a submission must
-                receive to be scored. `must_grade` should be greater than
-                `must_be_graded_by` to ensure that everyone will get scored.
-                The intention is to eventually pass in more assessment sequence
-                specific requirements in this dict.
+        Set the workflow status to returned.
         """
 
         # Save status if it is not returned.
@@ -603,7 +590,7 @@ class AssessmentWorkflow(TimeStampedModel, StatusModel):
             raise AssessmentWorkflowInternalError(error_message)
 
     @classmethod
-    def return_workflow(cls, submission_uuid, comments, returned_by_id, assessment_requirements):
+    def return_workflow(cls, submission_uuid, comments, returned_by_id):
         """
         Add an entry in AssessmentWorkflowReturning table for a AssessmentWorkflow.
 
@@ -614,20 +601,12 @@ class AssessmentWorkflow(TimeStampedModel, StatusModel):
             submission_uuid (str): The UUID of the workflow's submission.
             comments (str): The reason for returning.
             returned_by_id (str): The ID of the user who return the peer workflow.
-            assessment_requirements (dict): Dictionary that currently looks like:
-            `{"peer": {"must_grade": <int>, "must_be_graded_by": <int>}}`
-            `must_grade` is the number of assessments a student must complete.
-            `must_be_graded_by` is the number of assessments a submission must
-            receive to be scored. `must_grade` should be greater than
-            `must_be_graded_by` to ensure that everyone will get scored.
-            The intention is to eventually pass in more assessment sequence
-            specific requirements in this dict.
         """
         try:
             workflow = cls.objects.get(submission_uuid=submission_uuid)
             AssessmentWorkflowReturning.create(workflow=workflow, comments=comments, returned_by_id=returned_by_id)
             # Return the related step's workflow.
-            workflow.workflow_return(assessment_requirements)
+            workflow.workflow_return()
         except (cls.DoesNotExist, cls.MultipleObjectsReturned):
             error_message = u"Error finding workflow for submission UUID {}.".format(submission_uuid)
             logger.exception(error_message)
@@ -882,7 +861,8 @@ class AssessmentWorkflowCancellation(models.Model):
 
 
 class AssessmentWorkflowReturning(models.Model):
-    """Model for tracking returning of assessment workflow.
+    """
+    Model for tracking returning of assessment workflow.
 
     It is created when a staff member requests returning of a submission
     from the peer grading pool.

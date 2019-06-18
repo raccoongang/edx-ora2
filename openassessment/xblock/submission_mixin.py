@@ -1,7 +1,7 @@
 import json
 import logging
 
-from openassessment.assessment.models import StaffWorkflow
+from openassessment.assessment.models import StaffWorkflow, StudentTrainingWorkflow
 from openassessment.workflow.models import AssessmentWorkflow
 from xblock.core import XBlock
 
@@ -264,14 +264,17 @@ class SubmissionMixin(object):
         submission = api.create_submission(student_item_dict, student_sub_dict)
 
         if workflow.get("status") == 'returned':
-            update_workflow = AssessmentWorkflow.objects.get(submission_uuid=workflow.get('submission_uuid'))
-            update_workflow.submission_uuid = submission["uuid"]
-            update_workflow.status = AssessmentWorkflow.STATUS.waiting
-            update_workflow.save()
+            AssessmentWorkflow.objects.filter(submission_uuid=workflow.get('submission_uuid')).update(
+                submission_uuid=submission["uuid"],
+                status=AssessmentWorkflow.STATUS.waiting
+            )
 
-            staff_workflow = StaffWorkflow.objects.get(submission_uuid=workflow.get('submission_uuid'))
-            staff_workflow.submission_uuid = submission["uuid"]
-            staff_workflow.save()
+            StaffWorkflow.objects.filter(submission_uuid=workflow.get('submission_uuid')).update(
+                submission_uuid=submission["uuid"]
+            )
+            StudentTrainingWorkflow.objects.filter(submission_uuid=workflow.get('submission_uuid')).update(
+                submission_uuid=submission["uuid"]
+            )
         else:
             self.create_workflow(submission["uuid"])
 
