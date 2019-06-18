@@ -214,11 +214,13 @@ class WorkflowMixin(object):
         if not returning_info:
             return None
 
-        # Add the username of the staff member who returned the submission
-        returning_info['returned_by'] = self.get_username(returning_info['returned_by_id'])
+        # Add the username of the staff member who returned the submission or 'Staff' if we try to do it in Studio
+        try:
+            returning_info['returned_by'] = self.get_username(returning_info['returned_by_id'])
+        except TypeError:
+            returning_info['returned_by'] = 'Staff'
 
         # Add the date that the workflow was returned (in preference to the serialized date string)
-        del returning_info['created_at']
         returning_model = AssessmentWorkflowReturning.get_latest_workflow_returning(submission_uuid)
         if returning_model:
             returning_info['returned_at'] = returning_model.created_at

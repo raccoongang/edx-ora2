@@ -22,6 +22,7 @@ from model_utils import Choices
 from model_utils.models import StatusModel, TimeStampedModel
 
 from openassessment.assessment.errors.base import AssessmentError
+from openassessment.assessment.models import StaffWorkflow
 from openassessment.assessment.signals import assessment_complete_signal
 from submissions import api as sub_api
 
@@ -607,6 +608,9 @@ class AssessmentWorkflow(TimeStampedModel, StatusModel):
             AssessmentWorkflowReturning.create(workflow=workflow, comments=comments, returned_by_id=returned_by_id)
             # Return the related step's workflow.
             workflow.workflow_return()
+
+            StaffWorkflow.objects.filter(submission_uuid=submission_uuid).update(returned_at=now())
+
         except (cls.DoesNotExist, cls.MultipleObjectsReturned):
             error_message = u"Error finding workflow for submission UUID {}.".format(submission_uuid)
             logger.exception(error_message)

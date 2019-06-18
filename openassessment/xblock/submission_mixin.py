@@ -270,7 +270,8 @@ class SubmissionMixin(object):
             )
 
             StaffWorkflow.objects.filter(submission_uuid=workflow.get('submission_uuid')).update(
-                submission_uuid=submission["uuid"]
+                submission_uuid=submission["uuid"],
+                returned_at=None
             )
             StudentTrainingWorkflow.objects.filter(submission_uuid=workflow.get('submission_uuid')).update(
                 submission_uuid=submission["uuid"]
