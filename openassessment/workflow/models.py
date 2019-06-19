@@ -62,12 +62,12 @@ class AssessmentWorkflow(TimeStampedModel, StatusModel):
     STEPS = ASSESSMENT_API_DICT.keys()
 
     STATUSES = [
-        "waiting",    # User has done all necessary assessment but hasn't been
-                      # graded yet -- we're waiting for assessments of their
-                      # submission by others.
-        "done",       # Complete
+        "waiting",  # User has done all necessary assessment but hasn't been
+                    # graded yet -- we're waiting for assessments of their
+                    # submission by others.
+        "done",  # Complete
         "cancelled",  # User submission has been cancelled.
-        "returned",   # User submission has been returned.
+        "returned",  # User submission has been returned.
     ]
 
     STATUS_VALUES = STEPS + STATUSES
