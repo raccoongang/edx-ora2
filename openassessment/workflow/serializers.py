@@ -4,7 +4,7 @@ scope of the ORA2 APIs.
 """
 from rest_framework import serializers
 
-from openassessment.workflow.models import AssessmentWorkflow, AssessmentWorkflowCancellation
+from openassessment.workflow.models import AssessmentWorkflow, AssessmentWorkflowCancellation, AssessmentWorkflowReturning
 
 
 class AssessmentWorkflowSerializer(serializers.ModelSerializer):
@@ -33,5 +33,19 @@ class AssessmentWorkflowCancellationSerializer(serializers.ModelSerializer):
         fields = (
             'comments',
             'cancelled_by_id',
+            'created_at',
+        )
+
+
+class AssessmentWorkflowReturningSerializer(serializers.ModelSerializer):
+    """
+    Serialize a `AssessmentWorkflowReturning` model.
+    """
+
+    class Meta:
+        model = AssessmentWorkflowReturning
+        fields = (
+            'comments',
+            'returned_by_id',
             'created_at',
         )

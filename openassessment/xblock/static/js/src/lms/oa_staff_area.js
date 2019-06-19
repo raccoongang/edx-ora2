@@ -95,6 +95,9 @@
                         // Install a change handler for rubric options to enable/disable the submit button
                         rubric.canSubmitCallback($.proxy(view.staffSubmitEnabled, view, $manageLearnersTab));
 
+                        // Install a change handler for rubric options to enable/disable the return button
+                        rubric.canSubmitCallback($.proxy(view.staffReturnEnabled, view, $manageLearnersTab));
+
                         rubric.changesExistCallback(
                             $.proxy(view.assessmentRubricChanges, view, view.OVERRIDE_UNSAVED_WARNING_KEY)
                         );
@@ -179,6 +182,9 @@
                         // Install a change handler for rubric options to enable/disable the submit button
                         rubric.canSubmitCallback($.proxy(view.staffSubmitEnabled, view, $staffGradeTab));
 
+                        // Install a change handler for rubric options to enable/disable the return button
+                        rubric.canSubmitCallback($.proxy(view.staffReturnEnabled, view, $staffGradeTab));
+
                         rubric.changesExistCallback(
                             $.proxy(view.assessmentRubricChanges, view, view.FULL_GRADE_UNSAVED_WARNING_KEY)
                         );
@@ -190,6 +196,16 @@
                                 eventObject.preventDefault();
                                 view.submitStaffGrade(submissionID, rubric, $staffGradeTab,
                                     $(eventObject.currentTarget).hasClass('continue_grading--action')
+                                );
+                            }
+                        );
+
+                        $staffGradeTab.find('.wrapper--staff-assessment .action--return_back').click(
+                            function(eventObject) {
+                                var submissionID = $staffGradeTab.find('.staff__grade__form').data('submission-uuid');
+                                eventObject.preventDefault();
+                                view.submitStaffGrade(submissionID, rubric, $staffGradeTab,
+                                    $(eventObject.currentTarget).hasClass('continue_grading--action'), 'return'
                                 );
                             }
                         );
@@ -482,6 +498,10 @@
             return this.baseView.buttonEnabled('.wrapper--staff-assessment .action--submit', enabled);
         },
 
+        staffReturnEnabled: function(scope, enabled) {
+            return this.baseView.buttonEnabled('.wrapper--staff-assessment .action--return_back', enabled);
+        },
+
         /**
          * Called when something is selected or typed in the assessment rubric.
          * Used to set the unsaved changes warning dialog.
@@ -531,7 +551,7 @@
          * @param {boolean} continueGrading If true, another learner will be marked as "In Progress",
          *     and a new grading form will be rendered with the learner's answer.
          */
-        submitStaffGrade: function(submissionID, rubric, scope, continueGrading) {
+        submitStaffGrade: function(submissionID, rubric, scope, continueGrading, assessmentType='full-grade') {
             var view = this;
             var successCallback = function() {
                 view.baseView.unsavedWarningEnabled(false, view.FULL_GRADE_UNSAVED_WARNING_KEY);
@@ -544,7 +564,7 @@
                     view.closeStaffGradeForm(true);
                 }
             };
-            this.callStaffAssess(submissionID, rubric, scope, successCallback, '.staff-grade-error', 'full-grade');
+            this.callStaffAssess(submissionID, rubric, scope, successCallback, '.staff-grade-error', assessmentType);
         },
 
         /**
@@ -561,9 +581,18 @@
         callStaffAssess: function(submissionID, rubric, scope, successCallback, errorSelector, assessType) {
             var view = this;
             view.staffSubmitEnabled(scope, false);
+            view.staffReturnEnabled(scope, false);
+            
+            var handler = "staff_assess";
+            
+            if (assessType == "return") {
+                handler = "return_submission"
+            }
+
+            console.log(assessType);
 
             this.server.staffAssess(
-                rubric.optionsSelected(), rubric.criterionFeedback(), rubric.overallFeedback(), submissionID, assessType
+                rubric.optionsSelected(), rubric.criterionFeedback(), rubric.overallFeedback(), submissionID, assessType, handler
             ).done(successCallback).fail(function(errorMessage) {
                 scope.find(errorSelector).html(_.escape(errorMessage));
                 view.staffSubmitEnabled(scope, true);

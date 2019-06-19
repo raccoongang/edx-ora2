@@ -34,6 +34,7 @@ class StaffWorkflow(models.Model):
     grading_started_at = models.DateTimeField(null=True, db_index=True)
     cancelled_at = models.DateTimeField(null=True, db_index=True)
     assessment = models.CharField(max_length=128, db_index=True, null=True)
+    returned_at = models.DateTimeField(null=True, db_index=True)
 
     class Meta:
         ordering = ["created_at", "id"]
@@ -110,6 +111,7 @@ class StaffWorkflow(models.Model):
                 scorer_id=scorer_id,
                 grading_completed_at=None,
                 cancelled_at=None,
+                returned_at=None,
             )
             # If no existing submissions exist, then get any other
             # available workflows.
@@ -120,6 +122,7 @@ class StaffWorkflow(models.Model):
                     item_id=item_id,
                     grading_completed_at=None,
                     cancelled_at=None,
+                    returned_at=None,
                 )
             if not staff_workflows:
                 return None

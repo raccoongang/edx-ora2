@@ -5,7 +5,7 @@ Handle OpenAssessment XBlock requests to the Workflow API.
 from xblock.core import XBlock
 
 from openassessment.workflow import api as workflow_api
-from openassessment.workflow.models import AssessmentWorkflowCancellation
+from openassessment.workflow.models import AssessmentWorkflowCancellation, AssessmentWorkflowReturning
 
 
 class WorkflowMixin(object):
@@ -201,3 +201,28 @@ class WorkflowMixin(object):
             cancellation_info['cancelled_at'] = cancellation_model.created_at
 
         return cancellation_info
+
+    def get_workflow_returning_info(self, submission_uuid):
+        """
+        Returns returning information for a particular submission.
+
+        :param submission_uuid: The submission to return information for.
+        :return: The returning information, or None if the submission has
+        not been returned.
+        """
+        returning_info = workflow_api.get_assessment_workflow_returning(submission_uuid)
+        if not returning_info:
+            return None
+
+        # Add the username of the staff member who returned the submission or 'Staff' if we try to do it in Studio
+        try:
+            returning_info['returned_by'] = self.get_username(returning_info['returned_by_id'])
+        except TypeError:
+            returning_info['returned_by'] = 'Staff'
+
+        # Add the date that the workflow was returned (in preference to the serialized date string)
+        returning_model = AssessmentWorkflowReturning.get_latest_workflow_returning(submission_uuid)
+        if returning_model:
+            returning_info['returned_at'] = returning_model.created_at
+
+        return returning_info
