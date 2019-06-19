@@ -89,6 +89,11 @@
     border-top-color: $action-primary-color;
   }
 
+  // STATE: is returned
+  &.is--returned {
+    border-top-color: $uxpl-warning-accent;
+  }
+
   // STATE: is complete
   &.is--complete {
     border-top-color: $color-complete;

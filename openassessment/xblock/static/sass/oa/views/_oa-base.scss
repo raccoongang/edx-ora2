@@ -61,7 +61,8 @@
       }
     }
 
-    .action--submit {
+    .action--submit,
+    .action--return_back {
       @extend %btn--primary;
       @extend %action-2;
       @include margin-left($baseline-v/2);
@@ -404,6 +405,30 @@
 
       .step__status__value {
         background: $action-primary-color;
+
+        .icon {
+          display: inline-block;
+        }
+
+        .copy, .icon {
+          color: $copy-inverse-color;
+        }
+      }
+
+      button {
+        opacity: 1;
+      }
+    }
+
+    // STATE: returned
+    &.is--returned {
+
+      .step__counter:before {
+        color: $uxpl-warning-accent;
+      }
+
+      .step__status__value {
+        background: $uxpl-warning-accent;
 
         .icon {
           display: inline-block;
@@ -1186,7 +1211,8 @@
     }
   }
 
-  .action--submit {
+  .action--submit,
+  .action--return_back {
     @extend %btn--secondary;
     @extend %action-2;
     @include margin-right(($baseline-v/2));

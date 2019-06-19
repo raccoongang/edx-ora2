@@ -322,8 +322,8 @@ if (typeof OpenAssessment.Server === "undefined" || !OpenAssessment.Server) {
          * @returns {promise} A promise which resolves with no arguments if successful,
          *     and which fails with an error message otherwise.
          */
-        staffAssess: function(optionsSelected, criterionFeedback, overallFeedback, submissionID, assessType) {
-            return this.submitAssessment("staff_assess", {
+        staffAssess: function(optionsSelected, criterionFeedback, overallFeedback, submissionID, assessType, handler="staff_assess") {
+            return this.submitAssessment(handler, {
                 options_selected: optionsSelected,
                 criterion_feedback: criterionFeedback,
                 overall_feedback: overallFeedback,

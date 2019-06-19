@@ -11,8 +11,12 @@ from submissions import api as sub_api
 
 from .errors import (AssessmentWorkflowError, AssessmentWorkflowInternalError, AssessmentWorkflowNotFoundError,
                      AssessmentWorkflowRequestError)
-from .models import AssessmentWorkflow, AssessmentWorkflowCancellation
-from .serializers import AssessmentWorkflowCancellationSerializer, AssessmentWorkflowSerializer
+from .models import AssessmentWorkflow, AssessmentWorkflowCancellation, AssessmentWorkflowReturning
+from .serializers import (
+    AssessmentWorkflowCancellationSerializer,
+    AssessmentWorkflowSerializer,
+    AssessmentWorkflowReturningSerializer,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -396,6 +400,21 @@ def cancel_workflow(submission_uuid, comments, cancelled_by_id, assessment_requi
     AssessmentWorkflow.cancel_workflow(submission_uuid, comments, cancelled_by_id, assessment_requirements)
 
 
+def return_workflow(submission_uuid, comments, returned_by_id):
+    """
+    Add an entry in AssessmentWorkflowReturning table for a AssessmentWorkflow.
+
+    AssessmentWorkflow which has been returned is no longer included in the
+    peer grading pool.
+
+    Args:
+        submission_uuid (str): The UUID of the workflow's submission.
+        comments (str): The reason for returning.
+        returned_by_id (str): The ID of the user who returned the peer workflow.
+    """
+    AssessmentWorkflow.return_workflow(submission_uuid, comments, returned_by_id)
+
+
 def get_assessment_workflow_cancellation(submission_uuid):
     """
     Get cancellation information for an assessment workflow.
@@ -408,6 +427,23 @@ def get_assessment_workflow_cancellation(submission_uuid):
         return AssessmentWorkflowCancellationSerializer(workflow_cancellation).data if workflow_cancellation else None
     except DatabaseError:
         error_message = u"Error finding assessment workflow cancellation for submission UUID {}."\
+            .format(submission_uuid)
+        logger.exception(error_message)
+        raise PeerAssessmentInternalError(error_message)
+
+
+def get_assessment_workflow_returning(submission_uuid):
+    """
+    Get returning information for an assessment workflow.
+
+    Args:
+        submission_uuid (str): The UUID of the submission.
+    """
+    try:
+        workflow_returning = AssessmentWorkflowReturning.get_latest_workflow_returning(submission_uuid)
+        return AssessmentWorkflowReturningSerializer(workflow_returning).data if workflow_returning else None
+    except DatabaseError:
+        error_message = u"Error finding assessment workflow returning for submission UUID {}."\
             .format(submission_uuid)
         logger.exception(error_message)
         raise PeerAssessmentInternalError(error_message)
