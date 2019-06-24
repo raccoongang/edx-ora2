@@ -202,6 +202,15 @@
         });
 
         $section.find(".open-response-assessment-main-table").append(grid.render().el);
+
+        $.each(grid.collection.models, function(i, val){
+            if(val.attributes.staff > 0){
+                var staffTable = $section.find(".open-response-assessment-main-table")
+                var staffTableColIndex = staffTable.find('thead th.staff').index()
+                staffTable.find('tbody tr:eq('+i+') td:eq('+staffTableColIndex+') ').css('color', 'red')
+            }
+        });
+
     };
 
     OpenAssessment.CourseItemsListingView.prototype.displayOraBlock = function(url) {
