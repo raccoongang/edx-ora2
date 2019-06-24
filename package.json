@@ -3,13 +3,13 @@
   "version": "2.0.0",
   "repository": "https://github.com/edx/edx-ora2.git",
   "dependencies": {
-    "backbone": "~1.2.3",
-    "backgrid": "~0.3.8",
-    "edx-ui-toolkit": "1.5.3",
-    "moment": "^2.15.1",
-    "moment-timezone": "~0.5.5",
-    "requirejs": "~2.3.2",
-    "underscore": "^1.8.2"
+    "backbone": "^1.4.0",
+    "backgrid": "^0.3.8",
+    "edx-ui-toolkit": "^1.5.4",
+    "moment": "^2.24.0",
+    "moment-timezone": "^0.5.25",
+    "requirejs": "^2.3.6",
+    "underscore": "^1.9.1"
   },
   "devDependencies": {
     "jasmine": "^2.3.0",
