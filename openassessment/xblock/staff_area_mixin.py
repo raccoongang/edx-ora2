@@ -9,6 +9,7 @@ import logging
 from xblock.core import XBlock
 
 from openassessment.assessment.errors import PeerAssessmentInternalError
+from openassessment.utils.email_notification import send_notification_email
 from openassessment.workflow.errors import AssessmentWorkflowError, AssessmentWorkflowInternalError
 from openassessment.xblock.data_conversion import create_submission_dict
 from openassessment.xblock.resolve_dates import DISTANT_FUTURE, DISTANT_PAST
@@ -478,6 +479,11 @@ class StaffAreaMixin(object):
         if not comments:
             return {"success": False, "msg": self._(u'Please enter valid reason to remove the submission.')}
 
+        user_email, submission = self.get_user_email_by_submission_uuid(submission_uuid)
+
+        if user_email and submission:
+            send_notification_email(user_email, submission, "cancel", comments)
+
         return self._cancel_workflow(submission_uuid, comments)
 
     @XBlock.json_handler
@@ -505,15 +511,10 @@ class StaffAreaMixin(object):
         if not comments:
             return {"success": False, "msg": self._(u'Please enter valid reason to return the submission.')}
 
-
-
         user_email, submission = self.get_user_email_by_submission_uuid(submission_uuid)
 
-        # TODO Move to top
-        from openassessment.utils.email_notification import send_notification_email
-
         if user_email and submission:
-            send_notification_email(user_email, submission)
+            send_notification_email(user_email, submission, "return", comments)
 
         return self._return_workflow(submission_uuid, comments)
 

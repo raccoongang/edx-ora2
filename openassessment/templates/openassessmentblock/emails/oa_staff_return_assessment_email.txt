@@ -1,3 +1,10 @@
 {% load i18n %}
 
-I thin you can do it better
+{% trans "Your answer was returned by the course team on " %} {{ datetime|date:'m/d/y H:i a' }}
+{% trans "ACCEL team comment: " %}
+
+
+<a href="{{ url }}">{% trans "Link to returned assessment" %}</a>
+
+
+{% trans "Best regards, ACCEL team" %}

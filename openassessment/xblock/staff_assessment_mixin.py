@@ -7,6 +7,7 @@ from xblock.core import XBlock
 
 from openassessment.assessment.api import staff as staff_api
 from openassessment.assessment.errors import StaffAssessmentInternalError, StaffAssessmentRequestError
+from openassessment.utils.email_notification import send_notification_email
 from openassessment.workflow import api as workflow_api
 from staff_area_mixin import require_course_staff
 
@@ -26,6 +27,26 @@ class StaffAssessmentMixin(object):
         """
 
         return staff_api.get_latest_staff_assessment(submission_uuid) is not None
+
+    def get_user_email_by_submission_uuid(self, submission_uuid):
+        """
+        Gets the user email from submissions
+        :param submission_uuid: (string) submission uuid
+        :return: user email or None
+        """
+        from submissions import api as submission_api
+
+        submission = submission_api.get_submission_and_student(submission_uuid)
+        if submission:
+            anonymous_student_id = submission['student_item']['student_id']
+
+            try:
+                user = self.xmodule_runtime.get_real_user(anonymous_student_id)
+                user_email = user.email
+            except (TypeError, AttributeError):
+                user_email = None
+
+            return user_email, submission
 
     @XBlock.json_handler
     @require_course_staff("STUDENT_INFO")
@@ -55,6 +76,11 @@ class StaffAssessmentMixin(object):
                 None,
                 override_submitter_requirements=(assess_type == 'regrade')
             )
+
+            user_email, submission = self.get_user_email_by_submission_uuid(data['submission_uuid'])
+
+            if user_email and submission:
+                send_notification_email(user_email, submission, "done", data.get('overall_feedback'))
 
         except StaffAssessmentRequestError:
             logger.warning(
