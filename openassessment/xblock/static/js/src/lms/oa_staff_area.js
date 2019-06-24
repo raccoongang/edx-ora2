@@ -551,7 +551,8 @@
          * @param {boolean} continueGrading If true, another learner will be marked as "In Progress",
          *     and a new grading form will be rendered with the learner's answer.
          */
-        submitStaffGrade: function(submissionID, rubric, scope, continueGrading, assessmentType='full-grade') {
+        submitStaffGrade: function(submissionID, rubric, scope, continueGrading, assessmentType) {
+            assessmentType = typeof assessmentType  === 'undefined' ? 'full-grade' : assessmentType;
             var view = this;
             var successCallback = function() {
                 view.baseView.unsavedWarningEnabled(false, view.FULL_GRADE_UNSAVED_WARNING_KEY);
