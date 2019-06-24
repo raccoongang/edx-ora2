@@ -39,6 +39,25 @@
             }
         });
 
+        var UnitCell = Backgrid.UriCell.extend({
+            staff: true,
+            render: function() {
+                this.$el.empty();
+                var url = this.model.get('link');
+                var rawValue = this.model.get(this.column.get("name"));
+                var formattedValue = this.formatter.fromRaw(rawValue, this.model);
+                var link = $("<a>", {
+                        text: formattedValue,
+                        title: this.title || formattedValue,
+                        href: url,
+                        target: "_blank"
+                    });
+                this.$el.append(link);
+                this.delegateEvents();
+                return this;
+            }
+        });
+
         var StaffCell = AssessmentCell.extend({
             staff: true
         });
@@ -46,7 +65,7 @@
         this._columns = [
             {
                 name: 'parent_name', label: gettext("Unit Name"), label_summary: gettext("Units"),
-                cell: "string", num: false, editable: false
+                cell: UnitCell, num: false, editable: false
             },
             {
                 name: 'name', label: gettext("Assessment"), label_summary: gettext("Assessments"),

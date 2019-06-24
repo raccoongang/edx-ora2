@@ -6,10 +6,12 @@ import csv
 import json
 
 from django.conf import settings
+from opaque_keys.edx.locator import BlockUsageLocator
 
 from openassessment.assessment.models import Assessment, AssessmentFeedback, AssessmentPart
 from openassessment.workflow.models import AssessmentWorkflow
 from submissions import api as sub_api
+from lms.djangoapps.courseware.url_helpers import get_redirect_url
 
 
 class CsvWriter(object):
@@ -525,13 +527,13 @@ class OraAggregateData(object):
             statuses = AssessmentWorkflow().STATUS_VALUES
 
         items = AssessmentWorkflow.objects.filter(course_id=course_id, status__in=statuses).values('item_id', 'status')
-
         result = defaultdict(lambda: {status: 0 for status in statuses})
         for item in items:
             item_id = item['item_id']
             status = item['status']
             result[item_id]['total'] = result[item_id].get('total', 0) + 1
+            usage_key = BlockUsageLocator.from_string(item_id)
+            result[item_id]['link'] = get_redirect_url(usage_key.course_key, usage_key)
             if status in statuses:
                 result[item_id][status] += 1
-
         return result
