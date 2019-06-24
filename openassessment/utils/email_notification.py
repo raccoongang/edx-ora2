@@ -63,4 +63,4 @@ def send_notification_email(user_email, submission, action_name, comment):
             fail_silently=False
         )
     except SMTPException:
-        log.warning("Failure sending ORA staff response form e-mail")
+        log.exception("Failure sending ORA staff response form e-mail")
