@@ -31,26 +31,6 @@ class StaffAssessmentMixin(StaffBaseMixin):
 
         return staff_api.get_latest_staff_assessment(submission_uuid) is not None
 
-    def get_user_email_by_submission_uuid(self, submission_uuid):
-        """
-        Gets the user email from submissions
-        :param submission_uuid: (string) submission uuid
-        :return: user email or None
-        """
-        from submissions import api as submission_api
-
-        submission = submission_api.get_submission_and_student(submission_uuid)
-        if submission:
-            anonymous_student_id = submission['student_item']['student_id']
-
-            try:
-                user = self.xmodule_runtime.get_real_user(anonymous_student_id)
-                user_email = user.email
-            except (TypeError, AttributeError):
-                user_email = None
-
-            return user_email, submission
-
     @XBlock.json_handler
     @require_course_staff("STUDENT_INFO")
     @verify_assessment_parameters
