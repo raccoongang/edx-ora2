@@ -1,0 +1,3 @@
+{% load i18n %}
+
+I thin you can do it better

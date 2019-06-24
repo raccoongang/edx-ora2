@@ -250,6 +250,26 @@ class StaffAreaMixin(object):
         except PeerAssessmentInternalError:
             return self.render_error(self._(u"Error getting staff grade ungraded and checked out counts."))
 
+    def get_user_email_by_submission_uuid(self, submission_uuid):
+        """
+        Gets the user email from submissions
+        :param submission_uuid: (string) submission uuid
+        :return: user email or None
+        """
+        from submissions import api as submission_api
+
+        submission = submission_api.get_submission_and_student(submission_uuid)
+        if submission:
+            anonymous_student_id = submission['student_item']['student_id']
+
+            try:
+                user = self.xmodule_runtime.get_real_user(anonymous_student_id)
+                user_email = user.email
+            except (TypeError, AttributeError):
+                user_email = None
+
+            return user_email, submission
+
     def get_student_submission_context(self, student_email, submission):
         """
         Get a context dict for rendering a student submission and associated rubric (for staff grading).
@@ -484,6 +504,16 @@ class StaffAreaMixin(object):
 
         if not comments:
             return {"success": False, "msg": self._(u'Please enter valid reason to return the submission.')}
+
+
+
+        user_email, submission = self.get_user_email_by_submission_uuid(submission_uuid)
+
+        # TODO Move to top
+        from openassessment.utils.email_notification import send_notification_email
+
+        if user_email and submission:
+            send_notification_email(user_email, submission)
 
         return self._return_workflow(submission_uuid, comments)
 
