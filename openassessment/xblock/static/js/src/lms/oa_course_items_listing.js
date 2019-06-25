@@ -6,7 +6,6 @@
         var $section = $(element);
         var block = $section.find('.open-response-assessment-block');
         var itemViewEnabled = (parseInt(block.data('item-view-enabled')) === 1) && XBlock;
-
         this.$section = $section;
         this.runtime = runtime;
         this.oraData = $.parseJSON($("#open-response-assessment-items").text());
@@ -144,24 +143,25 @@
         $.each(self.oraData, function(i, oraItem) {
             var total = 0;
             var itemId = oraItem.id;
+            if(itemId != undefined) {
+                $.each(oraSteps, function (j, step) {
+                    oraItem[step] = 0;
+                });
 
-            $.each(oraSteps, function(j, step) {
-                oraItem[step] = 0;
-            });
-
-            if (itemId in data) {
-                _.extend(oraItem, data[itemId]);
-                if (oraItem.staff_assessment) {
-                    oraItem.staff = oraItem.waiting;
-                    oraItem.waiting = 0;
+                if (itemId in data) {
+                    _.extend(oraItem, data[itemId]);
+                    if (oraItem.staff_assessment) {
+                        oraItem.staff = oraItem.waiting;
+                        oraItem.waiting = 0;
+                    }
                 }
+
+                $.each(oraSteps, function (j, step) {
+                    total += oraItem[step];
+                });
+
+                oraItem.total = total;
             }
-
-            $.each(oraSteps, function(j, step) {
-                total += oraItem[step];
-            });
-
-            oraItem.total = total;
         });
 
         block.data('rendered', 1);
@@ -189,17 +189,19 @@
         });
 
         $.each(data, function(index, obj) {
-            $.each(obj, function(key, value) {
-                var idx = 0;
-                if (key in summaryDataMap) {
-                    idx = summaryDataMap[key];
-                    if (summaryData[idx].num) {
-                        summaryData[idx].value += value;
-                    } else {
-                        summaryData[idx].value += 1;
+            if (obj["type"] !== "subsection") {
+                $.each(obj, function (key, value) {
+                    var idx = 0;
+                    if (key in summaryDataMap) {
+                        idx = summaryDataMap[key];
+                        if (summaryData[idx].num) {
+                            summaryData[idx].value += value;
+                        } else {
+                            summaryData[idx].value += 1;
+                        }
                     }
-                }
-            });
+                });
+            }
         });
 
         var templateData = _.template($('#open-response-assessment-summary-tpl').text());
