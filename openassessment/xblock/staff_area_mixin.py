@@ -9,9 +9,13 @@ import logging
 from xblock.core import XBlock
 
 from openassessment.assessment.errors import PeerAssessmentInternalError
+from openassessment.utils.email_notification import send_notification_email
 from openassessment.workflow.errors import AssessmentWorkflowError, AssessmentWorkflowInternalError
 from openassessment.xblock.data_conversion import create_submission_dict
 from openassessment.xblock.resolve_dates import DISTANT_FUTURE, DISTANT_PAST
+from openassessment.xblock.staff_base_mixin import StaffBaseMixin
+
+from submissions import api as submission_api
 
 from .user_data import get_user_preferences
 
@@ -78,7 +82,7 @@ def require_course_staff(error_key, with_json_handler=False):
     return _decorator
 
 
-class StaffAreaMixin(object):
+class StaffAreaMixin(StaffBaseMixin):
     """
     Display debug information to course and global staff.
     """
@@ -458,6 +462,13 @@ class StaffAreaMixin(object):
         if not comments:
             return {"success": False, "msg": self._(u'Please enter valid reason to remove the submission.')}
 
+        submission = submission_api.get_submission_and_student(submission_uuid)
+        if submission:
+            user_email = self.get_user_email(submission['student_item']['student_id'])
+
+            if user_email:
+                send_notification_email(user_email, submission, "cancel", comments)
+
         return self._cancel_workflow(submission_uuid, comments)
 
     @XBlock.json_handler
@@ -484,6 +495,13 @@ class StaffAreaMixin(object):
 
         if not comments:
             return {"success": False, "msg": self._(u'Please enter valid reason to return the submission.')}
+
+        submission = submission_api.get_submission_and_student(submission_uuid)
+        if submission:
+            user_email = self.get_user_email(submission['student_item']['student_id'])
+
+            if user_email:
+                send_notification_email(user_email, submission, "return", comments)
 
         return self._return_workflow(submission_uuid, comments)
 

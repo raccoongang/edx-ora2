@@ -1,0 +1,14 @@
+{% load i18n %}
+
+
+{% trans "Congratulations!" %}
+
+{% trans "You have successfully  passed the assessment" %}
+{% trans "Score was added by Accel course Team on " %} {{ datetime|date:'m/d/y H:i a' }}
+{% if comment %}
+    {% trans "ACCEL team comment:" %} {{ comment }}
+{% endif %}
+
+<a href="{{ url }}">{% trans "Link to the assessment" %}</a>
+
+{% trans "Best regards, ACCEL team" %}
