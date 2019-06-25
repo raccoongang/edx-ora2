@@ -115,12 +115,12 @@ DEFAULT_STUDENT_TRAINING = {
             "answer": DEFAULT_EXAMPLE_ANSWER,
             "options_selected": [
                 {
-                    "criterion": _("Ideas"),
-                    "option": _("Fair")
+                    "criterion": "Ideas",
+                    "option": "Fair"
                 },
                 {
-                    "criterion": _("Content"),
-                    "option": _("Good")
+                    "criterion": "Content",
+                    "option": "Good"
                 }
             ]
         },
@@ -128,12 +128,12 @@ DEFAULT_STUDENT_TRAINING = {
             "answer": DEFAULT_EXAMPLE_ANSWER_2,
             "options_selected": [
                 {
-                    "criterion": _("Ideas"),
-                    "option": _("Poor")
+                    "criterion": "Ideas",
+                    "option": "Poor"
                 },
                 {
-                    "criterion": _("Content"),
-                    "option": _("Good")
+                    "criterion": "Content",
+                    "option": "Good"
                 }
             ]
         }
