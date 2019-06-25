@@ -12,7 +12,7 @@ from opaque_keys.edx.locator import BlockUsageLocator
 from openassessment.assessment.models import Assessment, AssessmentFeedback, AssessmentPart
 from openassessment.workflow.models import AssessmentWorkflow
 from submissions import api as sub_api
-from lms.djangoapps.courseware.exception import ItemNotFoundError
+from xmodule.modulestore.exceptions import ItemNotFoundError
 from lms.djangoapps.courseware.url_helpers import get_redirect_url
 
 log = logging.getLogger(__name__)
