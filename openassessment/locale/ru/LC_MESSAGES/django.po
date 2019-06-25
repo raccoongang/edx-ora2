@@ -1050,8 +1050,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"                    Это назначение имеет несколько шагов. На первом этапе вы "
-"предоставите ответ на вопрос. Другие шаги появляются под %(start_tag)s Вашим "
+"                    Этот задание состоит из нескольких шагов. На первом "
+"этапе вы предоставляете ответ на заданный вопрос. Следующие шаги появляются "
+"под %(start_tag)s Вашим "
 "ответом %(end_tag)s \n"
 "                "
 
@@ -1332,7 +1333,7 @@ msgstr "Выполняется"
 #: openassessment/templates/openassessmentblock/response/oa_response.html:56
 #: openassessment/templates/openassessmentblock/response/oa_response_returned.html:56
 msgid "Enter your response to the prompt."
-msgstr "Введите свой ответ на приглашение."
+msgstr "Введите свой ответ на вопрос."
 
 #: openassessment/templates/openassessmentblock/response/oa_response.html:58
 #: openassessment/templates/openassessmentblock/response/oa_response_returned.html:58
@@ -1340,14 +1341,14 @@ msgid ""
 "You can save your progress and return to complete your response at any time "
 "before the due date"
 msgstr ""
-"Вы можете сохранить свою работу и завершить её в любое время до истечения "
-"срока сдачи"
+"Вы можете сохранить свой ответ в текущем состоянии и дополнить его позже. Вы "
+"не сможете изменить свой ответ после того, как отправите его на проверку."
 
 #: openassessment/templates/openassessmentblock/response/oa_response.html:63
 #: openassessment/templates/openassessmentblock/response/oa_response_returned.html:63
 msgid ""
 "You can save your progress and return to complete your response at any time."
-msgstr "Вы можете сохранить свою работу и завершить её в любое время."
+msgstr "Вы можете сохранить свой ответ в текущем состоянии и дополнить его позже."
 
 #: openassessment/templates/openassessmentblock/response/oa_response.html:65
 #: openassessment/templates/openassessmentblock/response/oa_response_returned.html:65
@@ -1359,7 +1360,7 @@ msgstr ""
 #: openassessment/templates/openassessmentblock/response/oa_response.html:74
 #: openassessment/templates/openassessmentblock/response/oa_response_returned.html:100
 msgid "The prompt for this section"
-msgstr "Подсказка для этого раздела"
+msgstr "Задание"
 
 #: openassessment/templates/openassessmentblock/response/oa_response.html:92
 #: openassessment/templates/openassessmentblock/response/oa_response_returned.html:118
@@ -1374,7 +1375,7 @@ msgstr "Ваш ответ (необязательно)"
 #: openassessment/templates/openassessmentblock/response/oa_response.html:104
 #: openassessment/templates/openassessmentblock/response/oa_response_returned.html:130
 msgid "Enter your response to the prompt above."
-msgstr "Введите свой ответ на запрос выше."
+msgstr "Введите ответ."
 
 #: openassessment/templates/openassessmentblock/response/oa_response.html:118
 #: openassessment/templates/openassessmentblock/response/oa_response_returned.html:144
