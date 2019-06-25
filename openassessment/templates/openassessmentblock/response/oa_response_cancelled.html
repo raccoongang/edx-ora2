@@ -35,7 +35,7 @@
                     <p>
                         {% if workflow_cancellation.cancelled_by %}
                             {% blocktrans with removed_datetime=workflow_cancellation.cancelled_at|timezone:"UTC"|date:"Y-m-d H:i e" removed_by_username=workflow_cancellation.cancelled_by %}
-                                Your submission has been cancelled by {{ removed_by_username }} on {{ removed_datetime }}
+                                Your submission has been cancelled by course team on {{ removed_datetime }}
                             {% endblocktrans %}
                         {% else %}
                             {% blocktrans with removed_datetime=workflow_cancellation.cancelled_at|timezone:"UTC"|date:"Y-m-d H:i e" %}

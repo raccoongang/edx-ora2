@@ -75,7 +75,7 @@
                     <p>
                         {% if workflow_returning.returned_by %}
                             {% blocktrans with returned_datetime=workflow_returning.returned_at|timezone:"UTC"|date:"Y-m-d H:i e" returned_by_username=workflow_returning.returned_by %}
-                                Your submission has been returned by {{ returned_by_username }} on {{ returned_datetime }}
+                                Your submission has been returned by course team on {{ returned_datetime }}
                             {% endblocktrans %}
                         {% else %}
                             {% blocktrans with returned_datetime=workflow_returning.returned_at|timezone:"UTC"|date:"Y-m-d H:i e" %}
