@@ -93,6 +93,24 @@ OpenAssessment.ResponseView.prototype = {
         var handlePrepareUpload = function(eventData) { view.prepareUpload(eventData.target.files, uploadType); };
         sel.find('input[type=file]').on('change', handlePrepareUpload);
 
+        var handleCustomButton = function(eventData) {
+            eventData.preventDefault();
+            $(this).parent().siblings('.ora-file-input').click();
+
+            $(".ora-file-input").change(function (ev) {
+                var input = ev.target;
+                if (input.files) {
+                    var names = [];
+                    $.each(input.files, function (i, e) {
+                        names[i] = e.name;
+                    });
+                    $(".ora-upload-title").text("");
+                }
+            });
+        };
+
+        sel.find('.ora-upload-btn').on('click', handleCustomButton);
+
         var submit = $('.step--response__submit', this.element);
         this.textResponse = $(submit).attr('text_response');
         this.fileUploadResponse = $(submit).attr('file_upload_response');
@@ -644,7 +662,7 @@ OpenAssessment.ResponseView.prototype = {
 
             divLabel = $('<div/>');
             divLabel.addClass('submission__file__description__label');
-            divLabel.text(gettext("Describe ") + files[i].name + ' ' + gettext("(required):"));
+            divLabel.text(interpolate(gettext("Describe  %(filename)s (required):"), {'filename': files[i].name}, true));
             divLabel.appendTo(mainDiv);
 
             divTextarea = $('<div/>');
