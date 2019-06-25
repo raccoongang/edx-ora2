@@ -9,6 +9,6 @@
 {% trans "ACCEL team comment:" %} {{ comment }}
 {% endif %}
 
-{% trans "Link to returned assessment" %} {{ url }}
+{% trans "Link to the assessment" %} {{ url }}
 
 {% trans "Best regards, ACCEL team" %}
