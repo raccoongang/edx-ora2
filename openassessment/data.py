@@ -543,8 +543,8 @@ class OraAggregateData(object):
                 link = get_redirect_url(usage_key.course_key, usage_key)
             except ItemNotFoundError as e:
                 log.exception(str(e))
-            finally:
-                result[item_id]['link'] = link
+
+            result[item_id]['link'] = link
 
             if status in statuses:
                 result[item_id][status] += 1
