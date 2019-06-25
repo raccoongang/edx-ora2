@@ -15,8 +15,6 @@ from submissions import api as sub_api
 from lms.djangoapps.courseware.exception import ItemNotFoundError
 from lms.djangoapps.courseware.url_helpers import get_redirect_url
 
-
-
 log = logging.getLogger(__name__)
 
 
