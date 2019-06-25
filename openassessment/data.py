@@ -3,7 +3,6 @@ Aggregate data for openassessment.
 """
 from collections import defaultdict
 import csv
-import logging
 import json
 
 from django.conf import settings
@@ -12,10 +11,7 @@ from opaque_keys.edx.locator import BlockUsageLocator
 from openassessment.assessment.models import Assessment, AssessmentFeedback, AssessmentPart
 from openassessment.workflow.models import AssessmentWorkflow
 from submissions import api as sub_api
-from lms.djangoapps.courseware.exception import ItemNotFoundError
 from lms.djangoapps.courseware.url_helpers import get_redirect_url
-
-log = logging.getLogger(__name__)
 
 
 class CsvWriter(object):
@@ -536,16 +532,8 @@ class OraAggregateData(object):
             item_id = item['item_id']
             status = item['status']
             result[item_id]['total'] = result[item_id].get('total', 0) + 1
-
             usage_key = BlockUsageLocator.from_string(item_id)
-            link = ""
-            try:
-                link = get_redirect_url(usage_key.course_key, usage_key)
-            except ItemNotFoundError as e:
-                log.exception(str(e))
-
-            result[item_id]['link'] = link
-
+            result[item_id]['link'] = get_redirect_url(usage_key.course_key, usage_key)
             if status in statuses:
                 result[item_id][status] += 1
         return result
