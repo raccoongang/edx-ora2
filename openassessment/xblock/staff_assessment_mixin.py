@@ -7,15 +7,19 @@ from xblock.core import XBlock
 
 from openassessment.assessment.api import staff as staff_api
 from openassessment.assessment.errors import StaffAssessmentInternalError, StaffAssessmentRequestError
+from openassessment.utils.email_notification import send_notification_email
 from openassessment.workflow import api as workflow_api
+from openassessment.xblock.staff_base_mixin import StaffBaseMixin
 from staff_area_mixin import require_course_staff
+
+from submissions import api as submission_api
 
 from .data_conversion import clean_criterion_feedback, create_rubric_dict, verify_assessment_parameters
 
 logger = logging.getLogger(__name__)
 
 
-class StaffAssessmentMixin(object):
+class StaffAssessmentMixin(StaffBaseMixin):
     """
     This mixin is for all staff-assessment related endpoints.
     """
@@ -55,6 +59,13 @@ class StaffAssessmentMixin(object):
                 None,
                 override_submitter_requirements=(assess_type == 'regrade')
             )
+
+            submission = submission_api.get_submission_and_student(data['submission_uuid'])
+            if submission:
+                user_email = self.get_user_email(submission['student_item']['student_id'])
+
+                if user_email:
+                    send_notification_email(user_email, submission, "done", data.get('overall_feedback'))
 
         except StaffAssessmentRequestError:
             logger.warning(
