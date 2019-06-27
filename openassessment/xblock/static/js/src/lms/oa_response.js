@@ -662,7 +662,7 @@ OpenAssessment.ResponseView.prototype = {
 
             divLabel = $('<div/>');
             divLabel.addClass('submission__file__description__label');
-            divLabel.text(interpolate(gettext("Describe  %(filename)s (required):"), {'filename': files[i].name}, true));
+            divLabel.html(gettext("Describe ") + files[i].name + ' ' + gettext("(required):"));
             divLabel.appendTo(mainDiv);
 
             divTextarea = $('<div/>');
