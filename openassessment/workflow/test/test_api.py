@@ -302,6 +302,7 @@ class TestAssessmentWorkflowApi(CacheResetTest):
             {"status": "waiting", "count": 0},
             {"status": "done", "count": 0},
             {"status": "cancelled", "count": 0},
+            {"status": "returned", "count": 0}
         ])
 
         self.assertFalse("ai" in [count['status'] for count in counts])
@@ -335,6 +336,7 @@ class TestAssessmentWorkflowApi(CacheResetTest):
             {"status": "waiting", "count": 3},
             {"status": "done", "count": 4},
             {"status": "cancelled", "count": 1},
+            {'status': 'returned', 'count': 0}
         ])
 
         self.assertFalse("ai" in [count['status'] for count in counts])
