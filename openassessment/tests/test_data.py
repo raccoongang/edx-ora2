@@ -530,24 +530,23 @@ class TestOraAggregateDataIntegration(TransactionCacheResetTest):
         ), STEPS)
 
         data = OraAggregateData.collect_ora2_responses(COURSE_ID)
-
         self.assertIn(ITEM_ID, data)
         self.assertIn(item_id2, data)
         self.assertIn(item_id3, data)
         for item in [ITEM_ID, item_id2, item_id3]:
-            self.assertEqual({'total', 'training', 'peer', 'self', 'staff', 'waiting', 'done', 'cancelled'},
+            self.assertEqual({'returned', 'total', 'training', 'peer', 'self', 'staff', 'waiting', 'done', 'cancelled'},
                              set(data[item].keys()))
         self.assertEqual(data[ITEM_ID], {
             'total': 2, 'training': 0, 'peer': 2, 'self': 0, 'staff': 0, 'waiting': 0,
-            'done': 0, 'cancelled': 0
+            'done': 0, 'cancelled': 0, 'returned': 0
         })
         self.assertEqual(data[item_id2], {
             'total': 2, 'training': 0, 'peer': 1, 'self': 1, 'staff': 0, 'waiting': 0,
-            'done': 0, 'cancelled': 0
+            'done': 0, 'cancelled': 0, 'returned': 0
         })
         self.assertEqual(data[item_id3], {
             'total': 3, 'training': 0, 'peer': 1, 'self': 2, 'staff': 0, 'waiting': 0,
-            'done': 0, 'cancelled': 0
+            'done': 0, 'cancelled': 0, 'returned': 0
         })
 
         data = OraAggregateData.collect_ora2_responses(COURSE_ID, ['staff', 'peer'])
