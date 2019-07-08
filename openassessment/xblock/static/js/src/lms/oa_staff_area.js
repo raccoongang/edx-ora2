@@ -583,18 +583,16 @@
             var view = this;
             view.staffSubmitEnabled(scope, false);
             view.staffReturnEnabled(scope, false);
-            
             var handler = "staff_assess";
-            
-            if (assessType == "return") {
-                handler = "return_submission"
+            if (assessType === "return") {
+                handler = "return_submission";
             }
 
             console.log(assessType);
 
             this.server.staffAssess(
-                rubric.optionsSelected(), rubric.criterionFeedback(), rubric.overallFeedback(), submissionID, assessType, handler
-            ).done(successCallback).fail(function(errorMessage) {
+                rubric.optionsSelected(), rubric.criterionFeedback(), rubric.overallFeedback(), submissionID,
+                assessType, handler).done(successCallback).fail(function(errorMessage) {
                 scope.find(errorSelector).html(_.escape(errorMessage));
                 view.staffSubmitEnabled(scope, true);
             });
