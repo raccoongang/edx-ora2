@@ -93,7 +93,7 @@ OpenAssessment.ResponseView.prototype = {
         var handlePrepareUpload = function(eventData) { view.prepareUpload(eventData.target.files, uploadType); };
         sel.find('input[type=file]').on('change', handlePrepareUpload);
 
-        var handleCustomButton = function(eventData) {
+        var onDownloadButtonClick = function(eventData) {
             eventData.preventDefault();
             $(this).parent().siblings('.ora-file-input').click();
 
@@ -109,7 +109,7 @@ OpenAssessment.ResponseView.prototype = {
             });
         };
 
-        sel.find('.ora-upload-btn').on('click', handleCustomButton);
+        sel.find('.ora-upload-btn').on('click', onDownloadButtonClick);
 
         var submit = $('.step--response__submit', this.element);
         this.textResponse = $(submit).attr('text_response');
