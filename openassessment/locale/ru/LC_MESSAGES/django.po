@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: edx-platform\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-25 10:01+0000\n"
+"POT-Creation-Date: 2019-06-26 09:39+0000\n"
 "PO-Revision-Date: 2018-03-29 22:44+0000\n"
 "Last-Translator: Ned Batchelder <ned@edx.org>\n"
 "Language-Team: Russian (http://www.transifex.com/open-edx/edx-platform/"
@@ -1143,7 +1143,7 @@ msgid ""
 msgstr ""
 "\n"
 "            <span id=\"oa_step_deadline_peer\" class=\"date ora-datetime\" "
-"data-datetime=\"%(due_date)s\" data-string=\"due {date} (in "
+"data-datetime=\"%(due_date)s\" data-string=\"до {date} (за "
 "%(time_until)s)\" data-timezone=\"%(user_timezone)s\" data-language="
 "\"%(user_language)s\"></span>\n"
 "            "
@@ -1320,7 +1320,7 @@ msgid ""
 msgstr ""
 "\n"
 "            <span id=\"oa_step_deadline_response\" class=\"date ora-datetime"
-"\" data-datetime=\"%(due_date)s\" data-string=\"due {date} (in "
+"\" data-datetime=\"%(due_date)s\" data-string=\"до {date} (за "
 "%(time_until)s)\" data-timezone=\"%(user_timezone)s\" data-language="
 "\"%(user_language)s\"></span>\n"
 "            "
@@ -1403,24 +1403,32 @@ msgstr "Мы не смогли загрузить файлы"
 msgid "Select a file to upload for this submission."
 msgstr "Выберите файл для загрузки в ответ."
 
-#: openassessment/templates/openassessmentblock/response/oa_response.html:147
+#: openassessment/templates/openassessmentblock/response/oa_response.html:148
+msgid "Choose Files"
+msgstr "Выберите файлы"
+
+#: openassessment/templates/openassessmentblock/response/oa_response.html:149
+msgid "No file chosen"
+msgstr "Файл не выбран"
+
+#: openassessment/templates/openassessmentblock/response/oa_response.html:152
 #: openassessment/templates/openassessmentblock/response/oa_response_returned.html:173
 msgid "Upload files"
 msgstr "Загрузить файлы"
 
-#: openassessment/templates/openassessmentblock/response/oa_response.html:156
+#: openassessment/templates/openassessmentblock/response/oa_response.html:161
 #: openassessment/templates/openassessmentblock/response/oa_response_returned.html:182
 msgid "You may continue to work on your response until you submit it."
 msgstr ""
 "Вы можете продолжать работать над своим ответом, пока не отправите его на "
 "проверку."
 
-#: openassessment/templates/openassessmentblock/response/oa_response.html:163
+#: openassessment/templates/openassessmentblock/response/oa_response.html:168
 #: openassessment/templates/openassessmentblock/response/oa_response_returned.html:189
 msgid "We could not submit your response"
 msgstr "Не удалось отправить ваш ответ на проверку"
 
-#: openassessment/templates/openassessmentblock/response/oa_response.html:173
+#: openassessment/templates/openassessmentblock/response/oa_response.html:178
 #: openassessment/templates/openassessmentblock/response/oa_response_returned.html:199
 msgid "Submit your response and move to the next step"
 msgstr "Отправить ответ на проверку и перейти к следующему шагу"
@@ -1438,8 +1446,7 @@ msgid ""
 "                            "
 msgstr ""
 "\n"
-"Ваш ответ был отменён командой курса. Дата отмены: "
-"%(removed_datetime)s\n"
+"Ваш ответ был отменён командой курса. Дата отмены: %(removed_datetime)s\n"
 "                            "
 
 #: openassessment/templates/openassessmentblock/response/oa_response_cancelled.html:41
@@ -1615,6 +1622,12 @@ msgid ""
 "\"%(user_language)s\"></span>\n"
 "           "
 msgstr ""
+"\n"
+"               <span id=\"oa_step_deadline_self\" class=\"date ora-datetime"
+"\" data-datetime=\"%(due_date)s\" data-string=\"до {date} (за "
+"%(time_until)s)\" data-timezone=\"%(user_timezone)s\" data-language="
+"\"%(user_language)s\"></span>\n"
+"           "
 
 #: openassessment/templates/openassessmentblock/self/oa_self_assessment.html:78
 msgid "Submit your assessment"
@@ -2008,6 +2021,12 @@ msgid ""
 "span>\n"
 "            "
 msgstr ""
+"\n"
+"            <span id=\"oa_step_deadline\" class=\"date ora-datetime\" data-"
+"datetime=\"%(due_date)s\" data-string=\"до {date} (за %(time_until)s)\" "
+"data-timezone=\"%(user_timezone)s\" data-language=\"%(user_language)s\"></"
+"span>\n"
+"            "
 
 #: openassessment/templates/openassessmentblock/student_training/student_training.html:56
 #: openassessment/templates/openassessmentblock/student_training/student_training.html:64
@@ -2134,8 +2153,7 @@ msgstr ""
 "из собственного опыта, наблюдений и / или чтения. Прочитайте для краткости, "
 "ясности мысли и формы."
 
-#: openassessment/xblock/defaults.py:21 openassessment/xblock/defaults.py:118
-#: openassessment/xblock/defaults.py:131
+#: openassessment/xblock/defaults.py:21
 msgid "Ideas"
 msgstr "Идеи"
 
@@ -2144,7 +2162,6 @@ msgid "Determine if there is a unifying theme or main idea."
 msgstr "Определите, есть ли объединяющая тема или основная идея."
 
 #: openassessment/xblock/defaults.py:27 openassessment/xblock/defaults.py:56
-#: openassessment/xblock/defaults.py:132
 msgid "Poor"
 msgstr "Плохо"
 
@@ -2157,7 +2174,6 @@ msgstr ""
 "повторяющийся, чтобы установить или сохранить фокус."
 
 #: openassessment/xblock/defaults.py:34 openassessment/xblock/defaults.py:63
-#: openassessment/xblock/defaults.py:119
 msgid "Fair"
 msgstr "Справедливо"
 
@@ -2171,7 +2187,6 @@ msgstr ""
 "задаче."
 
 #: openassessment/xblock/defaults.py:41 openassessment/xblock/defaults.py:70
-#: openassessment/xblock/defaults.py:123 openassessment/xblock/defaults.py:136
 msgid "Good"
 msgstr "Хорошо"
 
@@ -2187,8 +2202,7 @@ msgstr ""
 "Представляет объединяющую тему или основную идею, не касаясь касательных. "
 "Остается полностью сосредоточенным на теме и задаче."
 
-#: openassessment/xblock/defaults.py:51 openassessment/xblock/defaults.py:122
-#: openassessment/xblock/defaults.py:135
+#: openassessment/xblock/defaults.py:51
 msgid "Content"
 msgstr "Содержание"
 
