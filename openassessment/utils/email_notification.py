@@ -8,9 +8,13 @@ from django.template.loader import render_to_string
 from django.utils.translation import ugettext as _
 from opaque_keys.edx.keys import CourseKey, UsageKey
 
-from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
+try:
+    from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
+    from courseware.url_helpers import get_redirect_url
+except ImportError as e:
+    # TODO(): take decision
+    pass
 
-from courseware.url_helpers import get_redirect_url
 
 log = logging.getLogger(__name__)
 

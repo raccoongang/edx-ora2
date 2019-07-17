@@ -1,0 +1,22 @@
+Metadata-Version: 2.1
+Name: edx-submissions
+Version: 2.1.1
+Summary: An API for creating submissions and scores.
+Home-page: http://github.com/edx/edx-submissions.git
+Author: edX
+Author-email: UNKNOWN
+License: AGPL
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: GNU Affero General Public License v3
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Requires-Dist: jsonfield (<3.0.0,>=2.0.2)
+Requires-Dist: pytz
+Requires-Dist: django-model-utils (>=2.3.1)
+Requires-Dist: Django (<2.0,>=1.8)
+
+UNKNOWN
+
+

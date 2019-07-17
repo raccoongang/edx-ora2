@@ -1,0 +1,4 @@
+[console_scripts]
+dog = dogshell:main
+dogwrap = dogshell.wrap:main
+

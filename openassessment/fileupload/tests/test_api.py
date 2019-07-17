@@ -33,7 +33,8 @@ class TestFileUploadService(TestCase):
     @override_settings(
         AWS_ACCESS_KEY_ID='foobar',
         AWS_SECRET_ACCESS_KEY='bizbaz',
-        FILE_UPLOAD_STORAGE_BUCKET_NAME="mybucket"
+        FILE_UPLOAD_STORAGE_BUCKET_NAME="mybucket",
+        S3_HOST='s3.amazonaws.com'
     )
     def test_get_upload_url(self):
         conn = boto.connect_s3()
@@ -45,7 +46,8 @@ class TestFileUploadService(TestCase):
     @override_settings(
         AWS_ACCESS_KEY_ID='foobar',
         AWS_SECRET_ACCESS_KEY='bizbaz',
-        FILE_UPLOAD_STORAGE_BUCKET_NAME="mybucket"
+        FILE_UPLOAD_STORAGE_BUCKET_NAME="mybucket",
+        S3_HOST='s3.amazonaws.com'
     )
     def test_get_download_url(self):
         conn = boto.connect_s3()
@@ -60,7 +62,8 @@ class TestFileUploadService(TestCase):
     @override_settings(
         AWS_ACCESS_KEY_ID='foobar',
         AWS_SECRET_ACCESS_KEY='bizbaz',
-        FILE_UPLOAD_STORAGE_BUCKET_NAME="mybucket"
+        FILE_UPLOAD_STORAGE_BUCKET_NAME="mybucket",
+        S3_HOST='s3.amazonaws.com'
     )
     def test_remove_file(self):
         conn = boto.connect_s3()

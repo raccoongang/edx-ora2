@@ -1,0 +1,20 @@
+[xblock.v1]
+allscopes_demo = sample_xblocks.basic.content:AllScopesBlock
+attempts_scoreboard_demo = sample_xblocks.basic.problem:AttemptsScoreboardBlock
+debugchild = workbench.blocks:DebuggingChildBlock
+equality_demo = sample_xblocks.basic.problem:EqualityCheckerBlock
+filethumbs = sample_xblocks.filethumbs:FileThumbsBlock
+helloworld_demo = sample_xblocks.basic.content:HelloWorldBlock
+html_demo = sample_xblocks.basic.content:HtmlBlock
+problem_demo = sample_xblocks.basic.problem:ProblemBlock
+sequence_demo = sample_xblocks.basic.structure:Sequence
+sidebar_demo = sample_xblocks.basic.structure:SidebarBlock
+slider_demo = sample_xblocks.basic.slider:Slider
+textinput_demo = sample_xblocks.basic.problem:TextInputBlock
+thumbs = sample_xblocks.thumbs:ThumbsBlock
+vertical_demo = sample_xblocks.basic.structure:VerticalBlock
+view_counter_demo = sample_xblocks.basic.view_counter:ViewCounter
+
+[xblock_asides.v1]
+
+

@@ -6,6 +6,7 @@ import copy
 import json
 
 import ddt
+from mock import patch
 
 from openassessment.assessment.api import peer as peer_api
 
@@ -110,8 +111,9 @@ class TestGrade(XBlockHandlerTestCase, SubmitAssessmentsMixin):
         self.assertIn(u'єאςєɭɭєภՇ ฬ๏гк!', resp.decode('utf-8'))
         self.assertIn(u'Good job!', resp.decode('utf-8'))
 
+    @patch("openassessment.xblock.staff_assessment_mixin.send_notification_email")
     @scenario('data/feedback_per_criterion.xml', user_id='Bernard')
-    def test_render_grade_feedback(self, xblock):
+    def test_render_grade_feedback(self, xblock, mock_email):
         # Submit, assess, and render the grade view
         submission = self.create_submission_and_assessments(
             xblock, self.SUBMISSION, self.PEERS, PEER_ASSESSMENTS, SELF_ASSESSMENT
@@ -213,8 +215,9 @@ class TestGrade(XBlockHandlerTestCase, SubmitAssessmentsMixin):
         (STAFF_BAD_ASSESSMENT, [1, 1]),
     )
     @ddt.unpack
+    @patch("openassessment.xblock.staff_assessment_mixin.send_notification_email")
     @scenario('data/feedback_per_criterion.xml', user_id='Bernard')
-    def test_render_staff_grades(self, xblock, assessment, scores):
+    def test_render_staff_grades(self, xblock, assessment, scores, mock_email):
         # Submit, assess, and render the grade view
         submission = self.create_submission_and_assessments(
             xblock, self.SUBMISSION, self.PEERS, PEER_ASSESSMENTS, SELF_ASSESSMENT
@@ -236,8 +239,9 @@ class TestGrade(XBlockHandlerTestCase, SubmitAssessmentsMixin):
                 else:
                     self.assertIsNone(assessment.get('points', None))
 
+    @patch("openassessment.xblock.staff_assessment_mixin.send_notification_email")
     @scenario('data/grade_scenario.xml', user_id='Bernard')
-    def test_peer_update_after_override(self, xblock):
+    def test_peer_update_after_override(self, xblock, mock_email):
         # Note that much of the logic from self.create_submission_and_assessments is duplicated here;
         # this is necessary to allow us to put off the final peer submission to the right point in time
 

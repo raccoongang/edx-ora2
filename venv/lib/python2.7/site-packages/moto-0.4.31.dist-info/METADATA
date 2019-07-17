@@ -1,0 +1,32 @@
+Metadata-Version: 2.0
+Name: moto
+Version: 0.4.31
+Summary: A library that allows your python tests to easily mock out the boto library
+Home-page: https://github.com/spulec/moto
+Author: Steve Pulec
+Author-email: spulec@gmail.com
+License: Apache
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.3
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Topic :: Software Development :: Testing
+Requires-Dist: Jinja2 (>=2.8)
+Requires-Dist: boto (>=2.36.0)
+Requires-Dist: httpretty (==0.8.10)
+Requires-Dist: python-dateutil
+Requires-Dist: pytz
+Requires-Dist: requests
+Requires-Dist: six
+Requires-Dist: werkzeug
+Requires-Dist: xmltodict
+Requires-Dist: ordereddict; python_version=="2.6"
+Provides-Extra: server
+Requires-Dist: flask; extra == 'server'
+
+UNKNOWN
+
+

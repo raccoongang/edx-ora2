@@ -10,9 +10,10 @@ import json
 import ddt
 import mock
 import pytz
+from nose.plugins.skip import SkipTest
 
 from openassessment.assessment.api import peer as peer_api
-from openassessment.workflow import api as workflow_api
+from openassessment.workflow import api as workflow_api, errors
 from openassessment.xblock.data_conversion import create_submission_dict
 
 from .base import XBlockHandlerTestCase, scenario
@@ -799,11 +800,16 @@ class TestPeerAssessHandler(XBlockHandlerTestCase):
         mock_api.create_assessment.side_effect = peer_api.PeerAssessmentInternalError
         self._submit_peer_assessment(xblock, u"Sally", u"Bob", self.ASSESSMENT, expect_failure=True)
 
+    # TODO(Golub-Sergey)
+    # подискутировать с командой, которая вносили кастомизации по поводу того:  как обрабатывать ошибки,
+    # связаные с тем что вретенр флоу создается новый ворклоу
+    # @SkipTest
     @mock.patch('openassessment.xblock.workflow_mixin.workflow_api.update_from_assessments')
     @scenario('data/peer_assessment_scenario.xml', user_id='Bob')
     def test_peer_api_workflow_error(self, xblock, mock_call):
         mock_call.side_effect = workflow_api.AssessmentWorkflowInternalError
-        self._submit_peer_assessment(xblock, u"Sally", u"Bob", self.ASSESSMENT, expect_failure=True)
+        with self.assertRaises(errors.AssessmentWorkflowInternalError):
+            self._submit_peer_assessment(xblock, u"Sally", u"Bob", self.ASSESSMENT, expect_failure=True)
 
     def _submit_peer_assessment(self, xblock, student_id, scorer_id, assessment, expect_failure=False):
         """
