@@ -26,15 +26,15 @@ class StaffAssessmentTestBase(XBlockHandlerTestCase, SubmitAssessmentsMixin):
         resp = self.request(xblock, 'render_staff_assessment', json.dumps({}))
         self.assertGreater(len(resp), 0)
 
-
+@mock.patch("openassessment.xblock.staff_assessment_mixin.send_notification_email")
 class TestStaffAssessmentRender(StaffAssessmentTestBase):
 
     @scenario('data/self_assessment_scenario.xml', user_id='Bob')
-    def test_staff_grade_templates(self, xblock):
+    def test_staff_grade_templates(self, xblock, mock_email):
         self._verify_grade_templates_workflow(xblock)
 
     @scenario('data/self_assessment_closed.xml', user_id='Bob')
-    def test_staff_grade_templates_closed(self, xblock):
+    def test_staff_grade_templates_closed(self, xblock, mock_email):
         # Whether or not a problem is closed (past due date) has no impact on Staff Grade section.
         self._verify_grade_templates_workflow(xblock)
 
@@ -105,7 +105,7 @@ class TestStaffAssessmentRender(StaffAssessmentTestBase):
         )
 
     @scenario('data/grade_waiting_scenario.xml', user_id='Omar')
-    def test_staff_grade_templates_no_peer(self, xblock):
+    def test_staff_grade_templates_no_peer(self, xblock, mock_email):
         # Waiting to be assessed by a peer
         submission = self.create_submission_and_assessments(
             xblock, self.SUBMISSION, self.PEERS, PEER_ASSESSMENTS, SELF_ASSESSMENT, waiting_for_peer=True
@@ -138,12 +138,11 @@ class TestStaffAssessmentRender(StaffAssessmentTestBase):
                 'xblock_id': xblock.scope_ids.usage_id
             }
         )
-
-
+@mock.patch("openassessment.xblock.staff_assessment_mixin.send_notification_email")
 class TestStaffAssessment(StaffAssessmentTestBase):
 
     @scenario('data/self_assessment_scenario.xml', user_id='Bob')
-    def test_staff_assess_handler(self, xblock):
+    def test_staff_assess_handler(self, xblock, mock_email):
         student_item = xblock.get_student_item_dict()
 
         # Create a submission for the student
@@ -182,7 +181,7 @@ class TestStaffAssessment(StaffAssessmentTestBase):
         )
 
     @scenario('data/self_assessment_scenario.xml', user_id='Bob')
-    def test_staff_assess_handler_regrade(self, xblock):
+    def test_staff_assess_handler_regrade(self, xblock, mock_email):
         student_item = xblock.get_student_item_dict()
 
         # Create a submission for the student
@@ -196,7 +195,7 @@ class TestStaffAssessment(StaffAssessmentTestBase):
         self.assert_assessment_event_published(xblock, 'openassessmentblock.staff_assess', assessment, type='regrade')
 
     @scenario('data/self_assessment_scenario.xml', user_id='Bob')
-    def test_permission_error(self, xblock):
+    def test_permission_error(self, xblock, mock_email):
         # Create a submission for the student
         student_item = xblock.get_student_item_dict()
         xblock.create_submission(student_item, self.SUBMISSION)
@@ -204,7 +203,7 @@ class TestStaffAssessment(StaffAssessmentTestBase):
         self.assertIn("You do not have permission", resp)
 
     @scenario('data/self_assessment_scenario.xml', user_id='Bob')
-    def test_invalid_options(self, xblock):
+    def test_invalid_options(self, xblock, mock_email):
         student_item = xblock.get_student_item_dict()
 
         # Create a submission for the student
@@ -224,7 +223,7 @@ class TestStaffAssessment(StaffAssessmentTestBase):
                 self.assertIn('msg', resp)
 
     @scenario('data/self_assessment_scenario.xml', user_id='bob')
-    def test_assessment_error(self, xblock):
+    def test_assessment_error(self, xblock, mock_email):
         student_item = xblock.get_student_item_dict()
 
         # Create a submission for the student

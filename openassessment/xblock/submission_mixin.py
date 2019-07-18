@@ -8,7 +8,7 @@ from xblock.core import XBlock
 from data_conversion import create_submission_dict, prepare_submission_for_serialization
 from openassessment.fileupload import api as file_upload_api
 from openassessment.fileupload.exceptions import FileUploadError
-from openassessment.workflow.errors import AssessmentWorkflowError
+from openassessment.workflow.errors import AssessmentWorkflowError, AssessmentWorkflowInternalError
 from validation import validate_submission
 
 from .resolve_dates import DISTANT_FUTURE
@@ -258,12 +258,16 @@ class SubmissionMixin(object):
                     student_sub_dict['files_descriptions'].append(file_description)
                 else:
                     break
-
-        workflow = self.get_workflow_info()
+        try:
+            workflow = self.get_workflow_info()
+        except AssessmentWorkflowInternalError:
+            msg = u"Error was excited when was called get_workflow_info"
+            logger.exception(msg)
+            workflow = None
 
         submission = api.create_submission(student_item_dict, student_sub_dict)
 
-        if workflow.get("status") == 'returned':
+        if workflow and workflow.get("status") == 'returned':
             AssessmentWorkflow.objects.filter(submission_uuid=workflow.get('submission_uuid')).update(
                 submission_uuid=submission["uuid"],
                 status=AssessmentWorkflow.STATUS.waiting

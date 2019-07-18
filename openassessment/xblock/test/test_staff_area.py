@@ -59,13 +59,14 @@ class NullUserService(object):
         return MagicMock(opt_attrs={})
 
 
+@patch('openassessment.xblock.staff_area_mixin.send_notification_email')
 class TestCourseStaff(XBlockHandlerTestCase):
     """
     Tests for course staff debug panel.
     """
 
     @scenario('data/basic_scenario.xml', user_id='Bob')
-    def test_is_course_staff(self, xblock):
+    def test_is_course_staff(self, xblock, mock_email):
         # By default, we shouldn't be course staff
         self.assertFalse(xblock.is_course_staff)
 
@@ -80,7 +81,7 @@ class TestCourseStaff(XBlockHandlerTestCase):
         self.assertTrue(xblock.is_course_staff)
 
     @scenario('data/basic_scenario.xml', user_id='Bob')
-    def test_course_staff_area(self, xblock):
+    def test_course_staff_area(self, xblock, mock_email):
         # If we're not course staff, we shouldn't see the staff area
         xblock.xmodule_runtime = self._create_mock_runtime(
             xblock.scope_ids.usage_id, False, False, "Bob"
@@ -94,7 +95,7 @@ class TestCourseStaff(XBlockHandlerTestCase):
         self.assertIn("view assignment statistics", resp.decode('utf-8').lower())
 
     @scenario('data/basic_scenario.xml', user_id='Bob')
-    def test_course_student_debug_info(self, xblock):
+    def test_course_student_debug_info(self, xblock, mock_email):
         # If we're not course staff, we shouldn't see the debug info
         xblock.xmodule_runtime = self._create_mock_runtime(
             xblock.scope_ids.usage_id, False, False, "Bob"
@@ -108,7 +109,7 @@ class TestCourseStaff(XBlockHandlerTestCase):
         self.assertIn("a response was not found for this learner.", resp.decode('utf-8').lower())
 
     @scenario('data/basic_scenario.xml')
-    def test_hide_course_staff_area_in_studio_preview(self, xblock):
+    def test_hide_course_staff_area_in_studio_preview(self, xblock, mock_email):
         # If we are in Studio preview mode, don't show the staff area.
         # In this case, the runtime will tell us that we're staff,
         # but no user ID will be set.
@@ -126,7 +127,7 @@ class TestCourseStaff(XBlockHandlerTestCase):
         self.assertNotIn(u'staff-info', xblock_fragment.body_html())
 
     @scenario('data/staff_dates_scenario.xml', user_id='Bob')
-    def test_staff_area_dates_table(self, xblock):
+    def test_staff_area_dates_table(self, xblock, mock_email):
         # Simulate that we are course staff
         xblock.xmodule_runtime = self._create_mock_runtime(
             xblock.scope_ids.usage_id, True, False, "Bob"
@@ -148,7 +149,7 @@ class TestCourseStaff(XBlockHandlerTestCase):
         self.assertIn("april 1, 2016", decoded_response)
 
     @scenario('data/basic_scenario.xml', user_id='Bob')
-    def test_staff_area_dates_distant_past_and_future(self, xblock):
+    def test_staff_area_dates_distant_past_and_future(self, xblock, mock_email):
         # Simulate that we are course staff
         xblock.xmodule_runtime = self._create_mock_runtime(
             xblock.scope_ids.usage_id, True, False, "Bob"
@@ -160,7 +161,7 @@ class TestCourseStaff(XBlockHandlerTestCase):
         self.assertIn("n/a", resp.decode('utf-8').lower())
 
     @scenario('data/basic_scenario.xml', user_id='Bob')
-    def test_staff_area_student_info_no_submission(self, xblock):
+    def test_staff_area_student_info_no_submission(self, xblock, mock_email):
         # Simulate that we are course staff
         xblock.xmodule_runtime = self._create_mock_runtime(
             xblock.scope_ids.usage_id, True, False, "Bob"
@@ -172,7 +173,7 @@ class TestCourseStaff(XBlockHandlerTestCase):
         self.assertIn("a response was not found for this learner.", resp.body.lower())
 
     @scenario('data/peer_only_scenario.xml', user_id='Bob')
-    def test_staff_area_student_info_peer_only(self, xblock):
+    def test_staff_area_student_info_peer_only(self, xblock, mock_email):
         # Simulate that we are course staff
         xblock.xmodule_runtime = self._create_mock_runtime(
             xblock.scope_ids.usage_id, True, False, "Bob"
@@ -213,7 +214,7 @@ class TestCourseStaff(XBlockHandlerTestCase):
         self.assertIsNone(context['grade_details'])
 
     @scenario('data/self_only_scenario.xml', user_id='Bob')
-    def test_staff_area_student_info_self_only(self, xblock):
+    def test_staff_area_student_info_self_only(self, xblock, mock_email):
         # Simulate that we are course staff
         xblock.xmodule_runtime = self._create_mock_runtime(
             xblock.scope_ids.usage_id, True, False, "Bob"
@@ -248,7 +249,7 @@ class TestCourseStaff(XBlockHandlerTestCase):
         self.assertEquals('Self Assessment Grade', grade_details['criteria'][0]['assessments'][0]['title'])
 
     @scenario('data/feedback_only_criterion_staff.xml', user_id='Bob')
-    def test_staff_area_student_info_staff_only_no_options(self, xblock):
+    def test_staff_area_student_info_staff_only_no_options(self, xblock, mock_email):
         # Simulate that we are course staff
         xblock.xmodule_runtime = self._create_mock_runtime(
             xblock.scope_ids.usage_id, True, False, "Bob"
@@ -282,7 +283,7 @@ class TestCourseStaff(XBlockHandlerTestCase):
         )
 
     @scenario('data/staff_grade_scenario.xml', user_id='Bob')
-    def test_staff_area_student_info_staff_only(self, xblock):
+    def test_staff_area_student_info_staff_only(self, xblock, mock_email):
         # Simulate that we are course staff
         xblock.xmodule_runtime = self._create_mock_runtime(
             xblock.scope_ids.usage_id, True, False, "Bob"
@@ -317,7 +318,7 @@ class TestCourseStaff(XBlockHandlerTestCase):
         self.assertEquals('Staff Grade', grade_details['criteria'][0]['assessments'][0]['title'])
 
     @scenario('data/basic_scenario.xml', user_id='Bob')
-    def test_staff_area_student_info_with_cancelled_submission(self, xblock):
+    def test_staff_area_student_info_with_cancelled_submission(self, xblock, mock_email):
         requirements = {
             "peer": {
                 "must_grade": 1,
@@ -351,7 +352,7 @@ class TestCourseStaff(XBlockHandlerTestCase):
         self.assertEquals("openassessmentblock/staff_area/oa_student_info.html", path)
 
     @scenario('data/basic_scenario.xml', user_id='Bob')
-    def test_cancelled_submission_peer_assessment_render_path(self, xblock):
+    def test_cancelled_submission_peer_assessment_render_path(self, xblock, mock_email):
         # Test that peer assessment path should be oa_peer_cancelled.html for a cancelled submission.
         # Simulate that we are course staff
         xblock.xmodule_runtime = self._create_mock_runtime(
@@ -382,7 +383,7 @@ class TestCourseStaff(XBlockHandlerTestCase):
         self.assertEquals("openassessmentblock/peer/oa_peer_cancelled.html", path)
 
     @scenario('data/self_only_scenario.xml', user_id='Bob')
-    def test_staff_area_student_info_image_submission(self, xblock):
+    def test_staff_area_student_info_image_submission(self, xblock, mock_email):
         # Simulate that we are course staff
         xblock.xmodule_runtime = self._create_mock_runtime(
             xblock.scope_ids.usage_id, True, False, "Bob"
@@ -420,7 +421,7 @@ class TestCourseStaff(XBlockHandlerTestCase):
             self.assertIn("http://www.example.com/image.jpeg", resp)
 
     @scenario('data/self_only_scenario.xml', user_id='Bob')
-    def test_staff_area_student_info_many_images_submission(self, xblock):
+    def test_staff_area_student_info_many_images_submission(self, xblock, mock_email):
         """
         Test multiple file uploads support
         """
@@ -472,7 +473,7 @@ class TestCourseStaff(XBlockHandlerTestCase):
                 self.assertIn("test_description%d" % i, resp)
 
     @scenario('data/self_only_scenario.xml', user_id='Bob')
-    def test_staff_area_student_info_file_download_url_error(self, xblock):
+    def test_staff_area_student_info_file_download_url_error(self, xblock, mock_email):
         # Simulate that we are course staff
         xblock.xmodule_runtime = self._create_mock_runtime(
             xblock.scope_ids.usage_id, True, False, "Bob"
@@ -503,7 +504,7 @@ class TestCourseStaff(XBlockHandlerTestCase):
             self.assertIn("Bob Answer", resp)
 
     @scenario('data/grade_scenario.xml', user_id='Bob')
-    def test_staff_area_student_info_full_workflow(self, xblock):
+    def test_staff_area_student_info_full_workflow(self, xblock, mock_email):
         # Simulate that we are course staff
         xblock.xmodule_runtime = self._create_mock_runtime(
             xblock.scope_ids.usage_id, True, False, "Bob"
@@ -561,8 +562,33 @@ class TestCourseStaff(XBlockHandlerTestCase):
         resp = xblock.render_student_info(request)
         self.assertIn("bob answer", resp.body.lower())
 
+    @patch('openassessment.xblock.staff_area_mixin.submission_api')
     @scenario('data/basic_scenario.xml', user_id='Bob')
-    def test_cancel_submission_without_reason(self, xblock):
+    def test_cancel_submission_full_flow(self, xblock, mock_email, mock_submission_api):
+        # Simulate that we are course staff
+        xblock.xmodule_runtime = self._create_mock_runtime(
+            xblock.scope_ids.usage_id, True, False, "Bob"
+        )
+
+        bob_item = STUDENT_ITEM.copy()
+        bob_item["item_id"] = xblock.scope_ids.usage_id
+        # Create a submission for Bob, and corresponding workflow.
+        submission = self._create_submission(bob_item, {'text': "Bob Answer"}, ['peer'])
+        incorrect_submission_uuid = 'abc'
+        params = {"submission_uuid": incorrect_submission_uuid, "comments": "Inappropriate language."}
+        # Raise flow not found exception.
+        resp = self.request(xblock, 'cancel_submission', json.dumps(params), response_format='json')
+        self.assertIn("Error finding workflow", resp['msg'])
+        self.assertEqual(False, resp['success'])
+
+        # Verify that we can render without error
+        params = {"submission_uuid": submission["uuid"], "comments": "Inappropriate language."}
+        resp = self.request(xblock, 'cancel_submission', json.dumps(params), response_format='json')
+        self.assertIn("The learner submission has been removed from peer", resp['msg'])
+        self.assertEqual(True, resp['success'])
+
+    @scenario('data/basic_scenario.xml', user_id='Bob')
+    def test_cancel_submission_without_reason(self, xblock, mock_email):
         # If we're not course staff, we shouldn't be able to see the
         # cancel submission option
         xblock.xmodule_runtime = self._create_mock_runtime(
@@ -579,33 +605,8 @@ class TestCourseStaff(XBlockHandlerTestCase):
         self.assertIn("Please enter valid reason", resp['msg'])
         self.assertEqual(False, resp['success'])
 
-    @scenario('data/basic_scenario.xml', user_id='Bob')
-    def test_cancel_submission_full_flow(self, xblock):
-        # Simulate that we are course staff
-        xblock.xmodule_runtime = self._create_mock_runtime(
-            xblock.scope_ids.usage_id, True, False, "Bob"
-        )
-
-        bob_item = STUDENT_ITEM.copy()
-        bob_item["item_id"] = xblock.scope_ids.usage_id
-        # Create a submission for Bob, and corresponding workflow.
-        submission = self._create_submission(bob_item, {'text': "Bob Answer"}, ['peer'])
-
-        incorrect_submission_uuid = 'abc'
-        params = {"submission_uuid": incorrect_submission_uuid, "comments": "Inappropriate language."}
-        # Raise flow not found exception.
-        resp = self.request(xblock, 'cancel_submission', json.dumps(params), response_format='json')
-        self.assertIn("Error finding workflow", resp['msg'])
-        self.assertEqual(False, resp['success'])
-
-        # Verify that we can render without error
-        params = {"submission_uuid": submission["uuid"], "comments": "Inappropriate language."}
-        resp = self.request(xblock, 'cancel_submission', json.dumps(params), response_format='json')
-        self.assertIn("The learner submission has been removed from peer", resp['msg'])
-        self.assertEqual(True, resp['success'])
-
     @scenario('data/staff_grade_scenario.xml', user_id='Bob')
-    def test_staff_assessment_counts(self, xblock):
+    def test_staff_assessment_counts(self, xblock, mock_email):
         """
         Verify the staff assessment counts (ungraded and checked out)
         as shown in the staff grading tool when staff assessment is required.
@@ -633,7 +634,7 @@ class TestCourseStaff(XBlockHandlerTestCase):
         self._verify_staff_assessment_context(context, True, 0, 1)
 
     @scenario('data/grade_scenario.xml', user_id='Bob')
-    def test_staff_assessment_counts_not_required(self, xblock):
+    def test_staff_assessment_counts_not_required(self, xblock, mock_email):
         """
         Verify the staff assessment counts (ungraded and checked out) are
         not present in the context when staff assessment is not required.
@@ -645,7 +646,7 @@ class TestCourseStaff(XBlockHandlerTestCase):
         self._verify_staff_assessment_context(context, False)
 
     @scenario('data/staff_grade_scenario.xml', user_id='Bob')
-    def test_staff_assessment_form(self, xblock):
+    def test_staff_assessment_form(self, xblock, mock_email):
         """
         Smoke test that the staff assessment form renders when staff assessment
         is required.
@@ -685,7 +686,7 @@ class TestCourseStaff(XBlockHandlerTestCase):
         })
 
     @scenario('data/self_only_scenario.xml', user_id='Bob')
-    def test_staff_delete_student_state(self, xblock):
+    def test_staff_delete_student_state(self, xblock, mock_email):
         # Simulate that we are course staff
         xblock.xmodule_runtime = self._create_mock_runtime(
             xblock.scope_ids.usage_id, True, False, 'Bob'
