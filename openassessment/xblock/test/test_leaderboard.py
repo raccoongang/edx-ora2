@@ -142,7 +142,8 @@ class TestLeaderboardRender(XBlockHandlerTransactionTestCase):
     @override_settings(
         AWS_ACCESS_KEY_ID='foobar',
         AWS_SECRET_ACCESS_KEY='bizbaz',
-        FILE_UPLOAD_STORAGE_BUCKET_NAME='mybucket'
+        FILE_UPLOAD_STORAGE_BUCKET_NAME='mybucket',
+        S3_HOST='s3.amazonaws.com'
     )
     @scenario('data/leaderboard_show.xml')
     def test_non_text_submission(self, xblock):
@@ -162,7 +163,8 @@ class TestLeaderboardRender(XBlockHandlerTransactionTestCase):
     @override_settings(
         AWS_ACCESS_KEY_ID='foobar',
         AWS_SECRET_ACCESS_KEY='bizbaz',
-        FILE_UPLOAD_STORAGE_BUCKET_NAME='mybucket'
+        FILE_UPLOAD_STORAGE_BUCKET_NAME='mybucket',
+        S3_HOST='s3.amazonaws.com'
     )
     @scenario('data/leaderboard_show_allowfiles.xml')
     def test_image_and_text_submission_multiple_files(self, xblock):
@@ -204,7 +206,8 @@ class TestLeaderboardRender(XBlockHandlerTransactionTestCase):
     @override_settings(
         AWS_ACCESS_KEY_ID='foobar',
         AWS_SECRET_ACCESS_KEY='bizbaz',
-        FILE_UPLOAD_STORAGE_BUCKET_NAME='mybucket'
+        FILE_UPLOAD_STORAGE_BUCKET_NAME='mybucket',
+        S3_HOST = 's3.amazonaws.com'
     )
     @scenario('data/leaderboard_show_allowfiles.xml')
     def test_image_and_text_submission(self, xblock):
@@ -216,7 +219,6 @@ class TestLeaderboardRender(XBlockHandlerTransactionTestCase):
         bucket = conn.create_bucket('mybucket')
         key = Key(bucket, 'submissions_attachments/foo')
         key.set_contents_from_string("How d'ya do?")
-
         file_download_url = [(api.get_download_url('foo'), '')]
         # Create a image and text submission
         submission = prepare_submission_for_serialization(('test answer 1 part 1', 'test answer 1 part 2'))
@@ -330,7 +332,6 @@ class TestLeaderboardRender(XBlockHandlerTransactionTestCase):
         if 'topscores' in expected_context:
             context['topscores'] = self._clean_score_filenames(context['topscores'])
             expected_context['topscores'] = self._clean_score_filenames(expected_context['topscores'])
-
         self.assertEqual(path, expected_path)
         self.assertEqual(context, expected_context)
 
@@ -353,7 +354,6 @@ class TestLeaderboardRender(XBlockHandlerTransactionTestCase):
         def _clean_query_string(_file_url):
             url = urlparse(_file_url)
             return url.scheme + '://' + url.netloc + url.path
-
         for score in scores:
             if score.get('files'):
                 score['files'] = [

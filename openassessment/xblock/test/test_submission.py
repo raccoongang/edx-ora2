@@ -144,7 +144,8 @@ class SubmissionTest(XBlockHandlerTestCase):
     @override_settings(
         AWS_ACCESS_KEY_ID='foobar',
         AWS_SECRET_ACCESS_KEY='bizbaz',
-        FILE_UPLOAD_STORAGE_BUCKET_NAME="mybucket"
+        FILE_UPLOAD_STORAGE_BUCKET_NAME="mybucket",
+        S3_HOST='s3.amazonaws.com'
     )
     @scenario('data/file_upload_scenario.xml')
     def test_upload_url(self, xblock):
@@ -165,7 +166,8 @@ class SubmissionTest(XBlockHandlerTestCase):
     @override_settings(
         AWS_ACCESS_KEY_ID='foobar',
         AWS_SECRET_ACCESS_KEY='bizbaz',
-        FILE_UPLOAD_STORAGE_BUCKET_NAME="mybucket"
+        FILE_UPLOAD_STORAGE_BUCKET_NAME="mybucket",
+        S3_HOST='s3.amazonaws.com'
     )
     @scenario('data/file_upload_scenario.xml')
     def test_download_url(self, xblock):
@@ -176,14 +178,12 @@ class SubmissionTest(XBlockHandlerTestCase):
         key.key = "submissions_attachments/test_student/test_course/" + xblock.scope_ids.usage_id
         key.set_contents_from_string("How d'ya do?")
         download_url = api.get_download_url("test_student/test_course/" + xblock.scope_ids.usage_id)
-
         xblock.xmodule_runtime = Mock(
             course_id='test_course',
             anonymous_student_id='test_student',
         )
 
         resp = self.request(xblock, 'download_url', json.dumps(dict()), response_format='json')
-
         self.assertTrue(resp['success'])
         self.assertEqual(download_url, resp['url'])
 
@@ -205,7 +205,8 @@ class SubmissionTest(XBlockHandlerTestCase):
     @override_settings(
         AWS_ACCESS_KEY_ID='foobar',
         AWS_SECRET_ACCESS_KEY='bizbaz',
-        FILE_UPLOAD_STORAGE_BUCKET_NAME="mybucket"
+        FILE_UPLOAD_STORAGE_BUCKET_NAME="mybucket",
+        S3_HOST='s3.amazonaws.com'
     )
     @scenario('data/file_upload_scenario.xml')
     def test_remove_all_uploaded_files(self, xblock):
@@ -215,7 +216,6 @@ class SubmissionTest(XBlockHandlerTestCase):
         key = Key(bucket)
         key.key = "submissions_attachments/test_student/test_course/" + xblock.scope_ids.usage_id
         key.set_contents_from_string("How d'ya do?")
-
         xblock.xmodule_runtime = Mock(
             course_id='test_course',
             anonymous_student_id='test_student',
@@ -224,11 +224,9 @@ class SubmissionTest(XBlockHandlerTestCase):
         resp = self.request(xblock, 'download_url', json.dumps(dict()), response_format='json')
         self.assertTrue(resp['success'])
         self.assertTrue(resp['url'].startswith(download_url))
-
         resp = self.request(xblock, 'remove_all_uploaded_files', json.dumps(dict()), response_format='json')
         self.assertTrue(resp['success'])
         self.assertEqual(resp['removed_num'], 1)
-
         resp = self.request(xblock, 'download_url', json.dumps(dict()), response_format='json')
         self.assertTrue(resp['success'])
         self.assertEqual(u'', resp['url'])
@@ -237,7 +235,8 @@ class SubmissionTest(XBlockHandlerTestCase):
     @override_settings(
         AWS_ACCESS_KEY_ID='foobar',
         AWS_SECRET_ACCESS_KEY='bizbaz',
-        FILE_UPLOAD_STORAGE_BUCKET_NAME="mybucket"
+        FILE_UPLOAD_STORAGE_BUCKET_NAME="mybucket",
+        S3_HOST='s3.amazonaws.com'
     )
     @scenario('data/custom_file_upload.xml')
     def test_upload_files_with_uppercase_ext(self, xblock):
