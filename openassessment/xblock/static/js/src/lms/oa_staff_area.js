@@ -169,7 +169,7 @@
                     showFormError('');
 
                     // Load the HTML and install event handlers
-                    $staffGradeTab.find('.staff__grade__form').replaceWith(html);
+                    $staffGradeTab.find('.staff-info__content').replaceWith(html);
 
                     // Update the number of ungraded and checked out assigments.
                     view.updateStaffGradeCounts();
@@ -376,16 +376,9 @@
             );
 
             // Install a click handler for showing the staff grading form.
-            $staffGradeTool.find('.staff__grade__show-form').click(
-                function(event) {
-                    var $container = $(event.currentTarget).closest('.' + view.baseView.SLIDABLE_CONTAINER_CLASS);
-                    var wasShowing = $container.hasClass(view.baseView.IS_SHOWING_CLASS);
-                    if (wasShowing) {
-                        view.closeStaffGradeForm(false);
-                    }
-                    else {
-                        view.loadStaffGradeForm();
-                    }
+            $staffArea.find('.button-staff-grading').click(
+                function() {
+                    view.loadStaffGradeForm();
                 }
             );
         },

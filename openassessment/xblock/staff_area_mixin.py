@@ -202,17 +202,20 @@ class StaffAreaMixin(StaffBaseMixin):
             # If no submissions are available for grading, will return None.
             submission_to_assess = staff_api.get_submission_to_assess(course_id, item_id, staff_id)
 
-            if submission_to_assess is not None:
+            if submission_to_assess:
                 # This is posting a tracking event to the runtime.
                 self.runtime.publish(self, 'openassessmentblock.get_submission_for_staff_grading', {
                     'type': 'full-grade',
                     'requesting_staff_id': staff_id,
                     'item_id': item_id,
-                    'submission_returned_uuid': submission_to_assess['uuid']
                 })
-                submission = submission_api.get_submission_and_student(submission_to_assess['uuid'])
-                if submission:
-                    anonymous_student_id = submission['student_item']['student_id']
+
+                submission_context_list = list()
+
+                for submission in submission_to_assess:
+                    sub = submission_api.get_submission_and_student(submission['uuid'])
+
+                    anonymous_student_id = sub['student_item']['student_id']
 
                     try:
                         user = self.xmodule_runtime.get_real_user(anonymous_student_id)
@@ -220,13 +223,12 @@ class StaffAreaMixin(StaffBaseMixin):
                     except (TypeError, AttributeError):
                         user_email = None
 
-                    submission_context = self.get_student_submission_context(
+                    submission_context_list.append(self.get_student_submission_context(
                         user_email, submission
-                    )
-                    path = 'openassessmentblock/staff_area/oa_staff_grade_learners_assessment.html'
-                    return self.render_assessment(path, submission_context)
-                else:
-                    return self.render_error(self._(u"Error loading the checked out learner response."))
+                    ))
+
+                path = 'openassessmentblock/staff_area/oa_staff_grade_learners_assessment.html'
+                return self.render_assessment(path, {"submission_context_list": submission_context_list})
             else:
                 return self.render_error(self._(u"No other learner responses are available for grading at this time."))
 

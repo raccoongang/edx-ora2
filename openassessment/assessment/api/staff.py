@@ -260,9 +260,12 @@ def get_submission_to_assess(course_id, item_id, scorer_id):
 
     """
     student_submission_uuid = StaffWorkflow.get_submission_for_review(course_id, item_id, scorer_id)
+    submission_data = list()
     if student_submission_uuid:
         try:
-            submission_data = submissions_api.get_submission(student_submission_uuid)
+            for submission_uuid in student_submission_uuid:
+                submission_data += [submissions_api.get_submission(submission_uuid)]
+
             return submission_data
         except submissions_api.SubmissionNotFoundError:
             error_message = (
@@ -278,7 +281,7 @@ def get_submission_to_assess(course_id, item_id, scorer_id):
                 item_id,
             )
         )
-        return None
+        return submission_data
 
 
 def get_staff_grading_statistics(course_id, item_id):

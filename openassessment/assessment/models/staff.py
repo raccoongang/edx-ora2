@@ -102,36 +102,35 @@ class StaffWorkflow(models.Model):
                 the workflows for this request.
 
         """
-        timeout = (now() - cls.TIME_LIMIT).strftime("%Y-%m-%d %H:%M:%S")
+        # timeout = (now() - cls.TIME_LIMIT).strftime("%Y-%m-%d %H:%M:%S")
         try:
             # Search for existing submissions that the scorer has worked on.
+            # staff_workflows = StaffWorkflow.objects.filter(
+            #     course_id=course_id,
+            #     item_id=item_id,
+            #     scorer_id=scorer_id,
+            #     grading_completed_at=None,
+            #     cancelled_at=None,
+            #     returned_at=None,
+            # )
+            # # If no existing submissions exist, then get any other
+            # # available workflows.
+            # if not staff_workflows:
             staff_workflows = StaffWorkflow.objects.filter(
                 course_id=course_id,
                 item_id=item_id,
-                scorer_id=scorer_id,
                 grading_completed_at=None,
                 cancelled_at=None,
                 returned_at=None,
-            )
-            # If no existing submissions exist, then get any other
-            # available workflows.
-            if not staff_workflows:
-                staff_workflows = StaffWorkflow.objects.filter(
-                    models.Q(scorer_id='') | models.Q(grading_started_at__lte=timeout),
-                    course_id=course_id,
-                    item_id=item_id,
-                    grading_completed_at=None,
-                    cancelled_at=None,
-                    returned_at=None,
-                )
-            if not staff_workflows:
-                return None
+            ).values_list('submission_uuid', flat=True)
 
-            workflow = staff_workflows[0]
-            workflow.scorer_id = scorer_id
-            workflow.grading_started_at = now()
-            workflow.save()
-            return workflow.submission_uuid
+            return staff_workflows
+
+            # workflow = staff_workflows[0]
+            # workflow.scorer_id = scorer_id
+            # workflow.grading_started_at = now()
+            # workflow.save()
+            # return workflow.submission_uuid
         except DatabaseError:
             error_message = (
                 u"An internal error occurred while retrieving a submission for staff grading"
