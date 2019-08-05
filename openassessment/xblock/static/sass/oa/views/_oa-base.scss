@@ -62,7 +62,8 @@
     }
 
     .action--submit,
-    .action--return_back {
+    .action--return_back,
+    .action--close {
       @extend %btn--primary;
       @extend %action-2;
       @include margin-left($baseline-v/2);
@@ -477,12 +478,13 @@
 
     // If there is an icon, it should rotate when clicked
     @include transition(color $tmg-f2 ease-in);
+
     .icon {
       @include transition(all $tmg-f2 ease-in-out 0s);
       @include transform(rotate(bidi-rotate-angle(0deg)));
     }
 
-    &.is--initially--collapsed  {
+    &.is--initially--collapsed {
       .ui-slidable__content {
         display: none;
       }
@@ -1216,5 +1218,62 @@
     @extend %btn--secondary;
     @extend %action-2;
     @include margin-right(($baseline-v/2));
+  }
+
+
+  // ui-accordion
+  .ui-accordion-wrapper {
+    .ui-accordion-item {
+      margin-bottom: 0;
+    }
+
+    .ui-accordion-header {
+      color: #0075b4;
+      font-size: 16px;
+      font-weight: 600;
+      padding: 0 20px;
+      position: relative;
+
+      &:hover,
+      &:focus {
+        cursor: pointer;
+        opacity: .8;
+      }
+
+      .fa-close {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        color: #333;
+        font-size: 13px;
+      }
+
+      .staff-assessment__display__title {
+        padding-right: 10px;
+      }
+    }
+
+    .ui-accordion-body {
+      display: none;
+      padding: 20px;
+    }
+
+    .list--actions li {
+      display: inline-block;
+    }
+  }
+
+
+  .wrapper--staff-assessment.collapse-grade {
+    padding-top: 0;
+    margin-top: 0;
+  }
+  
+  .collapse-grade-form {
+    background-color: #fff;
+  }
+  
+  .staff-grade-message {
+    color: #fff;
   }
 }

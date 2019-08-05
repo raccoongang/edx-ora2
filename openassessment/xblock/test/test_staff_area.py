@@ -682,7 +682,6 @@ class TestCourseStaff(XBlockHandlerTestCase):
             'type': 'full-grade',
             'requesting_staff_id': 'Bob',
             'item_id': bob_item['item_id'],
-            'submission_returned_uuid': submission['uuid']
         })
 
     @scenario('data/self_only_scenario.xml', user_id='Bob')
