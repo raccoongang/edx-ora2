@@ -228,20 +228,19 @@ def get_assessment_scores_by_criteria(submission_uuid):
         raise StaffAssessmentInternalError(error_message)
 
 
-def get_submission_to_assess(course_id, item_id, scorer_id):
+def get_submissions_to_assess(course_id, item_id):
     """
-    Get a submission for staff evaluation.
+    Get a list of submissions for staff evaluation.
 
-    Retrieves a submission for assessment for the given staff member.
+    Retrieves a list of submissions for assessment for the given staff member.
 
     Args:
         course_id (str): The course that we would like to fetch submissions from.
         item_id (str): The student_item (problem) that we would like to retrieve submissions for.
-        scorer_id (str): The user id of the staff member scoring this submission
 
     Returns:
-        dict: A student submission for assessment. This contains a 'student_item',
-            'attempt_number', 'submitted_at', 'created_at', and 'answer' field to be
+        list: A students submissions for assessment. Submission contains a 'student_item',
+            'attempt_number', 'submitted_at', 'created_at', and 'answer' fields to be
             used for assessment.
 
     Raises:
@@ -249,39 +248,37 @@ def get_submission_to_assess(course_id, item_id, scorer_id):
             retrieving staff workflow information.
 
     Examples:
-        >>> get_submission_to_assess("a_course_id", "an_item_id", "a_scorer_id")
-        {
+        >>> get_submission_to_assess("a_course_id", "an_item_id")
+        [{
             'student_item': 2,
             'attempt_number': 1,
             'submitted_at': datetime.datetime(2014, 1, 29, 23, 14, 52, 649284, tzinfo=<UTC>),
             'created_at': datetime.datetime(2014, 1, 29, 17, 14, 52, 668850, tzinfo=<UTC>),
             'answer': { ... }
-        }
+        }, ...]
 
     """
-    student_submission_uuid = StaffWorkflow.get_submission_for_review(course_id, item_id, scorer_id)
+
+    student_submission_uuids = StaffWorkflow.get_submissions_for_review(course_id, item_id)
     submission_data = list()
-    if student_submission_uuid:
-        try:
-            for submission_uuid in student_submission_uuid:
+    if student_submission_uuids:
+        for submission_uuid in student_submission_uuids:
+            try:
                 submission_data += [submissions_api.get_submission(submission_uuid)]
 
-            return submission_data
-        except submissions_api.SubmissionNotFoundError:
-            error_message = (
-                u"Could not find a submission with the uuid {}"
-            ).format(student_submission_uuid)
-            logger.exception(error_message)
-            raise StaffAssessmentInternalError(error_message)
+            except submissions_api.SubmissionNotFoundError:
+                error_message = (
+                    u"Could not find a submissions to access course_id {}"
+                ).format(course_id)
+                logger.exception(error_message)
+                raise StaffAssessmentInternalError(error_message)
     else:
-        logger.info(
-            u"No submission found for staff to assess ({}, {})"
-            .format(
-                course_id,
-                item_id,
-            )
-        )
-        return submission_data
+        logger.info(u"No submissions found for staff to assess ({}, {})".format(
+            course_id,
+            item_id,
+        ))
+
+    return submission_data
 
 
 def get_staff_grading_statistics(course_id, item_id):

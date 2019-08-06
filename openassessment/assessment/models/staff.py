@@ -2,11 +2,14 @@
 Models for managing staff assessments.
 """
 from datetime import timedelta
+import logging
 
 from django.db import DatabaseError, models
 from django.utils.timezone import now
 
 from openassessment.assessment.errors import StaffAssessmentInternalError
+
+logger = logging.getLogger("openassessment.assessment.api.staff")
 
 
 class StaffWorkflow(models.Model):
@@ -80,43 +83,25 @@ class StaffWorkflow(models.Model):
         return {'ungraded': ungraded, 'in-progress': in_progress, 'graded': graded}
 
     @classmethod
-    def get_submission_for_review(cls, course_id, item_id, scorer_id):
+    def get_submissions_for_review(cls, course_id, item_id):
         """
-        Find a submission for staff assessment. This function will find the next
-        submission that requires assessment, excluding any submission that has been
-        completely graded, or is actively being reviewed by other staff members.
+        Find all submissions for staff assessment.
 
         Args:
-            submission_uuid (str): The submission UUID from the student
-                requesting a submission for assessment. This is used to explicitly
-                avoid giving the student their own submission, and determines the
-                associated Peer Workflow.
+            course_id (str): The course ID for filtering submissions for current course.
             item_id (str): The student_item that we would like to retrieve submissions for.
-            scorer_id (str): The user id of the staff member scoring this submission
 
         Returns:
-            submission_uuid (str): The submission_uuid for the submission to review.
+            QuerySet object: QuerySet with the list of submission_uuid's for review.
 
         Raises:
             StaffAssessmentInternalError: Raised when there is an error retrieving
                 the workflows for this request.
 
         """
-        # timeout = (now() - cls.TIME_LIMIT).strftime("%Y-%m-%d %H:%M:%S")
+
         try:
-            # Search for existing submissions that the scorer has worked on.
-            # staff_workflows = StaffWorkflow.objects.filter(
-            #     course_id=course_id,
-            #     item_id=item_id,
-            #     scorer_id=scorer_id,
-            #     grading_completed_at=None,
-            #     cancelled_at=None,
-            #     returned_at=None,
-            # )
-            # # If no existing submissions exist, then get any other
-            # # available workflows.
-            # if not staff_workflows:
-            staff_workflows = StaffWorkflow.objects.filter(
+            return StaffWorkflow.objects.filter(
                 course_id=course_id,
                 item_id=item_id,
                 grading_completed_at=None,
@@ -124,16 +109,9 @@ class StaffWorkflow(models.Model):
                 returned_at=None,
             ).values_list('submission_uuid', flat=True)
 
-            return staff_workflows
-
-            # workflow = staff_workflows[0]
-            # workflow.scorer_id = scorer_id
-            # workflow.grading_started_at = now()
-            # workflow.save()
-            # return workflow.submission_uuid
         except DatabaseError:
             error_message = (
-                u"An internal error occurred while retrieving a submission for staff grading"
+                u"An internal error occurred while retrieving a submissions for staff grading"
             )
             logger.exception(error_message)
             raise StaffAssessmentInternalError(error_message)

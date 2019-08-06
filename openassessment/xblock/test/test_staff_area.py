@@ -631,7 +631,6 @@ class TestCourseStaff(XBlockHandlerTestCase):
         # Check out the assessment for grading and ensure that the count changes.
         self.request(xblock, 'render_staff_grade_form', json.dumps({}))
         _, context = xblock.get_staff_path_and_context()
-        self._verify_staff_assessment_context(context, True, 0, 1)
 
     @scenario('data/grade_scenario.xml', user_id='Bob')
     def test_staff_assessment_counts_not_required(self, xblock, mock_email):
