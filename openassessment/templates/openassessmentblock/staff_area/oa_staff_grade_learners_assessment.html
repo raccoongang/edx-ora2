@@ -8,23 +8,16 @@
 {% for submission in submission_context_list %}
     <div class="staff__grade__form collapse-grade-form" data-submission-uuid="{{ submission.submission.uuid }}">
     <div class="wrapper--staff-assessment collapse-grade">
-
-
         <div class="ui-accordion-wrapper">
 
             <article class="staff-assessment">
                 <div class="staff-assessment__display ui-accordion-item">
                     <header class="staff-assessment__display__header ui-accordion-header">
-                        {{ submission.submission }}
-                        <br>
-                        {{submission}}
                         <h4 class="staff-assessment__display__title">
                             {% if submission.student_email %}
-                            {% blocktrans %}
-                            Response for: {{ submission.student_email }}
-                            {% endblocktrans %}
+                                {{ submission.student_email }}
                             {% else %}
-                            {% trans "Learner Response" %}
+                                {% trans "Learner Response" %}
                             {% endif %}
                         </h4>
                         <span class="icon fa fa-close" aria-hidden="true"></span>
@@ -81,22 +74,6 @@
             </article>
         </div>
     </div>
-
-</div>
+    </div>
 {% endfor %}
-
-
-
-<script>
-    $(document).ready(function () {
-        $('.ui-accordion-header').on('click', function () {
-            $(this).next().slideToggle(300);
-            $('.ui-accordion-header').not($(this)).next().slideUp(300);
-        });
-
-        $('.action--close').on('click', function () {
-            $(this).closest('.ui-accordion-body').slideUp(300);
-        });
-    })
-</script>
 {% endspaceless %}

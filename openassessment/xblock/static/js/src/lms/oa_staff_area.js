@@ -139,6 +139,46 @@
             return deferred.promise();
         },
 
+        StaffAreaCollapsing: function () {
+            $(this).next().slideToggle(300);
+            $('.ui-accordion-header').not($(this)).next().slideUp(300).closest('.staff__grade__form').removeClass('assessment-opened');
+            $(this).closest('.staff__grade__form').toggleClass('assessment-opened');
+            $(this).closest('.staff__grade__form').trigger('assessment-opened');
+        },
+
+        closeLearnerAssessment: function () {
+            $(this).closest('.ui-accordion-body').slideUp(300);
+            $(this).closest('.staff__grade__form').removeClass('assessment-opened');
+        },
+
+
+        CollapsingLearnersGrades: function () {
+            var view = OpenAssessment.BaseView.prototype;
+            $(this).on("click", function (event) {
+                event.preventDefault();
+
+                var $slidableControl = $(event.target).closest('.' + view.SLIDABLE_CONTROLS_CLASS);
+
+                var $container = $slidableControl.closest('.' + view.SLIDABLE_CONTAINER_CLASS);
+                var $toggleButton = $slidableControl.find('.' + view.SLIDABLE_CLASS);
+                var $panel = $slidableControl.next('.' + view.SLIDABLE_CONTENT_CLASS);
+
+                if ($container.hasClass('is--showing')) {
+                    $panel.slideUp();
+                    $toggleButton.attr('aria-expanded', 'false');
+                    $container.removeClass('is--showing');
+                } else if (!$container.hasClass('has--error') &&
+                    !$container.hasClass('is--empty') &&
+                    !$container.hasClass('is--unavailable')) {
+                    $panel.slideDown();
+                    $toggleButton.attr('aria-expanded', 'true');
+                    $container.addClass('is--showing');
+                }
+
+                $container.removeClass('is--initially--collapsed ');
+            });
+        },
+
         /**
          * Upon request, loads the staff grade/assessment section of the staff area.
          * This allows staff grading when staff assessment is a required step.
@@ -171,45 +211,56 @@
                     // Load the HTML and install event handlers
                     $staffGradeTab.find('.staff-info__content').replaceWith(html);
 
-                    // Update the number of ungraded and checked out assigments.
+                    // Sets handlers for collapsing tabs in the staff area
+                    $('.ui-accordion-header').on('click', view.StaffAreaCollapsing);
+                    $('.action--close').on('click', view.closeLearnerAssessment);
+                    $('.ui-accordion-wrapper .ui-slidable').each(view.CollapsingLearnersGrades);
+
+                    // Update the number of ungraded and checked out assignments.
                     view.updateStaffGradeCounts();
 
-                    var $rubric = $staffGradeTab.find('.staff-assessment__assessment');
-                    if ($rubric.size() > 0) {
-                        var rubricElement = $rubric.get(0);
-                        var rubric = new OpenAssessment.Rubric(rubricElement);
+                    $(".staff__grade__form").on('assessment-opened', function () {
+                        if ($('.staff__grade__form').hasClass('assessment-opened')) {
+                            var $rubric = $('.staff__grade__form.assessment-opened').find('.staff-assessment__assessment');
 
-                        // Install a change handler for rubric options to enable/disable the submit button
-                        rubric.canSubmitCallback($.proxy(view.staffSubmitEnabled, view, $staffGradeTab));
+                            if ($rubric.size()) {
+                                var rubricElement = $rubric.get(0);
+                                var rubric = new OpenAssessment.Rubric(rubricElement);
 
-                        // Install a change handler for rubric options to enable/disable the return button
-                        rubric.canSubmitCallback($.proxy(view.staffReturnEnabled, view, $staffGradeTab));
+                                // Install a change handler for rubric options to enable/disable the submit button
+                                rubric.canSubmitCallback($.proxy(view.staffSubmitEnabled, view, $staffGradeTab));
 
-                        rubric.changesExistCallback(
-                            $.proxy(view.assessmentRubricChanges, view, view.FULL_GRADE_UNSAVED_WARNING_KEY)
-                        );
+                                // Install a change handler for rubric options to enable/disable the return button
+                                rubric.canSubmitCallback($.proxy(view.staffReturnEnabled, view, $staffGradeTab));
 
-                        // Install a click handler for the submit buttons
-                        $staffGradeTab.find('.wrapper--staff-assessment .action--submit').click(
-                            function(eventObject) {
-                                var submissionID = $staffGradeTab.find('.staff__grade__form').data('submission-uuid');
-                                eventObject.preventDefault();
-                                view.submitStaffGrade(submissionID, rubric, $staffGradeTab,
-                                    $(eventObject.currentTarget).hasClass('continue_grading--action')
+                                rubric.changesExistCallback(
+                                    $.proxy(view.assessmentRubricChanges, view, view.FULL_GRADE_UNSAVED_WARNING_KEY)
+                                );
+
+                                // Install a click handler for the submit buttons
+                                $('.action--submit').click(
+                                    function (eventObject) {
+                                        var submissionID = $(this).closest('.staff__grade__form').data('submission-uuid');
+                                        eventObject.preventDefault();
+                                        view.submitStaffGrade(submissionID, rubric, $staffGradeTab,
+                                            $(eventObject.currentTarget).hasClass('continue_grading--action')
+                                        );
+                                    }
+                                );
+
+                                $('.action--return_back').click(
+                                    function (eventObject) {
+                                        var submissionID = $(this).closest('.staff__grade__form').data('submission-uuid');
+                                        eventObject.preventDefault();
+                                        view.submitStaffGrade(submissionID, rubric, $staffGradeTab,
+                                            $(eventObject.currentTarget).hasClass('continue_grading--action'), 'return'
+                                        );
+                                    }
                                 );
                             }
-                        );
+                        }
 
-                        $staffGradeTab.find('.wrapper--staff-assessment .action--return_back').click(
-                            function(eventObject) {
-                                var submissionID = $staffGradeTab.find('.staff__grade__form').data('submission-uuid');
-                                eventObject.preventDefault();
-                                view.submitStaffGrade(submissionID, rubric, $staffGradeTab,
-                                    $(eventObject.currentTarget).hasClass('continue_grading--action'), 'return'
-                                );
-                            }
-                        );
-                    }
+                    });
 
                     $staffGradeContent.slideDown(
                         function() {
@@ -236,32 +287,24 @@
         /**
          * Closes the staff grade/assessment section of the staff area.
          *
+         * @param submissionID submission uuid of submitted assessment
          * @param {boolean} clear if true, remove the staff grade form and collapse it. Otherwise
          *     the staff grade form is collapsed but not removed (meaning that the same
          *     form will be presented if the user later expands the staff grade section again).
          */
-        closeStaffGradeForm: function(clear) {
+        closeStaffGradeForm: function(submissionID, clear) {
             var view = this;
             var $staffGradeTab = $('.openassessment__staff-grading', view.element);
-            var $staffGradeControl = $staffGradeTab.find('.' + view.baseView.SLIDABLE_CLASS).first();
             var $staffGradeContent = $staffGradeTab.find('.' + view.baseView.SLIDABLE_CONTENT_CLASS);
-            var $staffGradeContainer = $staffGradeTab.find('.' + view.baseView.SLIDABLE_CONTAINER_CLASS);
 
-            $staffGradeControl.attr('aria-expanded', 'false');
             if (clear) {
-                // Collapse the editor and update the counts.
-                // This is the case of submitting an assessment and NOT continuing with grading.
-                $staffGradeTab.find('.staff__grade__form').replaceWith('<div class="staff__grade__form"></div>');
-                this.updateStaffGradeCounts();
+                // Remove collapsed form afer successful grading.
+                $staffGradeTab.find('.staff__grade__form[data-submission-uuid="' + submissionID + '"]').remove();
             }
             else {
                 // Just hide the form currently being shown (no need to update counts).
                 $staffGradeContent.slideUp();
             }
-
-            $staffGradeContainer.removeClass(view.baseView.IS_SHOWING_CLASS);
-            // For accessibility, move focus to the staff grade form control.
-            $staffGradeControl.focus();
         },
 
         /**
@@ -488,11 +531,11 @@
          * @returns {boolean} Whether the button is enabled
          */
         staffSubmitEnabled: function(scope, enabled) {
-            return this.baseView.buttonEnabled('.wrapper--staff-assessment .action--submit', enabled);
+            return this.baseView.buttonEnabled('.staff__grade__form.assessment-opened .action--submit', enabled);
         },
 
         staffReturnEnabled: function(scope, enabled) {
-            return this.baseView.buttonEnabled('.wrapper--staff-assessment .action--return_back', enabled);
+            return this.baseView.buttonEnabled('.staff__grade__form.assessment-opened .action--return_back', enabled);
         },
 
         /**
@@ -555,7 +598,7 @@
                     view.baseView.scrollToTop(".openassessment__staff-area");
                 }
                 else {
-                    view.closeStaffGradeForm(true);
+                    view.closeStaffGradeForm(submissionID,true);
                 }
             };
             this.callStaffAssess(submissionID, rubric, scope, successCallback, '.staff-grade-error', assessmentType);
@@ -580,9 +623,6 @@
             if (assessType === "return") {
                 handler = "return_submission";
             }
-
-            console.log(assessType);
-
             this.server.staffAssess(
                 rubric.optionsSelected(), rubric.criterionFeedback(), rubric.overallFeedback(), submissionID,
                 assessType, handler).done(successCallback).fail(function(errorMessage) {

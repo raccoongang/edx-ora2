@@ -7,14 +7,14 @@
             class="field field--radio is--required assessment__rubric__question is--showing ui-slidable__container {% if criterion.options %}has--options{% endif %} {{ rubric_type }}__assessment__rubric__question--{{ criterion.order_num }}"
         >
             <div class="question__title ui-slidable__control">
-                <button class="ui-slidable" aria-expanded="true" id="oa_rubric__{{ rubric_type }}__{{ submission.uuid }}__{{ criterion.order_num }}" aria-controls="oa_rubric__{{ rubric_type }}__{{ submission.uuid }}__{{ criterion.order_num }}__content">
+                <button class="ui-slidable" aria-expanded="true" id="oa_rubric__{{ rubric_type }}__{{ submission.submission.uuid }}__{{ criterion.order_num }}" aria-controls="oa_rubric__{{ rubric_type }}__{{ submission.submission.uuid }}__{{ criterion.order_num }}__content">
                     <span class="icon fa fa-caret-right" aria-hidden="true"></span>
                     <span id="{{ rubric_type }}__assessment__rubric__prompt--{{ criterion.order_num }}" class="ui-slidable__control__copy question__title__copy">{{ criterion.prompt }}</span>
                     <span class="label--required sr">({% trans "Required" %})</span>
                 </button>
             </div>
 
-            <div class="ui-slidable__content" aria-labelledby="oa_rubric__{{ rubric_type }}__{{ submission.uuid }}__{{ criterion.order_num }}" id="oa_rubric__{{ rubric_type }}__{{ submission.uuid }}__{{ criterion.order_num }}__content">
+            <div class="ui-slidable__content" aria-labelledby="oa_rubric__{{ rubric_type }}__{{ submission.submission.uuid }}__{{ criterion.order_num }}" id="oa_rubric__{{ rubric_type }}__{{ submission.submission.uuid }}__{{ criterion.order_num }}__content">
                 <div class="question__answers">
                     <div role="group" aria-labelledby="{{ rubric_type }}__assessment__rubric__prompt--{{ criterion.order_num }}">
                         {% for option in criterion.options %}

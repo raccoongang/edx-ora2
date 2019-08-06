@@ -200,7 +200,7 @@ class StaffAreaMixin(StaffBaseMixin):
 
             # Note that this will check out a submission for grading by the specified staff member.
             # If no submissions are available for grading, will return None.
-            submission_to_assess = staff_api.get_submission_to_assess(course_id, item_id, staff_id)
+            submission_to_assess = staff_api.get_submissions_to_assess(course_id, item_id)
 
             if submission_to_assess:
                 # This is posting a tracking event to the runtime.
@@ -223,9 +223,9 @@ class StaffAreaMixin(StaffBaseMixin):
                     except (TypeError, AttributeError):
                         user_email = None
 
-                    submission_context_list.append(self.get_student_submission_context(
-                        user_email, submission
-                    ))
+                    submission_context_list.append(
+                        self.get_student_submission_context(user_email, submission)
+                    )
 
                 path = 'openassessmentblock/staff_area/oa_staff_grade_learners_assessment.html'
                 return self.render_assessment(path, {"submission_context_list": submission_context_list})
