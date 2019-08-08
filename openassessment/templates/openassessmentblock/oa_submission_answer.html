@@ -1,30 +1,60 @@
+{% load tz %}
 {% spaceless %}
 {% load i18n %}
 {% load oa_extras %}
 <ol class="submission__answer__display__content">
     {% for part in answer.parts %}
-        <li class="submission__answer__part">
-            <div class="submission__answer__part__text">
-                <h5 class="submission__answer__part__text__title">{% trans "The question for this section" %}</h5>
+    <li class="submission__answer__part">
+        <div class="submission__answer__part__text">
+            <h5 class="submission__answer__part__text__title">{% trans "The question for this section" %}</h5>
+        </div>
+        <article class="submission__answer__part_oa_staff_override_assessment.html_prompt">
+            <div class="submission__answer__part__prompt__value">
+                {% if prompts_type == 'html' %}
+                {{ part.prompt.description|safe }}
+                {% else %}
+                {{ part.prompt.description|linebreaks }}
+                {% endif %}
             </div>
-            <article class="submission__answer__part__prompt">
-                <div class="submission__answer__part__prompt__value">
-                    {% if prompts_type == 'html' %}
-                        {{ part.prompt.description|safe }}
-                    {% else %}
-                        {{ part.prompt.description|linebreaks }}
-                    {% endif %}
+        </article>
+        {% if submission.workflow_returning %}
+            {% with workflow_returning=submission.workflow_returning %}
+                <!-- Return message -->
+                <div class="step__message message message--incomplete">
+                    <h5 class="message__title">{% trans "Status" %}</h5>
+
+                    <div class="message__content">
+                        <p>
+                            {% if workflow_returning.returned_by %}
+                                {% blocktrans with returned_datetime=workflow_returning.returned_at|timezone:"UTC"|date:"Y-m-d H:i e" returned_by_username=workflow_returning.returned_by %}
+                                    Submission has been returned by {{ returned_by_username }} on {{ returned_datetime }}
+                                {% endblocktrans %}
+                            {% else %}
+                                {% blocktrans with returned_datetime=workflow_returning.returned_at|timezone:"UTC"|date:"Y-m-d H:i e" %}
+                                    Submission was returned on {{ returned_datetime }}
+                                {% endblocktrans %}
+                            {% endif %}
+                        </p>
+                        <p>
+                            <!-- Comments: Reason for Returning -->
+                            {% blocktrans with comments=workflow_returning.comments %}
+                                Comments: {{ comments }}
+                            {% endblocktrans %}
+                        </p>
+                    </div>
                 </div>
-            </article>
-            {% if part.text %}
-            <div class="submission__answer__part__text">
-                <h5 class="submission__answer__part__text__title">{{ answer_text_label }}</h5>
-                <div class="submission__answer__part__text__value">
-                    {{ part.text|escape|link_and_linebreak }}
-                </div>
+            {% endwith %}
+        {% endif %}
+
+        {% if part.text %}
+        <div class="submission__answer__part__text">
+            <h5 class="submission__answer__part__text__title">{{ answer_text_label }}</h5>
+            <div class="submission__answer__part__text__value">
+                {{ part.text|escape|link_and_linebreak }}
             </div>
-            {% endif %}
-        </li>
+        </div>
+        {% endif %}
+    </li>
     {% endfor %}
 </ol>
 {% endspaceless %}
