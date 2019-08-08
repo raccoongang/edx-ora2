@@ -140,7 +140,7 @@
         },
 
         StaffAreaCollapsing: function () {
-            $(this).next().slideToggle(300);
+            $(this).next().stop().slideToggle(300);
             $('.ui-accordion-header').not($(this)).next().slideUp(300).closest('.staff__grade__form').removeClass('assessment-opened');
             $(this).closest('.staff__grade__form').toggleClass('assessment-opened');
             $(this).closest('.staff__grade__form').trigger('assessment-opened');

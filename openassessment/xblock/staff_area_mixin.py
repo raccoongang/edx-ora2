@@ -269,7 +269,9 @@ class StaffAreaMixin(StaffBaseMixin):
         Returns:
             A context dict for rendering a student submission and associated rubric (for staff grading).
         """
-        user_preferences = get_user_preferences(self.runtime.service(self, 'user')) # localize for staff user
+        user_preferences = get_user_preferences(self.runtime.service(self, 'user'))  # localize for staff user
+
+        workflow_returning = self.get_workflow_returning_info(submission['uuid'])
 
         context = {
             'submission': create_submission_dict(submission, self.prompts) if submission else None,
@@ -278,6 +280,7 @@ class StaffAreaMixin(StaffBaseMixin):
             'user_timezone': user_preferences['user_timezone'],
             'user_language': user_preferences['user_language'],
             "prompts_type": self.prompts_type,
+            "workflow_returning": workflow_returning,
         }
 
         if submission:
