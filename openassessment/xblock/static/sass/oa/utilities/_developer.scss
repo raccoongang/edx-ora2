@@ -88,6 +88,10 @@
         color: $white;
       }
     }
+    
+    .ui-staff__title + div {
+      color: $white;
+    }
   }
 }
 
