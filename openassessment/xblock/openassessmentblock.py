@@ -1,21 +1,20 @@
 """An XBlock where students can read a question and compose their response"""
 
 import copy
-import datetime as dt
 import json
 import logging
-import os
 
-from lazy import lazy
+import datetime as dt
+import os
 import pkg_resources
 import pytz
+from django.conf import settings
+from django.template.loader import get_template
+from lazy import lazy
 from webob import Response
 from xblock.core import XBlock
 from xblock.fields import Boolean, Integer, List, Scope, String
 from xblock.fragment import Fragment
-
-from django.conf import settings
-from django.template.loader import get_template
 
 from openassessment.workflow.errors import AssessmentWorkflowError
 from openassessment.xblock.course_items_listing_mixin import CourseItemsListingMixin
@@ -445,7 +444,8 @@ class OpenAssessmentBlock(MessageMixin,
         ora_item_view_enabled = context.get('ora_item_view_enabled', False) if context else False
         context_dict = {
             "ora_items": json.dumps(ora_items),
-            "ora_item_view_enabled": ora_item_view_enabled
+            "ora_item_view_enabled": ora_item_view_enabled,
+            "cohort_info": context.get('cohort_info', []),
         }
 
         template = get_template('openassessmentblock/instructor_dashboard/oa_listing.html')

@@ -26,5 +26,8 @@ class CourseItemsListingMixin(object):
         """
         # Import is placed here to avoid model import at project startup.
         from openassessment.data import OraAggregateData
-        responses = OraAggregateData.collect_ora2_responses(unicode(self.course_id))
+        responses = OraAggregateData.collect_ora2_responses(
+            unicode(self.course_id),
+            selected_cohort=request.GET.get('selectedCohort', '' )
+        )
         return Response(json.dumps(responses), content_type='application/json')
