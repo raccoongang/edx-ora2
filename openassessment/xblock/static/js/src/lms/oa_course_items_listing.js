@@ -9,10 +9,16 @@
         this.$section = $section;
         this.runtime = runtime;
         this.oraData = $.parseJSON($("#open-response-assessment-items").text());
+        this.selectedCohort = '';
 
         $section.find(".open-response-assessment-content").hide();
         $section.find('.open-response-assessment-item').hide();
         $section.find('.open-response-assessment-msg').show();
+
+        $section.find('#ora-cohort-select').change(function() {
+            self.selectedCohort = this.value;
+            self.refreshGrids(true);
+        });
 
         var AssessmentCell = Backgrid.UriCell.extend({
             staff: false,
@@ -111,7 +117,7 @@
         var self = this;
         var $section = this.$section;
         var block = $section.find('.open-response-assessment-block');
-        var dataUrl = this.runtime.handlerUrl($section, 'get_ora2_responses');
+        var dataUrl = this.runtime.handlerUrl($section, 'get_ora2_responses', '', {selectedCohort: self.selectedCohort});
         var dataRendered = parseInt(block.data('rendered'));
 
         if (!dataRendered || force) {

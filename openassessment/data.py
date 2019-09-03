@@ -9,7 +9,10 @@ from django.conf import settings
 
 from openassessment.assessment.models import Assessment, AssessmentFeedback, AssessmentPart
 from openassessment.workflow.models import AssessmentWorkflow
+from openedx.core.djangoapps.course_groups.models import CohortMembership
+from opaque_keys.edx.keys import CourseKey
 from submissions import api as sub_api
+from submissions.models import Submission
 
 
 class CsvWriter(object):
@@ -499,7 +502,7 @@ class OraAggregateData(object):
         return header, rows
 
     @classmethod
-    def collect_ora2_responses(cls, course_id, desired_statuses=None):
+    def collect_ora2_responses(cls, course_id, desired_statuses=None, selected_cohort=''):
         """
         Get information about all ora2 blocks in the course with response count for each step
 
@@ -524,7 +527,20 @@ class OraAggregateData(object):
         else:
             statuses = AssessmentWorkflow().STATUS_VALUES
 
-        items = AssessmentWorkflow.objects.filter(course_id=course_id, status__in=statuses).values('item_id', 'status')
+        items_qs = AssessmentWorkflow.objects.filter(course_id=course_id, status__in=statuses)
+        if selected_cohort:
+            anonymous_user_ids = (CohortMembership.objects.
+                  filter(course_id=CourseKey.from_string(course_id), course_user_group__id=selected_cohort).
+                  values('user__anonymoususerid__anonymous_user_id')
+            )
+            relevant_submissions_uuid = (Submission.objects.
+                filter(student_item__student_id__in=anonymous_user_ids).
+                values('uuid')
+            )
+            relevant_submissions_uuid_list = [str(uuid['uuid']) for uuid in relevant_submissions_uuid]
+            items_qs = items_qs.filter(submission_uuid__in=relevant_submissions_uuid_list)
+
+        items = items_qs.values('item_id', 'status')
 
         result = defaultdict(lambda: {status: 0 for status in statuses})
         for item in items:
