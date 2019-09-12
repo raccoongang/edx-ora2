@@ -6,7 +6,7 @@
 
     {% if cohort_info %}
         <select class="input cohort-select" name="cohort-select" id="ora-cohort-select">
-            <option value="">Select a cohort</option>
+            <option value="">{% trans "All cohorts" %}</option>
             {% for cohort in cohort_info %}
                 <option value="{{ cohort.id }}">{{ cohort.name }}</option>
             {% endfor %}
