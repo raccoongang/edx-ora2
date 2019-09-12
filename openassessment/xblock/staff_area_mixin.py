@@ -6,7 +6,11 @@ import copy
 from functools import wraps
 import logging
 
+from opaque_keys.edx.keys import CourseKey
+from submissions import api as submission_api
 from xblock.core import XBlock
+from lms.djangoapps.instructor.models import CohortAssigment
+from openedx.core.djangoapps.course_groups.cohorts import is_course_cohorted
 
 from openassessment.assessment.errors import PeerAssessmentInternalError
 from openassessment.utils.email_notification import send_notification_email
@@ -14,8 +18,6 @@ from openassessment.workflow.errors import AssessmentWorkflowError, AssessmentWo
 from openassessment.xblock.data_conversion import create_submission_dict
 from openassessment.xblock.resolve_dates import DISTANT_FUTURE, DISTANT_PAST
 from openassessment.xblock.staff_base_mixin import StaffBaseMixin
-
-from submissions import api as submission_api
 
 from .user_data import get_user_preferences
 
@@ -197,6 +199,20 @@ class StaffAreaMixin(StaffBaseMixin):
             course_id = student_item_dict.get('course_id')
             item_id = student_item_dict.get('item_id')
             staff_id = student_item_dict['student_id']
+            course_key = CourseKey.from_string(course_id)
+
+            cohort_dict = dict()
+
+            if is_course_cohorted(course_key):
+                staff_user = self.xmodule_runtime.get_real_user(staff_id)
+
+                staff_cohorts = CohortAssigment.objects.filter(user=staff_user).select_related(
+                    'cohort'
+                ).prefetch_related('cohort__users')
+
+                for cohort_object in staff_cohorts:
+                    for user in cohort_object.cohort.users.all():
+                        cohort_dict[user.id] = cohort_object.cohort.name
 
             # Note that this will check out a submission for grading by the specified staff member.
             # If no submissions are available for grading, will return None.
@@ -219,12 +235,18 @@ class StaffAreaMixin(StaffBaseMixin):
 
                     try:
                         user = self.xmodule_runtime.get_real_user(anonymous_student_id)
+                        user_id = user.id
+                        if user_id not in cohort_dict.keys() and is_course_cohorted(course_key):
+                            continue
+
                         user_email = user.email
+                        cohort_name = cohort_dict.get(user_id)
                     except (TypeError, AttributeError):
                         user_email = None
+                        cohort_name = None
 
                     submission_context_list.append(
-                        self.get_student_submission_context(user_email, submission)
+                        self.get_student_submission_context(user_email, submission, cohort_name)
                     )
 
                 path = 'openassessmentblock/staff_area/oa_staff_grade_learners_assessment.html'
@@ -256,7 +278,7 @@ class StaffAreaMixin(StaffBaseMixin):
         except PeerAssessmentInternalError:
             return self.render_error(self._(u"Error getting staff grade ungraded and checked out counts."))
 
-    def get_student_submission_context(self, student_email, submission):
+    def get_student_submission_context(self, student_email, submission, cohort_name):
         """
         Get a context dict for rendering a student submission and associated rubric (for staff grading).
         Includes submission (populating submitted file information if relevant), rubric_criteria,
@@ -265,6 +287,7 @@ class StaffAreaMixin(StaffBaseMixin):
         Args:
             student_email (string): The student email.
             submission (object): A submission, as returned by the submission_api.
+            cohort_name (string): Name of the cohort to which the user belongs.
 
         Returns:
             A context dict for rendering a student submission and associated rubric (for staff grading).
@@ -281,6 +304,7 @@ class StaffAreaMixin(StaffBaseMixin):
             'user_language': user_preferences['user_language'],
             "prompts_type": self.prompts_type,
             "workflow_returning": workflow_returning,
+            "cohort_name": cohort_name,
         }
 
         if submission:

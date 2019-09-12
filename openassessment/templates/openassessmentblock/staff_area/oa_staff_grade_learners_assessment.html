@@ -16,6 +16,7 @@
                         <h4 class="staff-assessment__display__title">
                             {% if submission.student_email %}
                                 {{ submission.student_email }}
+                                {% if submission.cohort_name %}({{ submission.cohort_name }}){% endif %}
                             {% else %}
                                 {% trans "Learner Response" %}
                             {% endif %}
