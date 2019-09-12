@@ -2772,3 +2772,7 @@ msgstr "Количество лучших ответов задано невер
 #: openassessment/xblock/validation.py:376
 msgid "The submission format is invalid."
 msgstr "Неправильный формат ответа."
+
+#: openassessment/templates/openassessmentblock/instructor_dashboard/oa_listing.html
+msgid "All cohorts"
+msgstr "Все когорты"
