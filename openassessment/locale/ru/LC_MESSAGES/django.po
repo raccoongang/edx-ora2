@@ -2776,3 +2776,7 @@ msgstr "Неправильный формат ответа."
 #: openassessment/templates/openassessmentblock/instructor_dashboard/oa_listing.html
 msgid "All cohorts"
 msgstr "Все когорты"
+
+#: openassessment/templates/openassessmentblock/instructor_dashboard/oa_listing.html
+msgid "Filtering by cohorts:"
+msgstr "Фильтрация по когортам:"
