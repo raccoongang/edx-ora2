@@ -4,8 +4,11 @@
          data-item-view-enabled="{{ ora_item_view_enabled|yesno:'1,0' }}"
          data-rendered=0>
 
+    <div class="ora-summary-title" style="display: inline;">{% trans "Filtering by cohorts:" %}</div>
+
     {% if cohort_info %}
-        <select class="input cohort-select" name="cohort-select" id="ora-cohort-select">
+        <select class="input cohort-select" name="cohort-select"
+                id="ora-cohort-select" style="display: inline; margin-left: 10px;">
             <option value="">{% trans "All cohorts" %}</option>
             {% for cohort in cohort_info %}
                 <option value="{{ cohort.id }}">{{ cohort.name }}</option>
