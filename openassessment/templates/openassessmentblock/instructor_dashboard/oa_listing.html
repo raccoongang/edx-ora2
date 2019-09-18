@@ -1,37 +1,39 @@
 {% load i18n %}
 {% spaceless %}
-<section class="open-response-assessment-block"
-         data-item-view-enabled="{{ ora_item_view_enabled|yesno:'1,0' }}"
-         data-rendered=0>
+    <section class="open-response-assessment-block"
+             data-item-view-enabled="{{ ora_item_view_enabled|yesno:'1,0' }}"
+             data-rendered=0>
 
-    <div class="ora-summary-title" style="display: inline;">{% trans "Filtering by cohorts:" %}</div>
+        <div class="ora-summary-title" style="display: inline;">{% trans "Filtering by cohorts:" %}</div>
 
-    {% if cohort_info %}
-        <select class="input cohort-select" name="cohort-select"
-                id="ora-cohort-select" style="display: inline; margin-left: 10px;">
-            <option value="">{% trans "All cohorts" %}</option>
-            {% for cohort in cohort_info %}
-                <option value="{{ cohort.id }}">{{ cohort.name }}</option>
-            {% endfor %}
-        </select>
-    {% endif %}
+        {% if cohort_info %}
+            <select class="input cohort-select" name="cohort-select"
+                    id="ora-cohort-select" style="display: inline; margin-left: 10px;">
+                {% if cohort_info|length > 1 %}
+                    <option value="">{% trans "All cohorts" %}</option>
+                {% endif %}
+                {% for cohort in cohort_info %}
+                    <option value="{{ cohort.id }}">{{ cohort.name }}</option>
+                {% endfor %}
+            </select>
+        {% endif %}
 
-    <div class="open-response-assessment-msg">{% trans "Please wait" %}</div>
-    <div class="open-response-assessment-content">
-        <div class="open-response-assessment-summary"></div>
-        <hr/>
-        <div class="open-response-assessment-main-table"></div>
-    </div>
-    <div class="open-response-assessment-item">
-        <div class="open-response-assessment-item-breadcrumbs"></div>
-        <div class="open-response-assessment-item-block"></div>
-    </div>
-</section>
+        <div class="open-response-assessment-msg">{% trans "Please wait" %}</div>
+        <div class="open-response-assessment-content">
+            <div class="open-response-assessment-summary"></div>
+            <hr/>
+            <div class="open-response-assessmentora-cohort-select-main-table"></div>
+        </div>
+        <div class="open-response-assessment-item">
+            <div class="open-response-assessment-item-breadcrumbs"></div>
+            <div class="open-response-assessment-item-block"></div>
+        </div>
+    </section>
 
-<script type="text/template" id="open-response-assessment-items">{{ ora_items |safe }}</script>
+    <script type="text/template" id="open-response-assessment-items">{{ ora_items |safe }}</script>
 
-<script type="text/template" id="open-response-assessment-summary-tpl">
-  {% include "openassessmentblock/instructor_dashboard/open-response-assessment-summary.underscore" %}
-</script>
+    <script type="text/template" id="open-response-assessment-summary-tpl">
+        {% include "openassessmentblock/instructor_dashboard/open-response-assessment-summary.underscore" %}
+    </script>
 {% endspaceless %}
 
