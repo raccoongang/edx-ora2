@@ -3,22 +3,22 @@ The Staff Area View mixin renders all the staff-specific information used to
 determine the flow of the problem.
 """
 import copy
-from functools import wraps
 import logging
+from functools import wraps
 
 from opaque_keys.edx.keys import CourseKey
 from submissions import api as submission_api
 from xblock.core import XBlock
-from lms.djangoapps.instructor.models import CohortAssigment
-from openedx.core.djangoapps.course_groups.cohorts import is_course_cohorted
 
+from lms.djangoapps.instructor.models import CohortAssigment
 from openassessment.assessment.errors import PeerAssessmentInternalError
 from openassessment.utils.email_notification import send_notification_email
 from openassessment.workflow.errors import AssessmentWorkflowError, AssessmentWorkflowInternalError
 from openassessment.xblock.data_conversion import create_submission_dict
 from openassessment.xblock.resolve_dates import DISTANT_FUTURE, DISTANT_PAST
 from openassessment.xblock.staff_base_mixin import StaffBaseMixin
-
+from openedx.core.djangoapps.course_groups.cohorts import is_course_cohorted
+from openedx.core.djangoapps.course_groups.models import CourseUserGroup
 from .user_data import get_user_preferences
 
 logger = logging.getLogger(__name__)
@@ -37,6 +37,7 @@ def require_global_admin(error_key):
         Decorated function
 
     """
+
     def _decorator(func):  # pylint: disable=C0111
         @wraps(func)
         def _wrapped(xblock, *args, **kwargs):  # pylint: disable=C0111
@@ -48,7 +49,9 @@ def require_global_admin(error_key):
                 return {'success': False, 'msg': permission_errors[error_key]}
             else:
                 return func(xblock, *args, **kwargs)
+
         return _wrapped
+
     return _decorator
 
 
@@ -65,6 +68,7 @@ def require_course_staff(error_key, with_json_handler=False):
         decorated function
 
     """
+
     def _decorator(func):  # pylint: disable=C0111
         @wraps(func)
         def _wrapped(xblock, *args, **kwargs):  # pylint: disable=C0111
@@ -80,7 +84,9 @@ def require_course_staff(error_key, with_json_handler=False):
                 return xblock.render_error(permission_errors[error_key])
             else:
                 return func(xblock, *args, **kwargs)
+
         return _wrapped
+
     return _decorator
 
 
@@ -128,7 +134,6 @@ class StaffAreaMixin(StaffBaseMixin):
         # Include release/due dates for each step in the problem
         context['step_dates'] = list()
         for step in ['submission'] + self.assessment_steps:
-
             # Get the dates as a student would see them
             __, __, start_date, due_date = self.is_closed(step=step, course_staff=False)
 
@@ -202,17 +207,25 @@ class StaffAreaMixin(StaffBaseMixin):
             course_key = CourseKey.from_string(course_id)
 
             cohort_dict = dict()
-
             if is_course_cohorted(course_key):
+
                 staff_user = self.xmodule_runtime.get_real_user(staff_id)
+                if CohortAssigment.objects.filter(user=staff_user).exists():
+                    staff_cohorts = CohortAssigment.objects.filter(user=staff_user).select_related(
+                        'cohort'
+                    ).prefetch_related('cohort__users')
+                else:
+                    staff_cohorts = CourseUserGroup.objects.all()
 
-                staff_cohorts = CohortAssigment.objects.filter(user=staff_user).select_related(
-                    'cohort'
-                ).prefetch_related('cohort__users')
-
-                for cohort_object in staff_cohorts:
-                    for user in cohort_object.cohort.users.all():
-                        cohort_dict[user.id] = cohort_object.cohort.name
+                for cohort_obj in staff_cohorts:
+                    if isinstance(cohort_obj, CohortAssigment):
+                        users = cohort_obj.cohort.users.all()
+                        cohort_name = cohort_obj.cohort.name
+                    else:
+                        users = cohort_obj.users.all()
+                        cohort_name = cohort_obj.name
+                    for user in users:
+                        cohort_dict[user.id] = cohort_name
 
             # Note that this will check out a submission for grading by the specified staff member.
             # If no submissions are available for grading, will return None.
