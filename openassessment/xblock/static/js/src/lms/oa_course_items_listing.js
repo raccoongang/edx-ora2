@@ -131,7 +131,7 @@
                         defer.resolve();
                     }).fail(function(data, textStatus) {
                         $section.find('.open-response-assessment-msg')
-                            .text(gettext('List of Open Assessments is unavailable'));
+                                .text(gettext('List of Open Assessments is unavailable'));
                         defer.rejectWith(this, [textStatus]);
                     });
                 }
@@ -267,7 +267,7 @@
                 }).fail(function(data, textStatus) {
                     $section.find('.open-response-assessment-item').show();
                     $section.find('.open-response-assessment-msg')
-                        .text(gettext('Block view is unavailable'));
+                            .text(gettext('Block view is unavailable'));
 
                     self.renderBreadcrumbs();
                     defer.rejectWith(this, [textStatus]);
