@@ -1,6 +1,5 @@
 (function(OpenAssessment) {
     'use strict';
-
     OpenAssessment.CourseItemsListingView = function(runtime, element) {
         var self = this;
         var $section = $(element);
@@ -9,7 +8,7 @@
         this.$section = $section;
         this.runtime = runtime;
         this.oraData = $.parseJSON($("#open-response-assessment-items").text());
-        this.selectedCohort = '';
+        this.selectedCohort = $section.find("#ora-cohort-select").val();
 
         $section.find(".open-response-assessment-content").hide();
         $section.find('.open-response-assessment-item').hide();
@@ -52,11 +51,11 @@
                 var rawValue = this.model.get(this.column.get("name"));
                 var formattedValue = this.formatter.fromRaw(rawValue, this.model);
                 var link = $("<a>", {
-                        text: formattedValue,
-                        title: this.title || formattedValue,
-                        href: url,
-                        target: "_blank"
-                    });
+                    text: formattedValue,
+                    title: this.title || formattedValue,
+                    href: url,
+                    target: "_blank"
+                });
                 this.$el.append(link);
                 this.delegateEvents();
                 return this;

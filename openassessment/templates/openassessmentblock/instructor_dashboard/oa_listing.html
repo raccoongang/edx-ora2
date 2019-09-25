@@ -9,7 +9,9 @@
     {% if cohort_info %}
         <select class="input cohort-select" name="cohort-select"
                 id="ora-cohort-select" style="display: inline; margin-left: 10px;">
-            <option value="">{% trans "All cohorts" %}</option>
+            {% if cohort_info|length > 1 %}
+                <option value="">{% trans "All cohorts" %}</option>
+            {% endif %}
             {% for cohort in cohort_info %}
                 <option value="{{ cohort.id }}">{{ cohort.name }}</option>
             {% endfor %}
@@ -20,7 +22,7 @@
     <div class="open-response-assessment-content">
         <div class="open-response-assessment-summary"></div>
         <hr/>
-        <div class="open-response-assessment-main-table"></div>
+        <div class="open-response-assessmentora-cohort-select-main-table"></div>
     </div>
     <div class="open-response-assessment-item">
         <div class="open-response-assessment-item-breadcrumbs"></div>
