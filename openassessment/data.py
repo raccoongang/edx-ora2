@@ -1,18 +1,16 @@
 """
 Aggregate data for openassessment.
 """
-from collections import defaultdict
 import csv
 import json
+from collections import defaultdict
 
 from django.conf import settings
+from submissions import api as sub_api
 
 from openassessment.assessment.models import Assessment, AssessmentFeedback, AssessmentPart
+from openassessment.utils.cohorts import get_assessments_by_cohorts
 from openassessment.workflow.models import AssessmentWorkflow
-from openedx.core.djangoapps.course_groups.models import CohortMembership
-from opaque_keys.edx.keys import CourseKey
-from submissions import api as sub_api
-from submissions.models import Submission
 
 
 class CsvWriter(object):
@@ -21,37 +19,29 @@ class CsvWriter(object):
     """
 
     MODELS = [
-        'assessment', 'assessment_part',
-        'assessment_feedback', 'assessment_feedback_option',
-        'submission', 'score'
+        'assessment',
+        'assessment_part',
+        'assessment_feedback',
+        'assessment_feedback_option',
+        'submission',
+        'score',
     ]
 
     HEADERS = {
-        'assessment': [
-            'id', 'submission_uuid', 'scored_at',
-            'scorer_id', 'score_type',
-            'points_possible', 'feedback',
-        ],
+        'assessment': ['id', 'submission_uuid', 'scored_at', 'scorer_id', 'score_type', 'points_possible', 'feedback'],
         'assessment_part': [
-            'assessment_id', 'points_earned',
-            'criterion_name', 'criterion_label',
-            'option_name', 'option_label', 'feedback'
+            'assessment_id',
+            'points_earned',
+            'criterion_name',
+            'criterion_label',
+            'option_name',
+            'option_label',
+            'feedback',
         ],
-        'assessment_feedback': [
-            'submission_uuid', 'feedback_text', 'options'
-        ],
-        'assessment_feedback_option': [
-            'id', 'text'
-        ],
-        'submission': [
-            'uuid', 'student_id', 'item_id',
-            'submitted_at', 'created_at', 'raw_answer'
-        ],
-        'score': [
-            'submission_uuid',
-            'points_earned', 'points_possible',
-            'created_at',
-        ]
+        'assessment_feedback': ['submission_uuid', 'feedback_text', 'options'],
+        'assessment_feedback_option': ['id', 'text'],
+        'submission': ['uuid', 'student_id', 'item_id', 'submitted_at', 'created_at', 'raw_answer'],
+        'score': ['submission_uuid', 'points_earned', 'points_possible', 'created_at'],
     }
 
     # Number of submissions to retrieve at a time
@@ -87,9 +77,7 @@ class CsvWriter(object):
 
         """
         self.writers = {
-            key: csv.writer(file_handle)
-            for key, file_handle in output_streams.iteritems()
-            if key in self.MODELS
+            key: csv.writer(file_handle) for key, file_handle in output_streams.iteritems() if key in self.MODELS
         }
         self._progress_callback = progress_callback
 
@@ -126,15 +114,11 @@ class CsvWriter(object):
             self._write_assessment_to_csv(parts, rubric_points_cache)
 
             feedback_query = self._use_read_replica(
-                AssessmentFeedback.objects
-                .filter(submission_uuid=submission_uuid)
-                .prefetch_related('options')
+                AssessmentFeedback.objects.filter(submission_uuid=submission_uuid).prefetch_related('options')
             )
             for assessment_feedback in feedback_query:
                 self._write_assessment_feedback_to_csv(assessment_feedback)
-                feedback_option_set.update(set(
-                    option for option in assessment_feedback.options.all()
-                ))
+                feedback_option_set.update(set(option for option in assessment_feedback.options.all()))
 
             if self._progress_callback is not None:
                 self._progress_callback()
@@ -158,9 +142,7 @@ class CsvWriter(object):
         """
         num_results = 0
         start = 0
-        total_results = self._use_read_replica(
-            AssessmentWorkflow.objects.filter(course_id=course_id)
-        ).count()
+        total_results = self._use_read_replica(AssessmentWorkflow.objects.filter(course_id=course_id)).count()
 
         while num_results < total_results:
             # Load a subset of the submission UUIDs
@@ -169,9 +151,7 @@ class CsvWriter(object):
             # there should be >= N for us to process.
             end = start + self.QUERY_INTERVAL
             query = self._use_read_replica(
-                AssessmentWorkflow.objects
-                .filter(course_id=course_id)
-                .order_by('created')
+                AssessmentWorkflow.objects.filter(course_id=course_id).order_by('created')
             ).values('submission_uuid')[start:end]
 
             for workflow_dict in query:
@@ -199,23 +179,24 @@ class CsvWriter(object):
 
         """
         submission = sub_api.get_submission_and_student(submission_uuid, read_replica=True)
-        self._write_unicode('submission', [
-            submission['uuid'],
-            submission['student_item']['student_id'],
-            submission['student_item']['item_id'],
-            submission['submitted_at'],
-            submission['created_at'],
-            json.dumps(submission['answer'])
-        ])
+        self._write_unicode(
+            'submission',
+            [
+                submission['uuid'],
+                submission['student_item']['student_id'],
+                submission['student_item']['item_id'],
+                submission['submitted_at'],
+                submission['created_at'],
+                json.dumps(submission['answer']),
+            ],
+        )
 
         score = sub_api.get_latest_score_for_submission(submission_uuid, read_replica=True)
         if score is not None:
-            self._write_unicode('score', [
-                score['submission_uuid'],
-                score['points_earned'],
-                score['points_possible'],
-                score['created_at']
-            ])
+            self._write_unicode(
+                'score',
+                [score['submission_uuid'], score['points_earned'], score['points_possible'], score['created_at']],
+            )
 
     def _write_assessment_to_csv(self, assessment_parts, rubric_points_cache):
         """
@@ -233,15 +214,18 @@ class CsvWriter(object):
         assessment_id_set = set()
 
         for part in assessment_parts:
-            self._write_unicode('assessment_part', [
-                part.assessment.id,
-                part.points_earned,
-                part.criterion.name,
-                part.criterion.label,
-                part.option.name if part.option is not None else u"",
-                part.option.label if part.option is not None else u"",
-                part.feedback
-            ])
+            self._write_unicode(
+                'assessment_part',
+                [
+                    part.assessment.id,
+                    part.points_earned,
+                    part.criterion.name,
+                    part.criterion.label,
+                    part.option.name if part.option is not None else u"",
+                    part.option.label if part.option is not None else u"",
+                    part.feedback,
+                ],
+            )
 
             # If we haven't seen this assessment before, write it
             if part.assessment.id not in assessment_id_set:
@@ -257,15 +241,18 @@ class CsvWriter(object):
                     points_possible = assessment.points_possible
                     rubric_points_cache[assessment.rubric_id] = points_possible
 
-                self._write_unicode('assessment', [
-                    assessment.id,
-                    assessment.submission_uuid,
-                    assessment.scored_at,
-                    assessment.scorer_id,
-                    assessment.score_type,
-                    points_possible,
-                    assessment.feedback
-                ])
+                self._write_unicode(
+                    'assessment',
+                    [
+                        assessment.id,
+                        assessment.submission_uuid,
+                        assessment.scored_at,
+                        assessment.scorer_id,
+                        assessment.score_type,
+                        points_possible,
+                        assessment.feedback,
+                    ],
+                )
                 assessment_id_set.add(assessment.id)
 
     def _write_assessment_feedback_to_csv(self, assessment_feedback):
@@ -279,15 +266,12 @@ class CsvWriter(object):
             None
 
         """
-        options_string = ",".join([
-            unicode(option.id) for option in assessment_feedback.options.all()
-        ])
+        options_string = ",".join([unicode(option.id) for option in assessment_feedback.options.all()])
 
-        self._write_unicode('assessment_feedback', [
-            assessment_feedback.submission_uuid,
-            assessment_feedback.feedback_text,
-            options_string
-        ])
+        self._write_unicode(
+            'assessment_feedback',
+            [assessment_feedback.submission_uuid, assessment_feedback.feedback_text, options_string],
+        )
 
     def _write_feedback_options_to_csv(self, feedback_options):
         """
@@ -301,10 +285,7 @@ class CsvWriter(object):
 
         """
         for option in feedback_options:
-            self._write_unicode(
-                'assessment_feedback_option',
-                [option.id, option.text]
-            )
+            self._write_unicode('assessment_feedback_option', [option.id, option.text])
 
     def _write_unicode(self, output_name, row):
         """
@@ -335,11 +316,7 @@ class CsvWriter(object):
             QuerySet
 
         """
-        return (
-            queryset.using("read_replica")
-            if "read_replica" in settings.DATABASES
-            else queryset
-        )
+        return queryset.using("read_replica") if "read_replica" in settings.DATABASES else queryset
 
 
 class OraAggregateData(object):
@@ -358,11 +335,7 @@ class OraAggregateData(object):
         Returns:
             QuerySet
         """
-        return (
-            queryset.using("read_replica")
-            if "read_replica" in settings.DATABASES
-            else queryset
-        )
+        return queryset.using("read_replica") if "read_replica" in settings.DATABASES else queryset
 
     @classmethod
     def _build_assessments_cell(cls, assessments):
@@ -458,11 +431,9 @@ class OraAggregateData(object):
         for student_item, submission, score in all_submission_information:
             row = []
             assessments = cls._use_read_replica(
-                Assessment.objects.prefetch_related('parts').
-                prefetch_related('rubric').
-                filter(
-                    submission_uuid=submission['uuid']
-                )
+                Assessment.objects.prefetch_related('parts')
+                .prefetch_related('rubric')
+                .filter(submission_uuid=submission['uuid'])
             )
             assessments_cell = cls._build_assessments_cell(assessments)
             assessments_parts_cell = cls._build_assessments_parts_cell(assessments)
@@ -481,7 +452,7 @@ class OraAggregateData(object):
                 score.get('points_earned', ''),
                 score.get('points_possible', ''),
                 feedback_options_cell,
-                feedback_cell
+                feedback_cell,
             ]
             rows.append(row)
 
@@ -497,18 +468,20 @@ class OraAggregateData(object):
             'Final Score Points Earned',
             'Final Score Points Possible',
             'Feedback Statements Selected',
-            'Feedback on Peer Assessments'
+            'Feedback on Peer Assessments',
         ]
         return header, rows
 
     @classmethod
-    def collect_ora2_responses(cls, course_id, desired_statuses=None, selected_cohort=''):
+    def collect_ora2_responses(cls, course_id, desired_statuses=None, user=None, selected_cohort=''):
         """
         Get information about all ora2 blocks in the course with response count for each step
 
         Args:
             course_id (string) - the course id of the course whose data we would like to return
             desired_statuses (list) - statuses to return in the result dict for each ora item
+            user (User) - requested user
+            selected_cohort (str) - available filtering by arbitrary cohort
 
         Returns:
             A dict in the format:
@@ -527,23 +500,11 @@ class OraAggregateData(object):
         else:
             statuses = AssessmentWorkflow().STATUS_VALUES
 
-        items_qs = AssessmentWorkflow.objects.filter(course_id=course_id, status__in=statuses)
-        if selected_cohort:
-            anonymous_user_ids = (CohortMembership.objects.
-                  filter(course_id=CourseKey.from_string(course_id), course_user_group__id=selected_cohort).
-                  values('user__anonymoususerid__anonymous_user_id')
-            )
-            relevant_submissions_uuid = (Submission.objects.
-                filter(student_item__student_id__in=anonymous_user_ids).
-                values('uuid')
-            )
-            relevant_submissions_uuid_list = [str(uuid['uuid']) for uuid in relevant_submissions_uuid]
-            items_qs = items_qs.filter(submission_uuid__in=relevant_submissions_uuid_list)
-
-        items = items_qs.values('item_id', 'status')
+        assessments_qs = get_assessments_by_cohorts(course_id, statuses, selected_cohort, user)
+        assessments = assessments_qs.values('item_id', 'status')
 
         result = defaultdict(lambda: {status: 0 for status in statuses})
-        for item in items:
+        for item in assessments:
             item_id = item['item_id']
             status = item['status']
             result[item_id]['total'] = result[item_id].get('total', 0) + 1

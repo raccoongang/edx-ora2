@@ -28,6 +28,7 @@ class CourseItemsListingMixin(object):
         from openassessment.data import OraAggregateData
         responses = OraAggregateData.collect_ora2_responses(
             unicode(self.course_id),
-            selected_cohort=request.GET.get('selectedCohort', '' )
+            user=request._request.user,
+            selected_cohort=request.GET.get('selectedCohort', '')
         )
         return Response(json.dumps(responses), content_type='application/json')
