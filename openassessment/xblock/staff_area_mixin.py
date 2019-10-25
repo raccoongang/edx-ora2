@@ -210,7 +210,7 @@ class StaffAreaMixin(StaffBaseMixin):
             if is_course_cohorted(course_key):
 
                 staff_user = self.xmodule_runtime.get_real_user(staff_id)
-                if CohortAssigment.objects.filter(user=staff_user).exists():
+                if CohortAssigment.objects.has_cohorts(staff_user):
                     staff_cohorts = CohortAssigment.objects.filter(user=staff_user).select_related(
                         'cohort'
                     ).prefetch_related('cohort__users')
