@@ -291,7 +291,7 @@ class StaffAreaMixin(StaffBaseMixin):
         except PeerAssessmentInternalError:
             return self.render_error(self._(u"Error getting staff grade ungraded and checked out counts."))
 
-    def get_student_submission_context(self, student_email, submission, cohort_name):
+    def get_student_submission_context(self, student_email, submission, cohort_name=None):
         """
         Get a context dict for rendering a student submission and associated rubric (for staff grading).
         Includes submission (populating submitted file information if relevant), rubric_criteria,
@@ -307,7 +307,7 @@ class StaffAreaMixin(StaffBaseMixin):
         """
         user_preferences = get_user_preferences(self.runtime.service(self, 'user'))  # localize for staff user
 
-        workflow_returning = self.get_workflow_returning_info(submission['uuid'])
+        workflow_returning = self.get_workflow_returning_info(submission.get('uuid')) if submission else None
 
         context = {
             'submission': create_submission_dict(submission, self.prompts) if submission else None,
