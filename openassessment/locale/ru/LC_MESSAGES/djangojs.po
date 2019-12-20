@@ -1,7 +1,7 @@
 # edX translation file.
 # Copyright (C) 2014 EdX
 # This file is distributed under the GNU AFFERO GENERAL PUBLIC LICENSE.
-# 
+#
 # Translators:
 # Alexandr Kosharny <acosarnii@gmail.com>, 2016
 # ovoschee <all.spam.there@gmail.com>, 2014
@@ -208,7 +208,7 @@ msgstr "Если вы покинете страницу, не отправив �
 msgid ""
 "After you upload new files all your previously uploaded files will be "
 "overwritten. Continue?"
-msgstr ""
+msgstr "После загрузки новых файлов все ранее загруженные файлы будут перезаписаны. Продолжать?"
 
 #: openassessment/xblock/static/js/openassessment-lms.min.js:2
 #: openassessment/xblock/static/js/src/lms/oa_response.js:280
@@ -235,7 +235,7 @@ msgstr "Сохранение..."
 #: openassessment/xblock/static/js/openassessment-lms.min.js:2
 #: openassessment/xblock/static/js/src/lms/oa_response.js:399
 msgid "This response has been saved but not submitted."
-msgstr "Ответ сохранён, но ещё не отправлен на оценивание."
+msgstr "Ответ сохранён, но ещё не отправлен на проверку."
 
 #: openassessment/xblock/static/js/openassessment-lms.min.js:2
 #: openassessment/xblock/static/js/src/lms/oa_response.js:404
@@ -245,14 +245,14 @@ msgstr "Ошибка"
 #: openassessment/xblock/static/js/openassessment-lms.min.js:2
 #: openassessment/xblock/static/js/src/lms/oa_response.js:427
 msgid "Do you want to upload your file before submitting?"
-msgstr "Вы хотите загрузить файл до отправки ответа?"
+msgstr "Вы хотите загрузить свой файл перед отправкой?"
 
 #: openassessment/xblock/static/js/openassessment-lms.min.js:2
 #: openassessment/xblock/static/js/src/lms/oa_response.js:505
 msgid ""
 "You're about to submit your response for this assignment. After you submit "
 "this response, you can't change it or submit a new response."
-msgstr "Вы собираетесь отправить свой ответ на оценивание. После отправки ответа Вы не сможете изменить его или отправить новый ответ."
+msgstr "Вы собираетесь отправить свой ответ на это задание. После отправки этого ответа вы не можете его изменить или отправить новый ответ."
 
 #: openassessment/xblock/static/js/openassessment-lms.min.js:2
 #: openassessment/xblock/static/js/src/lms/oa_response.js:547
@@ -275,12 +275,12 @@ msgstr "Недопустимый тип файла"
 #: openassessment/xblock/static/js/src/lms/oa_response.js:618
 #: openassessment/xblock/static/js/src/lms/oa_response.js:624
 msgid "Describe "
-msgstr ""
+msgstr "Опишите"
 
 #: openassessment/xblock/static/js/openassessment-lms.min.js:2
 #: openassessment/xblock/static/js/src/lms/oa_response.js:618
 msgid "(required):"
-msgstr ""
+msgstr "(обязательно)"
 
 #: openassessment/xblock/static/js/openassessment-lms.min.js:2
 #: openassessment/xblock/static/js/src/lms/oa_response.js:638
