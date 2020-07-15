@@ -754,7 +754,7 @@ msgstr ""
 msgid ""
 "You have completed this assignment. Your final grade will be available when "
 "the assessments of your response are complete."
-msgstr "Вы выполнили это задание. Ваша итоговая оценка будет доступна после завершения оценки вашего ответа."
+msgstr "Вы выполнили это задание. Ваша оценка будет доступна, после проверки вашего ответа командой курса."
 
 #: openassessment/templates/openassessmentblock/message/oa_message_complete.html:10
 msgid ""
@@ -844,6 +844,9 @@ msgid ""
 "                    This assignment has several steps. In the first step, you'll provide a response to the prompt. The other steps appear below the %(start_tag)sYour Response%(end_tag)s field.\n"
 "                "
 msgstr ""
+"\n"
+"                    Это задание имеет несколько этапов. На первом этапе вы предоставите ответ на задание. Другие этапы отображаются под формой %(start_tag)sВаш ответ%(end_tag)s.\n"
+"                "
 
 #: openassessment/templates/openassessmentblock/message/oa_message_unavailable.html:4
 msgid "Instructions Unavailable"
@@ -882,7 +885,7 @@ msgstr "Примечания"
 
 #: openassessment/templates/openassessmentblock/oa_submission_answer.html:7
 msgid "The question for this section"
-msgstr "Вопрос к этому заданию"
+msgstr "Описание задания"
 
 #: openassessment/templates/openassessmentblock/oa_uploaded_file.html:28
 msgid "View the files associated with this submission:"
@@ -1071,7 +1074,7 @@ msgstr "После того, как вы отправите свой ответ 
 
 #: openassessment/templates/openassessmentblock/response/oa_response.html:67
 msgid "The prompt for this section"
-msgstr "Вопрос к этому заданию:"
+msgstr "Описание задания:"
 
 #: openassessment/templates/openassessmentblock/response/oa_response.html:81
 msgid "Your response (required)"
@@ -1187,7 +1190,7 @@ msgstr "Ваши загруженные файлы"
 msgid ""
 "Your response has been submitted. You will receive your grade after all "
 "steps are complete and your response is fully assessed."
-msgstr "Ваш ответ отправлен. Вы получите оценку после того, как все шаги будут выполнены, и ваш ответ будет полностью оценен."
+msgstr "Ваш ответ отправлен."
 
 #: openassessment/templates/openassessmentblock/response/oa_response_submitted.html:32
 #, python-format
@@ -1378,7 +1381,7 @@ msgstr "Ответ слушателя"
 #: openassessment/templates/openassessmentblock/staff_area/oa_staff_override_assessment.html:24
 #: openassessment/templates/openassessmentblock/staff_area/oa_student_info.html:46
 msgid "The learner's response to the prompt above"
-msgstr "Ответ слушателя на вопрос"
+msgstr "Ответ студента на задание"
 
 #: openassessment/templates/openassessmentblock/staff_area/oa_staff_grade_learners_assessment.html:47
 #: openassessment/templates/openassessmentblock/staff_area/oa_staff_override_assessment.html:46
