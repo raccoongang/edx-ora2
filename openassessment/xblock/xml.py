@@ -571,7 +571,7 @@ def parse_assessments_xml(assessments_root):
                 raise UpdateFromXmlError('The "must_be_graded_by" value must be a positive integer.')
 
         # Assessment required
-        if 'required' in assessment.attrib:
+        if 'required' in assessment.attrib and assessment_dict['name'] != 'self-assessment':
 
             # Staff assessment is the only type to use an explicit required marker
             if assessment_dict['name'] != 'staff-assessment':
